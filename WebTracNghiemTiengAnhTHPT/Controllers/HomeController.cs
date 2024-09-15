@@ -26,5 +26,12 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
 
             return View();
         }
+        public ActionResult News()
+        {
+            ViewBag.Message = "Your news page.";
+
+            return View();
+        }
+        
     }
 }
