@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Trắc nghiệm tiếng Anh cho học sinh THPT</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm">
+        
+        <div class="container fw-bold ">
+            <img class="navbar-brand" src="~/Content/img/P2N 1.svg" />
+            <buton type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
+                   aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </buton>
+            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li class="nav-link">Cuộc thi</li>
+                    <li class="nav-link">Ôn tập</li>
+
+                    <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <form class="form-inline d-flex nav-link flex-grow-1">
+                        <input class="form-control mr-sm-2 search-bar flex-grow-1" type="search" placeholder="Search">
+                        <button class="btn btn-outline-secondary" type="submit">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85a1.007 1.007 0 0 0-.115-.098zm-5.44 0a5.5 5.5 0 1 1 0-7.778 5.5 5.5 0 0 1 0 7.778z" />
+                            </svg>
+                        </button>
+                    </form>
+                </ul>
+
+            </div>
+
+            <ul class="nav nav-pills nav-justified gap-2" id="ex1" role="tablist">
+                <li class="nav-item bg-secondary rounded-pill" role="presentation">
+                    <a class="nav-link text-danger" id="tab-login" data-mdb-pill-init href="#pills-login" role="tab"
+                       aria-controls="pills-login" aria-selected="true">Login</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link bg-primary text-white rounded-pill" id="tab-register" data-mdb-pill-init href="#pills-register" role="tab"
+                       aria-controls="pills-register" aria-selected="false">Register</a>
+                </li>
+            </ul>
+
+
+        </div>
+    </nav>
+    <div>
+        đây là banner
+        <div class="d-flex flex-row">
+            <div class="d-flex flex-fill bg-primary flex-column align-items-center justify-content-center col-6"> 
+                <p> WELCOME TO <span><img class="img-fluid" src="~/Content/img/P2N 1.svg" /> </span>  </p>
+            <p>  Hành trình rèn luyện tiếng Anh THPT </p>
+            </div>
+            <img class="col-6" src="~/Content/img/phan-mem-thi-truc-tuyen-lino 1.png" />
+        </div>
+       
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+
+    </div>
+
+    <footer>
+        <p>&copy; @DateTime.Now.Year - Footer</p>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
