@@ -19,11 +19,11 @@
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li class="nav-link">Cuộc thi</li>
-                    <li class="nav-link">Ôn tập</li>
+                    <li>@Html.ActionLink("Kỳ thí", "Index", "Contests", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Ôn tập", "Index", "Contests", new { area = "" }, new { @class = "nav-link" })</li>
 
-                    <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Về chúng tôi", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Liên hệ", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <form class="form-inline d-flex nav-link flex-grow-1">
                         <input class="form-control mr-sm-2 search-bar flex-grow-1" type="search" placeholder="Search">
                         <button class="btn btn-outline-secondary" type="submit">
@@ -50,17 +50,7 @@
 
         </div>
     </nav>
-    <div>
-        đây là banner
-        <div class="d-flex flex-row">
-            <div class="d-flex flex-fill bg-primary flex-column align-items-center justify-content-center col-6"> 
-                <p> WELCOME TO <span><img class="img-fluid" src="~/Content/img/P2N 1.svg" /> </span>  </p>
-            <p>  Hành trình rèn luyện tiếng Anh THPT </p>
-            </div>
-            <img class="col-6" src="~/Content/img/phan-mem-thi-truc-tuyen-lino 1.png" />
-        </div>
-       
-    </div>
+  
     <div class="container body-content">
         @RenderBody()
         <hr />

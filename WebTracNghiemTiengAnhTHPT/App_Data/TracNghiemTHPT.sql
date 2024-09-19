@@ -13,6 +13,7 @@ create table TaiKhoan
 	PhanQuyen nvarchar(30) NOT NULL,
 	Gmail varchar(30) NOT NULL,
 )
+
 go
 create table LienHe
 (
@@ -59,8 +60,9 @@ create table KyThi
 	MaDe varchar(20)  PRIMARY KEY,
 	TenKyThi nvarchar(100) NOT NULL,
 	ThoiGian int NOT NULL,
-	ThoiGianBatDau datetime NOT NULL,
-	ThoiGianKetThuc datetime NOT NULL,
+	ThoiGianBatDau datetime ,
+	ThoiGianKetThuc datetime ,
+	CongKhai bit not null,
 )
 create table BaoLoi
 (
@@ -120,6 +122,10 @@ create table DanhGia
 	PRIMARY KEY(Username,MaDe)
 )
 
-
-
-
+insert into TaiKhoan values ('admin','123','admin','d@gmail.com')
+insert into TaiKhoan values ('hocsinh','123','hocsinh','d@gmail.com')
+insert into TaiKhoan values ('giaovien','123','giaovien','d@gmail.com')
+insert into KyThi values('123','Test so 1',90,null,null,1)
+insert into KyThi values('1','Test so 2',90,null,null,1)
+insert into KyThi values('12','Test so 2',90,null,null,1)
+insert into KyThi values('1234','Test so 3',90,null,null,1)
