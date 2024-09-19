@@ -11,10 +11,20 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
         // GET: Contests
         public ActionResult Index()
         {
-            TracNghiemTiengAnhTHPTEntities db = new TracNghiemTiengAnhTHPTEntities(); 
-            List<KyThi> model= db.KyThis.ToList();
+            TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
+            List<view_ChitietKyThi> model = db.view_ChitietKyThi.ToList();
             return View(model);
             
+        }
+        [HttpPost]
+        public ActionResult ChiTietKyThi(string made)
+        {
+            TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
+        
+            List<CauHoi> model = db.CauHois.ToList();
+            model = model.Where(c => c.KyThis.Any(kc => kc.MaDe == made)).ToList();
+            return View(model);
+
         }
     }
 }

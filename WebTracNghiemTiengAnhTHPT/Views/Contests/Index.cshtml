@@ -1,58 +1,37 @@
-﻿@model IEnumerable<WebTracNghiemTiengAnhTHPT.Models.KyThi>
-
+﻿@model IEnumerable<WebTracNghiemTiengAnhTHPT.Models.view_ChitietKyThi>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Cuộc thi";
     Layout = "~/Views/Shared/LayoutWeb.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Danh sách kỳ thi</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.TenKyThi)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ThoiGian)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ThoiGianBatDau)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ThoiGianKetThuc)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CongKhai)
-        </th>
-        <th></th>
-    </tr>
+<div class="container">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            if (item.CongKhai == true)
+            {
+                <div class="col-6 col-md-3 ">
+                    <div class="bg-light border border-primary rounded-3 p-4 m-3 w-auto">
+                        <h2>  @Html.DisplayFor(modelItem => item.TenKyThi)</h2>
+                        <div>
+                            <p> @item.Soluot  Số lượt <img src="~/Content/img/mdi--account-check-outline.svg" /> </p>
+                            <p>  @item.ThoiGian phút <img src="~/Content/img/mingcute--time-line.svg"/> </p>
+                            <p>   @item.DiemTrungBinh Đánh giá <img src="~/Content/img/material-symbols--star-rate.svg"  /> </p>
+                            <p>  @item.SoCauHoi  câu hỏi <img src="~/Content/img/ph--question.svg" /></p>
+                        </div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.TenKyThi)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ThoiGian)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ThoiGianBatDau)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ThoiGianKetThuc)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CongKhai)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.MaDe }) |
-            @Html.ActionLink("Details", "Details", new { id=item.MaDe }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.MaDe })
-        </td>
-    </tr>
-}
+                        <center>
+                            @Html.ActionLink("Tham gia", "ChiTietKyThi", "Contests", new { made = item.MaDe }, new { @class = "btn btn-outline-success " })
+                           
+                        </center>
+                    </div>
 
-</table>
+
+                </div>
+            }
+
+        }
+    </div>
+</div>

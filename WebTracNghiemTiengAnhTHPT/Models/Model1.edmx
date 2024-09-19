@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="TracNghiemTiengAnhTHPTModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="TracNghiemTiengAnhTHPTModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="BaoLoi">
           <Key>
             <PropertyRef Name="Username" />
@@ -114,7 +114,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.LienHe' does not have a
             <PropertyRef Name="MaNhom" />
           </Key>
           <Property Name="MaNhom" Type="int" Nullable="false" />
-          <Property Name="NoiDung" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="NoiDung" Type="varchar" MaxLength="8000" Nullable="false" />
         </EntityType>
         <EntityType Name="PhongThi">
           <Key>
@@ -148,6 +148,25 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.LienHe' does not have a
           <Property Name="Password" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="PhanQuyen" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="Gmail" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="view_ChitietKyThi">
+          <Key>
+            <PropertyRef Name="MaDe" />
+            <PropertyRef Name="TenKyThi" />
+            <PropertyRef Name="ThoiGian" />
+            <PropertyRef Name="CongKhai" />
+          </Key>
+          <Property Name="MaDe" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="TenKyThi" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ThoiGian" Type="int" Nullable="false" />
+          <Property Name="ThoiGianBatDau" Type="datetime" />
+          <Property Name="ThoiGianKetThuc" Type="datetime" />
+          <Property Name="CongKhai" Type="bit" Nullable="false" />
+          <Property Name="SoCauHoi" Type="int" />
+          <Property Name="DiemTrungBinh" Type="int" />
+          <Property Name="Soluot" Type="int" />
         </EntityType>
         <Association Name="FK_BaoLoi_CauHoi">
           <End Role="CauHoi" Type="Self.CauHoi" Multiplicity="1" />
@@ -388,6 +407,19 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.LienHe' does not have a
     [LienHe].[NoiDung] AS [NoiDung]
     FROM [dbo].[LienHe] AS [LienHe]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="view_ChitietKyThi" EntityType="Self.view_ChitietKyThi" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [view_ChitietKyThi].[MaDe] AS [MaDe], 
+    [view_ChitietKyThi].[TenKyThi] AS [TenKyThi], 
+    [view_ChitietKyThi].[ThoiGian] AS [ThoiGian], 
+    [view_ChitietKyThi].[ThoiGianBatDau] AS [ThoiGianBatDau], 
+    [view_ChitietKyThi].[ThoiGianKetThuc] AS [ThoiGianKetThuc], 
+    [view_ChitietKyThi].[CongKhai] AS [CongKhai], 
+    [view_ChitietKyThi].[SoCauHoi] AS [SoCauHoi], 
+    [view_ChitietKyThi].[DiemTrungBinh] AS [DiemTrungBinh], 
+    [view_ChitietKyThi].[Soluot] AS [Soluot]
+    FROM [dbo].[view_ChitietKyThi] AS [view_ChitietKyThi]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_BaoLoi_CauHoi" Association="Self.FK_BaoLoi_CauHoi">
             <End Role="CauHoi" EntitySet="CauHoi" />
             <End Role="BaoLoi" EntitySet="BaoLoi" />
@@ -461,8 +493,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.LienHe' does not have a
             <End Role="PhongThiNguoiDung" EntitySet="PhongThiNguoiDung" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TracNghiemTiengAnhTHPTModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -565,7 +596,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.LienHe' does not have a
             <PropertyRef Name="MaNhom" />
           </Key>
           <Property Name="MaNhom" Type="Int32" Nullable="false" />
-          <Property Name="NoiDung" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NoiDung" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="CauHois" Relationship="Self.FK_CauHoi_NhomCauHoi" FromRole="NhomCauHoi" ToRole="CauHoi" />
         </EntityType>
         <EntityType Name="PhongThi">
@@ -808,7 +839,25 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.LienHe' does not have a
             <End Role="PhongThi" EntitySet="PhongThis" />
             <End Role="TaiKhoan" EntitySet="TaiKhoans" />
           </AssociationSet>
+          <EntitySet Name="view_ChitietKyThi" EntityType="TracNghiemTiengAnhTHPTModel.view_ChitietKyThi" />
         </EntityContainer>
+        <EntityType Name="view_ChitietKyThi">
+          <Key>
+            <PropertyRef Name="MaDe" />
+            <PropertyRef Name="TenKyThi" />
+            <PropertyRef Name="ThoiGian" />
+            <PropertyRef Name="CongKhai" />
+          </Key>
+          <Property Name="SoCauHoi" Type="Int32" />
+          <Property Name="DiemTrungBinh" Type="Int32" />
+          <Property Name="MaDe" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="TenKyThi" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ThoiGian" Type="Int32" Nullable="false" />
+          <Property Name="ThoiGianBatDau" Type="DateTime" Precision="3" />
+          <Property Name="ThoiGianKetThuc" Type="DateTime" Precision="3" />
+          <Property Name="CongKhai" Type="Boolean" Nullable="false" />
+          <Property Name="Soluot" Type="Int32" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -959,6 +1008,21 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.LienHe' does not have a
               <ScalarProperty Name="Username" ColumnName="Username" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="view_ChitietKyThi">
+            <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.view_ChitietKyThi">
+              <MappingFragment StoreEntitySet="view_ChitietKyThi">
+                <ScalarProperty Name="Soluot" ColumnName="Soluot" />
+                <ScalarProperty Name="CongKhai" ColumnName="CongKhai" />
+                <ScalarProperty Name="ThoiGianKetThuc" ColumnName="ThoiGianKetThuc" />
+                <ScalarProperty Name="ThoiGianBatDau" ColumnName="ThoiGianBatDau" />
+                <ScalarProperty Name="ThoiGian" ColumnName="ThoiGian" />
+                <ScalarProperty Name="TenKyThi" ColumnName="TenKyThi" />
+                <ScalarProperty Name="MaDe" ColumnName="MaDe" />
+                <ScalarProperty Name="DiemTrungBinh" ColumnName="DiemTrungBinh" />
+                <ScalarProperty Name="SoCauHoi" ColumnName="SoCauHoi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
