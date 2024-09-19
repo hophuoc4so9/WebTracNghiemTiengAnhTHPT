@@ -1,55 +1,58 @@
-﻿@{
+﻿@model IEnumerable<WebTracNghiemTiengAnhTHPT.Models.KyThi>
+
+@{
+    ViewBag.Title = "Index";
     Layout = "~/Views/Shared/LayoutWeb.cshtml";
 }
 
+<h2>Index</h2>
 
-@{
-    ViewBag.Title = "Contact";
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TenKyThi)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ThoiGian)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ThoiGianBatDau)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ThoiGianKetThuc)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CongKhai)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.TenKyThi)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ThoiGian)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ThoiGianBatDau)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ThoiGianKetThuc)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CongKhai)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.MaDe }) |
+            @Html.ActionLink("Details", "Details", new { id=item.MaDe }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.MaDe })
+        </td>
+    </tr>
 }
-<div class="content-wrapper">
-    <h2 class="text-justify text-center">Các kỳ thi</h2>
-    <p>Các kỳ thi hiện có</p>
 
-
-    <p>Các kỳ thi sắp tới</p>
-    <div>
-
-
-        <p>Các kỳ thi</p>
-        <div class="container">
-            <div class="row">
-
-                <div class="bg-light col-6 col-md-3 justify-content-center text-center rounded-3 border-primary border" >
-                    <a>
-                        <h2>Tên kỳ thi</h2>
-                        <div class="info-kythi ">
-                            <div>
-                                Thời gian
-                                Số lượt
-                            </div>
-                            
-                            <div>
-                                Đánh giá
-                                Số câu hỏi  
-                            </div>
-                            <button type="button" class="btn btn-info">Tham gia</button>
-                        </div>
-                    </a>
-                </div>
-               
-
-            </div>
-
-        </div>
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
-            </ul>
-        </nav>
-      
-    </div>
-</div>
+</table>
