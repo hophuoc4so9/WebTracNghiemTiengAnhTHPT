@@ -30,6 +30,7 @@
         <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.KyThiCauHoi" ManuallyRouted="false" />
         <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.PhongThiKyThi" ManuallyRouted="false" />
         <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.PhongThiNguoiDung" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.view_ChitietKyThi" Width="1.5" PointX="4.875" PointY="0.625" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

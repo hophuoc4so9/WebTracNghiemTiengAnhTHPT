@@ -13,10 +13,10 @@ namespace WebTracNghiemTiengAnhTHPT.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class TracNghiemTiengAnhTHPTEntities : DbContext
+    public partial class TracNghiemTiengAnhTHPTEntities1 : DbContext
     {
-        public TracNghiemTiengAnhTHPTEntities()
-            : base("name=TracNghiemTiengAnhTHPTEntities")
+        public TracNghiemTiengAnhTHPTEntities1()
+            : base("name=TracNghiemTiengAnhTHPTEntities1")
         {
         }
     
@@ -36,5 +36,6 @@ namespace WebTracNghiemTiengAnhTHPT.Models
         public virtual DbSet<PhongThi> PhongThis { get; set; }
         public virtual DbSet<TaiKhoan> TaiKhoans { get; set; }
         public virtual DbSet<LienHe> LienHes { get; set; }
+        public virtual DbSet<view_ChitietKyThi> view_ChitietKyThi { get; set; }
     }
 }

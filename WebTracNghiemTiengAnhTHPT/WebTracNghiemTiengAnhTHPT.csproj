@@ -184,6 +184,9 @@
     <Compile Include="Models\TaiKhoan.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\view_ChitietKyThi.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -207,7 +210,10 @@
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\img\Frame 7.png" />
+    <Content Include="Content\img\material-symbols--star-rate.svg" />
+    <Content Include="Content\img\mingcute--time-line.svg" />
     <Content Include="Content\img\P2N 1.svg" />
+    <Content Include="Content\img\ph--question.svg" />
     <Content Include="Content\img\phan-mem-thi-truc-tuyen-lino 1.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
@@ -256,6 +262,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Content\img\mdi--account-check-outline.svg" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -273,6 +280,7 @@
     <Content Include="Views\Shared\LayoutWeb.cshtml" />
     <Content Include="Views\Home\News.cshtml" />
     <Content Include="Views\Contests\Index.cshtml" />
+    <Content Include="Views\Contests\ChiTietKyThi.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\admin\Data\" />
