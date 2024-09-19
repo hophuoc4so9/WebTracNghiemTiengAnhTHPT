@@ -6,9 +6,9 @@ using System.Web.Mvc;
 
 namespace WebTracNghiemTiengAnhTHPT.Controllers
 {
-    public class ContestController : Controller
+    public class ContestsController : Controller
     {
-        // GET: Contest
+        // GET: Contests
         public ActionResult Index()
         {
             return View();

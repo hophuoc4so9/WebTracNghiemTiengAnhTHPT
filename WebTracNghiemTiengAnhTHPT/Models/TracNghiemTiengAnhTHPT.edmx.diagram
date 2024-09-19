@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7aece524f3884095ae9b1f098ef014d7" Name="Diagram1">
+        <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.BaoLoi" Width="1.5" PointX="12" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.CauHoi" Width="1.5" PointX="3" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.ChiTietKetQua" Width="1.5" PointX="12" PointY="18" IsExpanded="true" />
+        <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.DangBai" Width="1.5" PointX="5.25" PointY="13.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.DanhGia" Width="1.5" PointX="12" PointY="21.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.KetQua" Width="1.5" PointX="15" PointY="19" IsExpanded="true" />
+        <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.KyThi" Width="1.5" PointX="5.25" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.NhomCauHoi" Width="1.5" PointX="0.75" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.PhongThi" Width="1.5" PointX="7.5" PointY="21.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.TaiKhoan" Width="1.5" PointX="9.75" PointY="21.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.LienHe" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.FK_BaoLoi_CauHoi" ManuallyRouted="false" />
+        <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.FK_BaoLoi_TaiKhoan" ManuallyRouted="false" />
+        <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.FK_CauHoi_NhomCauHoi" ManuallyRouted="false" />
+        <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.FK_ChiTietKetQua_CauHoi" ManuallyRouted="false" />
+        <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.FK_ChiTietKetQua_KyThi" ManuallyRouted="false" />
+        <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.FK_ChiTietKetQua_TaiKhoan" ManuallyRouted="false" />
+        <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.FK_DanhGia_TaiKhoan" ManuallyRouted="false" />
+        <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.FK_KyThiCauHoi_MaDe" ManuallyRouted="false" />
+        <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.FK_KetQua_KyThi" ManuallyRouted="false" />
+        <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.FK_KetQua_TaiKhoan" ManuallyRouted="false" />
+        <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.ChiTietCauHoiDangBai" ManuallyRouted="false" />
+        <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.KyThiCauHoi" ManuallyRouted="false" />
+        <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.PhongThiKyThi" ManuallyRouted="false" />
+        <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.PhongThiNguoiDung" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

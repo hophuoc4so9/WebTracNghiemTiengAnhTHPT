@@ -45,10 +45,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -120,10 +128,58 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\ContestController.cs" />
+    <Compile Include="Controllers\ContestsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BaoLoi.cs">
+      <DependentUpon>TracNghiemTiengAnhTHPT.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CauHoi.cs">
+      <DependentUpon>TracNghiemTiengAnhTHPT.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ChiTietKetQua.cs">
+      <DependentUpon>TracNghiemTiengAnhTHPT.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DangBai.cs">
+      <DependentUpon>TracNghiemTiengAnhTHPT.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DanhGia.cs">
+      <DependentUpon>TracNghiemTiengAnhTHPT.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KetQua.cs">
+      <DependentUpon>TracNghiemTiengAnhTHPT.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KyThi.cs">
+      <DependentUpon>TracNghiemTiengAnhTHPT.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LienHe.cs">
+      <DependentUpon>TracNghiemTiengAnhTHPT.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\NhomCauHoi.cs">
+      <DependentUpon>TracNghiemTiengAnhTHPT.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PhongThi.cs">
+      <DependentUpon>TracNghiemTiengAnhTHPT.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TaiKhoan.cs">
+      <DependentUpon>TracNghiemTiengAnhTHPT.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TracNghiemTiengAnhTHPT.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TracNghiemTiengAnhTHPT.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TracNghiemTiengAnhTHPT.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TracNghiemTiengAnhTHPT.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TracNghiemTiengAnhTHPT.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TracNghiemTiengAnhTHPT.edmx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -151,12 +207,29 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Models\TracNghiemTiengAnhTHPT.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>TracNghiemTiengAnhTHPT.Context.cs</LastGenOutput>
+      <DependentUpon>TracNghiemTiengAnhTHPT.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\TracNghiemTiengAnhTHPT.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TracNghiemTiengAnhTHPT.edmx</DependentUpon>
+      <LastGenOutput>TracNghiemTiengAnhTHPT.cs</LastGenOutput>
+    </Content>
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <EntityDeploy Include="Models\TracNghiemTiengAnhTHPT.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>TracNghiemTiengAnhTHPT.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\TracNghiemTiengAnhTHPT.edmx.diagram">
+      <DependentUpon>TracNghiemTiengAnhTHPT.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -184,11 +257,9 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\LayoutWeb.cshtml" />
     <Content Include="Views\Home\News.cshtml" />
+    <Content Include="Views\Contests\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="Views\Contest\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
     <Content Include="Content\bootstrap.rtl.css.map" />
@@ -215,6 +286,9 @@
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
