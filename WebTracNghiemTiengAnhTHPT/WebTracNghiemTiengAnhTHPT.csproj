@@ -283,7 +283,6 @@
     <Content Include="Views\Home\News.cshtml" />
     <Content Include="Views\Contests\Index.cshtml" />
     <Content Include="Views\Contests\ChiTietKyThi.cshtml" />
-    <Content Include="Views\Contests\Result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\admin\Data\" />
