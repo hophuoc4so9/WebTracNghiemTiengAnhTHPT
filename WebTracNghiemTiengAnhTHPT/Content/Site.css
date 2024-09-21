@@ -18,3 +18,22 @@ select,
 textarea {
     max-width: 280px;
 }
+
+footer p {
+    margin-left: 117px;
+}
+
+footer .row{
+    margin-left: 105px;
+}
+
+.row a {
+    color: black;
+    text-decoration: none;
+}
+.icon li{
+    list-style: none;
+}
+.icon .fa {
+    margin-left: -30px;
+}
