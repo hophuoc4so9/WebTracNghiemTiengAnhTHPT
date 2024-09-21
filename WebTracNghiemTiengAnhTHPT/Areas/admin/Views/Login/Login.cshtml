@@ -1,6 +1,6 @@
 ﻿
 @{
-    Layout = null;
+   Layout = null;
 }
 
 <!DOCTYPE html>
@@ -25,9 +25,9 @@
             </div>
 
             <!-- Login Form -->
-            <form>
-                <input type="text" id="login" class="fadeIn second" name="login" placeholder="Login">
-                <input type="text" id="password" class="fadeIn third" name="login" placeholder="Password">
+            <form method="post" action="/admin/Login/Login">
+                <input type="text" id="login" class="fadeIn second" name="username" placeholder="username">
+                <input type="text" id="password" class="fadeIn third" name="password" placeholder="password">
                 <input type="submit" class="fadeIn fourth" value="Log In">
             </form>
 

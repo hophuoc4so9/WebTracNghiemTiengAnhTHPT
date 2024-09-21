@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.EnterpriseServices.Internal;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -26,6 +27,36 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             return View(model);
 
         }
-       
+        [HttpPost]
+        public ActionResult Result(FormCollection form)
+        {
+            TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
+
+
+            var results = new List<ChiTietKetQua>();
+            // Duyệt qua từng câu hỏi
+            foreach (var item in db.CauHois.ToList())
+            {
+                string questionKey = "answer_" + item.MaCauHoi;
+                string selectedValue = form[questionKey];
+
+                if (!string.IsNullOrEmpty(selectedValue))
+                {
+             //       var new = 
+             //       results.Add(("admin","12",item.MaCauHoi, selectedValue));
+                }
+            }
+
+            // Xử lý kết quả, ví dụ: lưu vào database hoặc hiển thị ra
+            foreach (var result in results)
+            {
+                // result.MaCauHoi và result.SelectedValue chứa giá trị cần thiết
+            }
+
+
+            return View();
+        }
+
+
     }
 }
