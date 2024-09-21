@@ -287,7 +287,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\admin\Data\" />
-    <Folder Include="Views\Contest\" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
