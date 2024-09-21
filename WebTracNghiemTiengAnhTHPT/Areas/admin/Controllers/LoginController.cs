@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using WebTracNghiemTiengAnhTHPT.Models;
+using static System.Collections.Specialized.BitVector32;
 
 namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
 {
@@ -27,20 +28,27 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
                 
                     if(PhanQuyen != null)
                     {
+                        FormsAuthentication.SetAuthCookie(username, false);
+                       
+                        Session["UserName"] = username;
+                        Session["phanquyen"] = PhanQuyen;
                         switch (PhanQuyen)
                         {
+                          
                             case "admin":
                                 return RedirectToAction("Index", "Home");
                                 break;
                             case "giavien":
-                                return RedirectToAction("Index", "Contests");
+                                return RedirectToAction("Index", "Contests", new { area = "" });
                                 break;
                             case "hocsinh":
-                                    return RedirectToAction("Index", "Contests");
+                                
+                                return RedirectToAction("Index", "Contests", new { area = "" });
+
                                 break;
                         }
                     }
-                    FormsAuthentication.SetAuthCookie(username, false);
+                   
                     
                 }
                 else
