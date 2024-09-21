@@ -41,10 +41,8 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
                             case "giavien":
                                 return RedirectToAction("Index", "Contests", new { area = "" });
                                 break;
-                            case "hocsinh":
-                                
+                            case "hocsinh":                        
                                 return RedirectToAction("Index", "Contests", new { area = "" });
-
                                 break;
                         }
                     }

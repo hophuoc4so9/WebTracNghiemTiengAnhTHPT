@@ -78,15 +78,18 @@
             <section class="col-md-4" aria-labelledby="gettingStartedTitle">
                 <h2>P2N</h2>
                 <ul>
-                    <li><a href="~/Views/Home/Contact.cshtml">Về Chúng Tôi</a></li>
-                    <li><a href="~/Views/Home/Contact.cshtml">Liên Hệ</a></li>
+
+            
+                    <li>@Html.ActionLink("Về Chúng Tôi", "About", "Home")</li>
+                    <li>@Html.ActionLink("Liên hệ", "Contact", "Home")</li>
                 </ul>
             </section>
             <section class="col-md-4" aria-labelledby="librariesTitle">
                 <h2>Tài Nguyên</h2>
                 <ul>
-                    <li><a href="~/Views/Contests/Index.cshtml">Ôn Tập</a></li>
-                    <li><a href="">Tham Gia Kỳ Thi</a></li>
+                    <li>@Html.ActionLink("Ôn tập", "Index", "Contests")</li>
+                    <li>@Html.ActionLink("Tham Gia Kỳ Thi", "Index", "Contests")</li>
+
                 </ul>
             </section>
             <section class="col-md-4" aria-labelledby="librariesTitle">

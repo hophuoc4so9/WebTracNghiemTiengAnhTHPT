@@ -21,9 +21,14 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
         public ActionResult ChiTietKyThi(string made)
         {
             TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
-            ViewBag.trangthai = 0;
             List<CauHoi> model = db.CauHois.ToList();
             model = model.Where(c => c.KyThis.Any(kc => kc.MaDe == made)).ToList();
+            if (Session["UserName"] == null)
+            {
+                List<view_ChitietKyThi> model2 = db.view_ChitietKyThi.ToList();
+                return View("Index", model2);
+            }
+            else
             return View(model);
 
         }
@@ -33,7 +38,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
 
 
-            var results = new List<ChiTietKetQua>();
+            List<ChiTietKetQua> results = new List<ChiTietKetQua>();
             // Duyệt qua từng câu hỏi
             foreach (var item in db.CauHois.ToList())
             {
@@ -42,19 +47,23 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
 
                 if (!string.IsNullOrEmpty(selectedValue))
                 {
-             //       var new = 
-             //       results.Add(("admin","12",item.MaCauHoi, selectedValue));
+                    ChiTietKetQua tam = new ChiTietKetQua();
+                    tam.MaCauHoi=item.MaCauHoi;
+                    tam.DapAnChon=  selectedValue;
+                    if(Session["UserName"]!=null)
+                    tam.Username = Session["UserName"].ToString();
+                
+                   results.Add(tam);
                 }
             }
-
+         
             // Xử lý kết quả, ví dụ: lưu vào database hoặc hiển thị ra
             foreach (var result in results)
             {
                 // result.MaCauHoi và result.SelectedValue chứa giá trị cần thiết
+              
             }
-
-
-            return View();
+            return View(results);
         }
 
 
