@@ -3,80 +3,164 @@
 @{
     ViewBag.Title = "ChiTietKyThi";
     Layout = "~/Views/Shared/LayoutWeb.cshtml";
+    var groupedItems = Model.GroupBy(item => new { item.NhomCauHoi.MaNhom, item.NhomCauHoi.NoiDung });
+    var isFirst = true;
+    List<WebTracNghiemTiengAnhTHPT.Models.ChiTietKetQua> chiTietKetQuaList = new List<WebTracNghiemTiengAnhTHPT.Models.ChiTietKetQua>();
 }
 
 <h2>ChiTietKyThi</h2>
+<div class="container">
+    <div class="row">
+        <!-- Parent Div -->
+        <div class="col-12 d-lg-flex flex-lg-row flex-column">
+            <!-- Child Div 1: 7/10 of the width on large screens -->
+            <div class="col-lg-9 col-12 ">
+                <form method="post" action="/ContestsController/SubmitAnswers">
+                    <div>
+                        @foreach (var group in groupedItems)
+                        {
+                            <button type="button" class="btn btn-light" onclick="showGroup('@group.Key.MaNhom')">
+                                Phần thi @group.Key.MaNhom
+                            </button>
+                        }
+                    </div>
+                    @foreach (var group in groupedItems)
+                    {
+                        <div class="group-container" id="group-container-@group.Key.MaNhom" style="display: @(isFirst ? "block" : "none");">
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.NoiDung)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.MucDo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DapAnA)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DapAnB)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DapAnC)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DapAnD)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DapAnChinhXac)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DaDuyet)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.NhomCauHoi.NoiDung)
-        </th>
-        <th></th>
-    </tr>
+                            <div class="bg-light "> @group.Key.NoiDung</div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.NoiDung)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MucDo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DapAnA)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DapAnB)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DapAnC)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DapAnD)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DapAnChinhXac)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DaDuyet)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NhomCauHoi.NoiDung)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.MaCauHoi }) |
-            @Html.ActionLink("Details", "Details", new { id=item.MaCauHoi }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.MaCauHoi })
-        </td>
-    </tr>
-}
 
-</table>
+
+                            @foreach (var item in group)
+                            {
+
+                                <div class="item-container border p-3 mb-3">
+                                    <div class="field mb-2">
+                                        <strong>@item.MaCauHoi : @Html.DisplayFor(modelItem => item.NoiDung) </strong>
+                                    </div>
+
+
+                                    <!-- Answer choices with radio buttons -->
+                                    <label class="form-check-label bg-info w-100 my-1 border-danger border-2" for="dapAnA_@item.MaCauHoi">
+                                        <span class="form-check mb-2">
+                                            <input class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAnA_@item.MaCauHoi" value="A">
+
+                                            @Html.DisplayFor(modelItem => item.DapAnA)
+
+                                        </span>
+                                    </label>
+                                    <label class="form-check-label bg-info w-100  my-1" for="dapAnB_@item.MaCauHoi">
+                                        <span class="form-check mb-2">
+                                            <input class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAnB_@item.MaCauHoi" value="B">
+
+                                            @Html.DisplayFor(modelItem => item.DapAnB)
+
+                                        </span>
+                                    </label>
+                                    <label class="form-check-label bg-info w-100  my-1" for="dapAnC_@item.MaCauHoi">
+                                        <span class="form-check mb-2">
+                                            <input class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAnC_@item.MaCauHoi" value="C">
+
+                                            @Html.DisplayFor(modelItem => item.DapAnC)
+
+                                        </span>
+                                    </label>
+                                    <label class="form-check-label bg-info w-100  my-1" for="dapAnD_@item.MaCauHoi">
+                                        <span class="form-check mb-2">
+                                            <input class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAnD_@item.MaCauHoi" value="D">
+
+                                            @Html.DisplayFor(modelItem => item.DapAnD)
+
+                                        </span>
+                                    </label>
+                                    <div class="field">
+                                        <strong>DapAnChinhXac:</strong> @Html.DisplayFor(modelItem => item.DapAnChinhXac)
+                                    </div>
+                                </div>
+
+                            }
+
+                        </div>
+
+                        isFirst = false;
+
+                    }
+                </form>
+            </div>
+
+            <!-- Child Div 2: 3/10 of the width on large screens -->
+            <div class="col-lg-3 col-12 bg-light border border-primary rounded-3 p-4 mx-1 ">
+                <button onclick="ketthuc()" id="nopbai">Nộp bài</button>
+                <div id="timer">90:00</div>
+                @foreach (var group in groupedItems)
+                {
+                    <div class="group-container-right ">
+
+                        <div class="bg-light ">Phần thi @group.Key.MaNhom</div>
+                        @foreach (var item in group)
+                        {
+                            <button class="m-1">@item.MaCauHoi</button>
+
+                        }
+                    </div>
+                }
+                </div>
+    </div>
+</div>
+    <div >
+        điểm
+    </div>
+
+</div>
+<script>
+    function showGroup(maNhom) {
+
+        var groupContainers = document.querySelectorAll('.group-container');
+        groupContainers.forEach(function (container) {
+            container.style.display = 'none';
+        });
+
+        var selectedContainer = document.getElementById('group-container-' + maNhom);
+        if (selectedContainer) {
+            selectedContainer.style.display = 'block';
+        }
+    }
+    let totalTime = 90 * 60; // 90 phút tính bằng giây
+    var interval;
+    function startTimer() {
+        const timerDiv = document.getElementById('timer');
+
+         interval = setInterval(() => {
+            if (totalTime <= 0) {
+                clearInterval(interval);
+                timerDiv.textContent = "00:00";
+                return;
+            }
+
+            const minutes = Math.floor(totalTime / 60);
+            const seconds = totalTime % 60;
+            timerDiv.textContent = `Thời gian còn lại: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            totalTime--;
+            if (totalTime <= 0) ketthuc();
+        }, 1000);
+    }
+    let selectedAnswers = {};
+
+    function ketthuc() {
+        var t;
+        
+        var s ="Bạn có chắc chấn muốn nộp bài"
+        if (totalTime > 0) t = confirm(s);
+    
+        if (t == true || totalTime <= 0) {     
+            clearInterval(interval);
+            document.getElementById('nopbai').disabled = true;
+            
+        }
+    }
+    startTimer();
+ 
+
+
+</script>

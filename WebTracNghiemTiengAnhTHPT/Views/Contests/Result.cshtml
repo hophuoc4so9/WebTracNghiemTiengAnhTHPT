@@ -1,0 +1,52 @@
+﻿@model IEnumerable<WebTracNghiemTiengAnhTHPT.Models.ChiTietKetQua>
+
+@{
+    ViewBag.Title = "Result";
+    Layout = "~/Views/Shared/LayoutWeb.cshtml";
+}
+
+<h2>Result</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DapAnChon)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CauHoi.NoiDung)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.KyThi.TenKyThi)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TaiKhoan.Password)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DapAnChon)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CauHoi.NoiDung)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.KyThi.TenKyThi)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TaiKhoan.Password)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

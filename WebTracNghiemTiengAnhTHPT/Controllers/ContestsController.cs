@@ -16,15 +16,16 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             return View(model);
             
         }
-        [HttpPost]
+       
         public ActionResult ChiTietKyThi(string made)
         {
             TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
-        
+            ViewBag.trangthai = 0;
             List<CauHoi> model = db.CauHois.ToList();
             model = model.Where(c => c.KyThis.Any(kc => kc.MaDe == made)).ToList();
             return View(model);
 
         }
+       
     }
 }
