@@ -4,6 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Trắc nghiệm tiếng Anh cho học sinh THPT</title>
+    <link rel="stylesheet" href="~/Content/Site.css" />
+    <link rel="stylesheet" href="~/Content/font-awesome.min.css" />
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -19,7 +21,7 @@
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Kỳ thí", "Index", "Contests", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Kỳ thi", "Index", "Contests", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Ôn tập", "Index", "Contests", new { area = "" }, new { @class = "nav-link" })</li>
 
                     <li>@Html.ActionLink("Về chúng tôi", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
@@ -72,6 +74,30 @@
 
     <footer>
         <p>&copy; @DateTime.Now.Year - Footer</p>
+        <div class="row">
+            <section class="col-md-4" aria-labelledby="gettingStartedTitle">
+                <h2>P2N</h2>
+                <ul>
+                    <li><a href="~/Views/Home/Contact.cshtml">Về Chúng Tôi</a></li>
+                    <li><a href="~/Views/Home/Contact.cshtml">Liên Hệ</a></li>
+                </ul>
+            </section>
+            <section class="col-md-4" aria-labelledby="librariesTitle">
+                <h2>Tài Nguyên</h2>
+                <ul>
+                    <li><a href="~/Views/Contests/Index.cshtml">Ôn Tập</a></li>
+                    <li><a href="">Tham Gia Kỳ Thi</a></li>
+                </ul>
+            </section>
+            <section class="col-md-4" aria-labelledby="librariesTitle">
+                <h2>Thông Tin Liên Hệ</h2>
+                <ul class="icon">
+                    <li><i class="fa fa-phone" aria-hidden="true">Số Điện Thoại:</i></li>
+                    <li><i class="fa fa-address-card" aria-hidden="true">Địa Chỉ:</i></li>
+                    <li><i class="fa fa-address-book" aria-hidden="true">Email:</i></li>
+                </ul>
+            </section>
+        </div>
     </footer>
 
     @Scripts.Render("~/bundles/jquery")
