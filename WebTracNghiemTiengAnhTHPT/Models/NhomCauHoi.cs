@@ -22,6 +22,7 @@ namespace WebTracNghiemTiengAnhTHPT.Models
     
         public int MaNhom { get; set; }
         public string NoiDung { get; set; }
+        public Nullable<bool> isDeleted { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CauHoi> CauHois { get; set; }

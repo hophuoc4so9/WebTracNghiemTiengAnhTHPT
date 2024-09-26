@@ -15,6 +15,7 @@
           <Property Name="Username" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="MaCauHoi" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="MaDe" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="isDeleted" Type="bit" />
         </EntityType>
         <EntityType Name="CauHoi">
           <Key>
@@ -30,6 +31,7 @@
           <Property Name="DapAnD" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="DapAnChinhXac" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="DaDuyet" Type="bit" />
+          <Property Name="isDeleted" Type="bit" />
         </EntityType>
         <EntityType Name="ChiTietCauHoiDangBai">
           <Key>
@@ -56,6 +58,7 @@
           </Key>
           <Property Name="MaLoai" Type="int" Nullable="false" />
           <Property Name="TenLoai" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="isDeleted" Type="bit" />
         </EntityType>
         <EntityType Name="DanhGia">
           <Key>
@@ -66,6 +69,7 @@
           <Property Name="Rate" Type="int" Nullable="false" />
           <Property Name="NoiDung" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="MaDe" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="isDeleted" Type="bit" />
         </EntityType>
         <EntityType Name="KetQua">
           <Key>
@@ -86,6 +90,7 @@
           <Property Name="ThoiGianBatDau" Type="datetime" />
           <Property Name="ThoiGianKetThuc" Type="datetime" />
           <Property Name="CongKhai" Type="bit" Nullable="false" />
+          <Property Name="isDeleted" Type="bit" />
         </EntityType>
         <EntityType Name="KyThiCauHoi">
           <Key>
@@ -115,6 +120,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.LienHe' does not have a
           </Key>
           <Property Name="MaNhom" Type="int" Nullable="false" />
           <Property Name="NoiDung" Type="varchar" MaxLength="8000" Nullable="false" />
+          <Property Name="isDeleted" Type="bit" />
         </EntityType>
         <EntityType Name="PhongThi">
           <Key>
@@ -123,6 +129,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.LienHe' does not have a
           <Property Name="MaPhong" Type="int" Nullable="false" />
           <Property Name="MatKhau" Type="varchar" MaxLength="30" />
           <Property Name="TenPhong" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="isDeleted" Type="bit" />
         </EntityType>
         <EntityType Name="PhongThiKyThi">
           <Key>
@@ -148,6 +155,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.LienHe' does not have a
           <Property Name="Password" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="PhanQuyen" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="Gmail" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="isDeleted" Type="bit" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -509,6 +517,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           <Property Name="MaDe" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="CauHoi" Relationship="Self.FK_BaoLoi_CauHoi" FromRole="BaoLoi" ToRole="CauHoi" />
           <NavigationProperty Name="TaiKhoan" Relationship="Self.FK_BaoLoi_TaiKhoan" FromRole="BaoLoi" ToRole="TaiKhoan" />
+          <Property Name="isDeleted" Type="Boolean" />
         </EntityType>
         <EntityType Name="CauHoi">
           <Key>
@@ -529,6 +538,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           <NavigationProperty Name="ChiTietKetQuas" Relationship="Self.FK_ChiTietKetQua_CauHoi" FromRole="CauHoi" ToRole="ChiTietKetQua" />
           <NavigationProperty Name="DangBais" Relationship="Self.ChiTietCauHoiDangBai" FromRole="CauHoi" ToRole="DangBai" />
           <NavigationProperty Name="KyThis" Relationship="Self.KyThiCauHoi" FromRole="CauHoi" ToRole="KyThi" />
+          <Property Name="isDeleted" Type="Boolean" />
         </EntityType>
         <EntityType Name="ChiTietKetQua">
           <Key>
@@ -551,6 +561,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           <Property Name="MaLoai" Type="Int32" Nullable="false" />
           <Property Name="TenLoai" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="CauHois" Relationship="Self.ChiTietCauHoiDangBai" FromRole="DangBai" ToRole="CauHoi" />
+          <Property Name="isDeleted" Type="Boolean" />
         </EntityType>
         <EntityType Name="DanhGia">
           <Key>
@@ -563,6 +574,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           <Property Name="MaDe" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="TaiKhoan" Relationship="Self.FK_DanhGia_TaiKhoan" FromRole="DanhGia" ToRole="TaiKhoan" />
           <NavigationProperty Name="KyThi" Relationship="Self.FK_KyThiCauHoi_MaDe" FromRole="DanhGia" ToRole="KyThi" />
+          <Property Name="isDeleted" Type="Boolean" />
         </EntityType>
         <EntityType Name="KetQua">
           <Key>
@@ -590,6 +602,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           <NavigationProperty Name="KetQuas" Relationship="Self.FK_KetQua_KyThi" FromRole="KyThi" ToRole="KetQua" />
           <NavigationProperty Name="CauHois" Relationship="Self.KyThiCauHoi" FromRole="KyThi" ToRole="CauHoi" />
           <NavigationProperty Name="PhongThis" Relationship="Self.PhongThiKyThi" FromRole="KyThi" ToRole="PhongThi" />
+          <Property Name="isDeleted" Type="Boolean" />
         </EntityType>
         <EntityType Name="NhomCauHoi">
           <Key>
@@ -598,6 +611,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           <Property Name="MaNhom" Type="Int32" Nullable="false" />
           <Property Name="NoiDung" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="CauHois" Relationship="Self.FK_CauHoi_NhomCauHoi" FromRole="NhomCauHoi" ToRole="CauHoi" />
+          <Property Name="isDeleted" Type="Boolean" />
         </EntityType>
         <EntityType Name="PhongThi">
           <Key>
@@ -608,6 +622,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           <Property Name="TenPhong" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="KyThis" Relationship="Self.PhongThiKyThi" FromRole="PhongThi" ToRole="KyThi" />
           <NavigationProperty Name="TaiKhoans" Relationship="Self.PhongThiNguoiDung" FromRole="PhongThi" ToRole="TaiKhoan" />
+          <Property Name="isDeleted" Type="Boolean" />
         </EntityType>
         <EntityType Name="TaiKhoan">
           <Key>
@@ -622,6 +637,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           <NavigationProperty Name="DanhGias" Relationship="Self.FK_DanhGia_TaiKhoan" FromRole="TaiKhoan" ToRole="DanhGia" />
           <NavigationProperty Name="KetQuas" Relationship="Self.FK_KetQua_TaiKhoan" FromRole="TaiKhoan" ToRole="KetQua" />
           <NavigationProperty Name="PhongThis" Relationship="Self.PhongThiNguoiDung" FromRole="TaiKhoan" ToRole="PhongThi" />
+          <Property Name="isDeleted" Type="Boolean" />
         </EntityType>
         <EntityType Name="LienHe">
           <Key>
@@ -867,6 +883,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           <EntitySetMapping Name="BaoLois">
             <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.BaoLoi">
               <MappingFragment StoreEntitySet="BaoLoi">
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
                 <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="MaCauHoi" ColumnName="MaCauHoi" />
@@ -877,6 +894,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           <EntitySetMapping Name="CauHois">
             <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.CauHoi">
               <MappingFragment StoreEntitySet="CauHoi">
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
                 <ScalarProperty Name="MaCauHoi" ColumnName="MaCauHoi" />
                 <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
                 <ScalarProperty Name="MaNhom" ColumnName="MaNhom" />
@@ -903,6 +921,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           <EntitySetMapping Name="DangBais">
             <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.DangBai">
               <MappingFragment StoreEntitySet="DangBai">
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
                 <ScalarProperty Name="MaLoai" ColumnName="MaLoai" />
                 <ScalarProperty Name="TenLoai" ColumnName="TenLoai" />
               </MappingFragment>
@@ -911,6 +930,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           <EntitySetMapping Name="DanhGias">
             <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.DanhGia">
               <MappingFragment StoreEntitySet="DanhGia">
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="Rate" ColumnName="Rate" />
                 <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
@@ -930,6 +950,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           <EntitySetMapping Name="KyThis">
             <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.KyThi">
               <MappingFragment StoreEntitySet="KyThi">
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
                 <ScalarProperty Name="MaDe" ColumnName="MaDe" />
                 <ScalarProperty Name="TenKyThi" ColumnName="TenKyThi" />
                 <ScalarProperty Name="ThoiGian" ColumnName="ThoiGian" />
@@ -942,6 +963,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           <EntitySetMapping Name="NhomCauHois">
             <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.NhomCauHoi">
               <MappingFragment StoreEntitySet="NhomCauHoi">
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
                 <ScalarProperty Name="MaNhom" ColumnName="MaNhom" />
                 <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
               </MappingFragment>
@@ -950,6 +972,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           <EntitySetMapping Name="PhongThis">
             <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.PhongThi">
               <MappingFragment StoreEntitySet="PhongThi">
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
                 <ScalarProperty Name="MaPhong" ColumnName="MaPhong" />
                 <ScalarProperty Name="MatKhau" ColumnName="MatKhau" />
                 <ScalarProperty Name="TenPhong" ColumnName="TenPhong" />
@@ -959,6 +982,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           <EntitySetMapping Name="TaiKhoans">
             <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.TaiKhoan">
               <MappingFragment StoreEntitySet="TaiKhoan">
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="PhanQuyen" ColumnName="PhanQuyen" />
