@@ -33,6 +33,7 @@ namespace WebTracNghiemTiengAnhTHPT.Models
         public string DapAnD { get; set; }
         public string DapAnChinhXac { get; set; }
         public Nullable<bool> DaDuyet { get; set; }
+        public Nullable<bool> isDeleted { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BaoLoi> BaoLois { get; set; }

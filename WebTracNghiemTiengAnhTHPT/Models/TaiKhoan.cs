@@ -28,6 +28,7 @@ namespace WebTracNghiemTiengAnhTHPT.Models
         public string Password { get; set; }
         public string PhanQuyen { get; set; }
         public string Gmail { get; set; }
+        public Nullable<bool> isDeleted { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BaoLoi> BaoLois { get; set; }
