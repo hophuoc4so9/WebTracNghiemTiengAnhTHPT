@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.EnterpriseServices.Internal;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -16,15 +17,55 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             return View(model);
             
         }
-        [HttpPost]
+       
         public ActionResult ChiTietKyThi(string made)
         {
             TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
-        
             List<CauHoi> model = db.CauHois.ToList();
             model = model.Where(c => c.KyThis.Any(kc => kc.MaDe == made)).ToList();
+            if (Session["UserName"] == null)
+            {
+                List<view_ChitietKyThi> model2 = db.view_ChitietKyThi.ToList();
+                return View("Index", model2);
+            }
+            else
             return View(model);
 
         }
+        [HttpPost]
+        public ActionResult Result(FormCollection form)
+        {
+            TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
+
+
+            List<ChiTietKetQua> results = new List<ChiTietKetQua>();
+            // Duyệt qua từng câu hỏi
+            foreach (var item in db.CauHois.ToList())
+            {
+                string questionKey = "answer_" + item.MaCauHoi;
+                string selectedValue = form[questionKey];
+
+                if (!string.IsNullOrEmpty(selectedValue))
+                {
+                    ChiTietKetQua tam = new ChiTietKetQua();
+                    tam.MaCauHoi=item.MaCauHoi;
+                    tam.DapAnChon=  selectedValue;
+                    if(Session["UserName"]!=null)
+                    tam.Username = Session["UserName"].ToString();
+                
+                   results.Add(tam);
+                }
+            }
+         
+            // Xử lý kết quả, ví dụ: lưu vào database hoặc hiển thị ra
+            foreach (var result in results)
+            {
+                // result.MaCauHoi và result.SelectedValue chứa giá trị cần thiết
+              
+            }
+            return View(results);
+        }
+
+
     }
 }

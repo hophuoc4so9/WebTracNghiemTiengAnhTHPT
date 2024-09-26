@@ -614,7 +614,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
             <PropertyRef Name="Username" />
           </Key>
           <Property Name="Username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="PhanQuyen" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Gmail" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="BaoLois" Relationship="Self.FK_BaoLoi_TaiKhoan" FromRole="TaiKhoan" ToRole="BaoLoi" />

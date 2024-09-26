@@ -1,6 +1,6 @@
 ﻿
 @{
-    Layout = null;
+   Layout = null;
 }
 
 <!DOCTYPE html>
@@ -15,19 +15,32 @@
     <!------ Include the above in your HEAD tag ---------->
 </head>
 <body>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(ViewBag.Message))
+    {
+        <div class="alert alert-danger alert-fade alert-success">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <span>@ViewBag.Message</span>
+        </div>
+    }
     <div class="wrapper fadeInDown">
         <div id="formContent">
             <!-- Tabs Titles -->
             <!-- Icon -->
             <div class="fadeIn first">
                 @*<img src="../../../Content/logo-test-english.png" id="icon" alt="User Icon" />*@
-                <img src="~/Content/img/logo-test-english.png" id="icon"/>
+                <img src="~/Content/img/logo-test-english.png" id="icon" />
             </div>
 
             <!-- Login Form -->
-            <form>
-                <input type="text" id="login" class="fadeIn second" name="login" placeholder="Login">
-                <input type="text" id="password" class="fadeIn third" name="login" placeholder="Password">
+            <form method="post" action="/admin/Login/Login">
+                <input type="text" id="login" class="fadeIn second" name="username" placeholder="username">
+                <input type="text" id="password" class="fadeIn third" name="password" placeholder="password">
                 <input type="submit" class="fadeIn fourth" value="Log In">
             </form>
 
@@ -38,6 +51,15 @@
 
         </div>
     </div>
+    <script>
+        // Hide the success message after 2 seconds
+        setTimeout(function () {
+            var messageDiv = document.querySelector('.alert-success');
+            if (messageDiv) {
+                messageDiv.style.display = "none"; // Hide the message
+            }
+        }, 2000); // 2000 milliseconds = 2 seconds
+    </script>
 </body>
 </html>
 <style>
@@ -302,5 +324,27 @@ input[type=text]:placeholder {
 #icon {
   width:60%;
 }
+    /* Alert styles */
+    .alert {
+        padding: 15px;
+        margin-top: 10px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        position: fixed;
+        z-index: 99999;
+        top: 50px;
+        right: 30px;
+        animation: fadeIn 0.8s ease-in-out forwards;
+    }
 
+        .alert i {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .alert span {
+            font-weight: bold;
+        }
 </style>

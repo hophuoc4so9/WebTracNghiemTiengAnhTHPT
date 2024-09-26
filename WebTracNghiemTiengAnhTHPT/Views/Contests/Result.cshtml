@@ -1,0 +1,43 @@
+﻿@model IEnumerable<WebTracNghiemTiengAnhTHPT.Models.ChiTietKetQua>
+
+@{
+    ViewBag.Title = "Result";
+    Layout = "~/Views/Shared/LayoutWeb.cshtml";
+}
+
+<h2>Result</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DapAnChon)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CauHoi.NoiDung)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.KyThi.TenKyThi)
+        </th>
+     
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DapAnChon)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MaCauHoi)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CauHoi.NoiDung)
+        </td>
+        
+
+    </tr>
+}
+
+</table>
