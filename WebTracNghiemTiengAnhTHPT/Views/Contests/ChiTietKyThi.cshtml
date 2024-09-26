@@ -12,10 +12,12 @@
 <div class="container">
     <div class="row">
         <!-- Parent Div -->
-        <div class="col-12 d-lg-flex flex-lg-row flex-column">
-            <!-- Child Div 1: 7/10 of the width on large screens -->
-            <div class="col-lg-9 col-12 ">
-                <form method="post" action="/ContestsController/SubmitAnswers">
+        <form action="/Contests/Result" method="post">
+            <div class="col-12 d-lg-flex flex-lg-row flex-column">
+
+
+                <div class="col-lg-9 col-12 ">
+
                     <div>
                         @foreach (var group in groupedItems)
                         {
@@ -86,28 +88,30 @@
                         isFirst = false;
 
                     }
-                </form>
-            </div>
 
-            <!-- Child Div 2: 3/10 of the width on large screens -->
-            <div class="col-lg-3 col-12 bg-light border border-primary rounded-3 p-4 mx-1 ">
-                <button onclick="ketthuc()" id="nopbai">Nộp bài</button>
-                <div id="timer">90:00</div>
-                @foreach (var group in groupedItems)
-                {
-                    <div class="group-container-right ">
-
-                        <div class="bg-light ">Phần thi @group.Key.MaNhom</div>
-                        @foreach (var item in group)
-                        {
-                            <button class="m-1">@item.MaCauHoi</button>
-
-                        }
-                    </div>
-                }
                 </div>
+
+
+                <div class="col-lg-3 col-12 bg-light border border-primary rounded-3 p-4 mx-1 ">
+              
+                    <input onclick="ketthuc()" type="submit" value="Nộp bài" />
+                    <div id="timer">90:00</div>
+                    @foreach (var group in groupedItems)
+                    {
+                        <div class="group-container-right ">
+
+                            <div class="bg-light ">Phần thi @group.Key.MaNhom</div>
+                            @foreach (var item in group)
+                            {
+                                <button class="m-1">@item.MaCauHoi</button>
+
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </form>
     </div>
-</div>
     <div >
         điểm
     </div>
