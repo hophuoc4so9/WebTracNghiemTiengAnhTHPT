@@ -23,23 +23,25 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
             List<CauHoi> model = db.CauHois.ToList();
             model = model.Where(c => c.KyThis.Any(kc => kc.MaDe == made)).ToList();
+            ViewBag.MaDe = made;
             if (Session["UserName"] == null)
             {
-                List<view_ChitietKyThi> model2 = db.view_ChitietKyThi.ToList();
-                return View("Index", model2);
+
+                return RedirectToAction("Login", "Login", new { area = "admin" });
             }
             else
             return View(model);
 
         }
         [HttpPost]
-        public ActionResult Result(FormCollection form)
+        public ActionResult Result(FormCollection form, string made)
         {
             TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
 
 
             List<ChiTietKetQua> results = new List<ChiTietKetQua>();
             // Duyệt qua từng câu hỏi
+
             foreach (var item in db.CauHois.ToList())
             {
                 string questionKey = "answer_" + item.MaCauHoi;
@@ -52,7 +54,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
                     tam.DapAnChon=  selectedValue;
                     if(Session["UserName"]!=null)
                     tam.Username = Session["UserName"].ToString();
-                
+                    tam.MaDe = made;
                    results.Add(tam);
                 }
             }

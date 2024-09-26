@@ -37,13 +37,13 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
                           
                             case "admin":
                                 return RedirectToAction("Index", "Home");
-                                break;
-                            case "giavien":
-                                return RedirectToAction("Index", "Contests", new { area = "" });
-                                break;
+                              
+                            case "giaovien":
+                                return RedirectToAction("Index", "Home", new { area = "giaovien" });
+                              
                             case "hocsinh":                        
                                 return RedirectToAction("Index", "Contests", new { area = "" });
-                                break;
+                               
                         }
                     }
                    

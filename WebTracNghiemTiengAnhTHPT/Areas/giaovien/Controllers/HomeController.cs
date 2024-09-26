@@ -4,11 +4,11 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
+namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
 {
     public class HomeController : Controller
     {
-        // GET: admin/Home
+        // GET: giaovien/Home
         public ActionResult Index()
         {
             return View();
@@ -20,19 +20,18 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
         }
         public ActionResult PartialPhanQuyen()
         {
-            if(Session["phanquyen"]==null)
+            if (Session["phanquyen"] == null)
             {
                 return null;
-            }    
-
+            }
             if (Session["phanquyen"].ToString() == "admin")
-             {
+            {
                 return PartialView("_PartialChucNangAdmin");
             }
             else
             {
                 return PartialView("_PartialChucNangGiaoVien");
-            }    
+            }
         }
     }
 }

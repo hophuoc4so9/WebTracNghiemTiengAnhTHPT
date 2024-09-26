@@ -123,6 +123,8 @@
     <Compile Include="Areas\admin\adminAreaRegistration.cs" />
     <Compile Include="Areas\admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\admin\Controllers\LoginController.cs" />
+    <Compile Include="Areas\giaovien\Controllers\HomeController.cs" />
+    <Compile Include="Areas\giaovien\giaovienAreaRegistration.cs" />
     <Compile Include="Controllers\ContestsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -179,6 +181,7 @@
     <Compile Include="Models\view_ChitietKyThi.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="obj\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -244,6 +247,10 @@
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Areas\giaovien\Views\web.config" />
+    <Content Include="Areas\admin\Views\Shared\_PartialChucNangAdmin.cshtml" />
+    <Content Include="Areas\admin\Views\Shared\_PartialChucNangGiaoVien.cshtml" />
+    <Content Include="Areas\giaovien\Views\Home\Index.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
@@ -278,6 +285,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\admin\Data\" />
+    <Folder Include="Areas\giaovien\Data\" />
+    <Folder Include="Areas\giaovien\Views\Shared\" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
