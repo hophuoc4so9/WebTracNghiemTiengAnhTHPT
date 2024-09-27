@@ -1,0 +1,143 @@
+﻿@model IEnumerable<WebTracNghiemTiengAnhTHPT.Models.KyThi>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<!-- Single Save Button -->
+<button type="button" class="btn btn-success btn-sm" onclick="saveAllChanges()">Save All</button>
+
+<!-- Bootstrap Grid Layout -->
+<form class="kyThi-form" action="@Url.Action("Update", "QuanLyDeThi")" method="post">
+    <div class="container">
+        <div class="row">
+            <!-- Title Row -->
+            <div class="col"><strong>@Html.DisplayNameFor(model => model.First().TenKyThi)</strong></div>
+            <div class="col"><strong>@Html.DisplayNameFor(model => model.First().ThoiGian)</strong></div>
+            <div class="col"><strong>@Html.DisplayNameFor(model => model.First().ThoiGianBatDau)</strong></div>
+            <div class="col"><strong>@Html.DisplayNameFor(model => model.First().ThoiGianKetThuc)</strong></div>
+            <div class="col"><strong>@Html.DisplayNameFor(model => model.First().CongKhai)</strong></div>
+            <div class="col"><strong>@Html.DisplayNameFor(model => model.First().UsernameTacGia)</strong></div>
+            <div class="col"><strong>Hoạt động</strong></div>
+        </div>
+
+        @foreach (var item in Model)
+        {
+            if (item.isDeleted == true)
+            {
+                continue;
+            }
+
+            <div class="row align-items-center kyThi-row" data-id="@item.MaDe">
+                <div class="col">
+                    <span class="text-display">@item.TenKyThi</span>
+                    <input type="text" name="KyThi[@item.MaDe].TenKyThi" class="form-control edit-input" value="@item.TenKyThi" style="display:none;" />
+                </div>
+                <div class="col">
+                    <span class="text-display">@item.ThoiGian</span>
+                    <input type="number" name="KyThi[@item.MaDe].ThoiGian" class="form-control edit-input" value="@item.ThoiGian" style="display:none;" />
+                </div>
+                <div class="col">
+                    @if (item.ThoiGianBatDau != null)
+                    {
+                        <span class="text-display">@item.ThoiGianBatDau</span>
+                        <input type="date" name="KyThi[@item.MaDe].ThoiGianBatDauDate" class="form-control edit-input" value="@item.ThoiGianBatDau?.ToString(" yyyy-MM-dd")" style="display:none;" />
+
+                        
+                        <input type="time" name="KyThi[@item.MaDe].ThoiGianBatDauTime" class="form-control edit-input" value="@item.ThoiGianBatDau?.ToString(" HH:mm")" style="display:none;" />
+                    }
+                    else
+                    {
+                        <span class="text-display">No Start Time</span>
+                        <input type="date" name="KyThi[@item.MaDe].ThoiGianBatDauDate" class="form-control edit-input" value="" style="display:none;" />
+                        <input type="time" name="KyThi[@item.MaDe].ThoiGianBatDauTime" class="form-control edit-input" value="" style="display:none;" />
+                    }
+                </div>
+                <div class="col">
+                    @if (item.ThoiGianKetThuc != null)
+                    {
+                        <span class="text-display">@item.ThoiGianKetThuc</span>
+                        <input type="date" name="KyThi[@item.MaDe].ThoiGianKetThucDate" class="form-control edit-input" value="@item.ThoiGianKetThuc?.ToString(" yyyy-MM-dd")" style="display:none;" />
+
+                        <input type="time" name="KyThi[@item.MaDe].ThoiGianKetThucTime" class="form-control edit-input" value="@item.ThoiGianKetThuc?.ToString(" HH:mm")" style="display:none;" />
+                    }
+                    else
+                    {
+                        <span class="text-display">No End Time</span>
+                        <input type="date" name="KyThi[@item.MaDe].ThoiGianKetThucDate" class="form-control edit-input" value="" style="display:none;" />
+                        <input type="time" name="KyThi[@item.MaDe].ThoiGianKetThucTime" class="form-control edit-input" value="" style="display:none;" />
+                    }
+                </div>
+                <div class="col">
+                    <input type="checkbox" name="KyThi[@item.MaDe].CongKhai" class="edit-input" @(item.CongKhai ? "checked" : "") style="display:none;" />
+                    <span class="text-display">@item.CongKhai</span>
+                </div>
+                <div class="col">
+                    <input type="hidden" name="KyThi[@item.MaDe].MaDe" value="@item.MaDe" />
+                    <input type="hidden" name="KyThi[@item.MaDe].isDeleted" value="@item.isDeleted" class="isDeleted-input" />
+                </div>
+                <div class="col">
+                    <button type="button" class="btn btn-primary btn-sm edit-btn" onclick="toggleEdit(this)">Edit</button>
+                    <button type="button" class="btn btn-danger btn-sm delete-btn" onclick="deleteItem(this)">Delete</button>
+                </div>
+            </div>
+        }
+    </div>
+</form>
+
+<script>
+    // Toggle edit inputs
+    function toggleEdit(button) {
+        var row = $(button).closest(".row");
+        row.find(".text-display").toggle(); // Toggle text display
+        row.find(".edit-input").toggle(); // Toggle inputs
+        $(button).toggle(); // Toggle Edit button
+    }
+
+    // Delete item (set isDeleted to true and hide the row)
+    function deleteItem(button) {
+        var row = $(button).closest(".kyThi-row");
+        var isDeletedInput = row.find(".isDeleted-input");
+
+        // Confirmation alert
+        if (confirm("Bạn chắc chắn muốn xóa mục này?")) {
+            // Set isDeleted to true
+            isDeletedInput.val("true");
+
+            // Hide the row visually
+            row.hide();
+        }
+    }
+
+    // Save all changes function
+    function saveAllChanges() {
+        var forms = $('.kyThi-form');
+        var isValid = true;
+
+        forms.find('.kyThi-row').each(function () {
+            var row = $(this);
+            var thoiGian = parseInt(row.find('input[name*="ThoiGian"]').val()) || 0;
+
+            var thoiGianBatDauDate = new Date(row.find('input[name*="ThoiGianBatDauDate"]').val() + "T" + (row.find('input[name*="ThoiGianBatDauTime"]').val() || "00:00"));
+            var thoiGianKetThucDate = new Date(row.find('input[name*="ThoiGianKetThucDate"]').val() + "T" + (row.find('input[name*="ThoiGianKetThucTime"]').val() || "00:00"));
+            var expectedEndTime = new Date(thoiGianBatDauDate.getTime() + thoiGian * 60000);
+
+            if (thoiGianKetThucDate < expectedEndTime) {
+                alert("Thời gian kết thúc không hợp lệ cho mục này. Vui lòng kiểm tra lại.");
+                isValid = false;
+                return false;
+            }
+        });
+
+        if (isValid) {
+            forms.submit();
+        }
+    }
+</script>
