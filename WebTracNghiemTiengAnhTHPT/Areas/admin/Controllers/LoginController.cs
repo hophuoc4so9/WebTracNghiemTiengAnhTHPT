@@ -43,15 +43,15 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
                                 TempData["SuccessMessage"] = $"Chào {username}, bạn đã đăng nhập thành công thành công.";
 
                                 return RedirectToAction("Index", "Home");
-                                break;
-                            case "giavien":
+                            
+                            case "giaovien":
                                 TempData["SuccessMessage"] = $"Chào {username}, bạn đã đăng nhập thành công thành công.";
-                                return RedirectToAction("Index", "Contests", new { area = "" });
-                                break;
+                                return RedirectToAction("Index", "Home", new { area = "giaovien" });
+                              
                             case "hocsinh":
                                 TempData["SuccessMessage"] = $"Chào {username}, bạn đã đăng nhập thành công thành công.";
                                 return RedirectToAction("Index", "Contests", new { area = "" });
-                                break;
+                             
                         }
                     }
                    

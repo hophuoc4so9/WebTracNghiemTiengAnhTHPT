@@ -1,0 +1,78 @@
+﻿@model IEnumerable<WebTracNghiemTiengAnhTHPT.Models.CauHoi>
+@{
+    ViewBag.Title = "ChiTietDeThi";
+    Layout = "~/Areas/admin/Views/Shared/_AdminLayout.cshtml";
+    var groupedItems = Model.GroupBy(item => new { item.NhomCauHoi.MaNhom, item.NhomCauHoi.NoiDung });
+}
+
+<h2>Thêm câu hỏi</h2>
+
+<div>
+    <h3>Danh sách câu hỏi khác</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Mã Câu Hỏi</th>
+                <th>Câu Hỏi</th>
+                <th>Thao Tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.OtherQuestions as List<WebTracNghiemTiengAnhTHPT.Models.CauHoi>)
+            {
+                <tr>
+                    <td>@item.MaCauHoi</td>
+                    <td>@item.NoiDung</td>
+                    <td>
+
+                        @using (Html.BeginForm("AddQuestionToExam", "QuanLyDeThi", FormMethod.Post))
+                        {
+                            @Html.Hidden("made", (string)ViewBag.made)
+                            @Html.Hidden("maCauHoi", item.MaCauHoi)
+                            <button type="submit" class="btn btn-primary">Thêm</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<h2>Chi tiết đề thi</h2>
+
+<div class="">
+    @foreach (var group in groupedItems)
+    {
+        <h4>@group.Key.NoiDung</h4>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Mã Câu Hỏi</th>
+                    <th>Câu Hỏi</th>
+                    <th>Đáp Án</th>
+                    <th>Đáp Án Chính Xác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in group)
+                {
+                    <tr>
+                        <td>@item.MaCauHoi</td>
+                        <td>@Html.DisplayFor(modelItem => item.NoiDung)</td>
+                        <td>
+                            <ul>
+                                <li>A: @Html.DisplayFor(modelItem => item.DapAnA)</li>
+                                <li>B: @Html.DisplayFor(modelItem => item.DapAnB)</li>
+                                <li>C: @Html.DisplayFor(modelItem => item.DapAnC)</li>
+                                <li>D: @Html.DisplayFor(modelItem => item.DapAnD)</li>
+                            </ul>
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.DapAnChinhXac)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    
+</div>

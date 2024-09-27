@@ -24,7 +24,7 @@
             <div class="col"><strong>@Html.DisplayNameFor(model => model.First().ThoiGianBatDau)</strong></div>
             <div class="col"><strong>@Html.DisplayNameFor(model => model.First().ThoiGianKetThuc)</strong></div>
             <div class="col"><strong>@Html.DisplayNameFor(model => model.First().CongKhai)</strong></div>
-            <div class="col"><strong>@Html.DisplayNameFor(model => model.First().UsernameTacGia)</strong></div>
+
             <div class="col"><strong>Hoạt động</strong></div>
         </div>
 
@@ -37,6 +37,7 @@
 
             <div class="row align-items-center kyThi-row" data-id="@item.MaDe">
                 <div class="col">
+                  
                     <span class="text-display">@item.TenKyThi</span>
                     <input type="text" name="KyThi[@item.MaDe].TenKyThi" class="form-control edit-input" value="@item.TenKyThi" style="display:none;" />
                 </div>
@@ -47,11 +48,12 @@
                 <div class="col">
                     @if (item.ThoiGianBatDau != null)
                     {
+                       
                         <span class="text-display">@item.ThoiGianBatDau</span>
-                        <input type="date" name="KyThi[@item.MaDe].ThoiGianBatDauDate" class="form-control edit-input" value="@item.ThoiGianBatDau?.ToString(" yyyy-MM-dd")" style="display:none;" />
+                        <input type="date" name="KyThi[@item.MaDe].ThoiGianBatDauDate" class="form-control edit-input" value="@item.ThoiGianBatDau.Value.ToString("yyyy-MM-dd")" style="display:none;" />
 
-                        
-                        <input type="time" name="KyThi[@item.MaDe].ThoiGianBatDauTime" class="form-control edit-input" value="@item.ThoiGianBatDau?.ToString(" HH:mm")" style="display:none;" />
+
+                        <input type="time" name="KyThi[@item.MaDe].ThoiGianBatDauTime" class="form-control edit-input" value="@item.ThoiGianBatDau.Value.ToString("HH:mm")" style="display:none;" />
                     }
                     else
                     {
@@ -64,9 +66,9 @@
                     @if (item.ThoiGianKetThuc != null)
                     {
                         <span class="text-display">@item.ThoiGianKetThuc</span>
-                        <input type="date" name="KyThi[@item.MaDe].ThoiGianKetThucDate" class="form-control edit-input" value="@item.ThoiGianKetThuc?.ToString(" yyyy-MM-dd")" style="display:none;" />
+                        <input type="date" name="KyThi[@item.MaDe].ThoiGianKetThucDate" class="form-control edit-input" value="@item.ThoiGianKetThuc.Value.ToString("yyyy-MM-dd")" style="display:none;" />
 
-                        <input type="time" name="KyThi[@item.MaDe].ThoiGianKetThucTime" class="form-control edit-input" value="@item.ThoiGianKetThuc?.ToString(" HH:mm")" style="display:none;" />
+                        <input type="time" name="KyThi[@item.MaDe].ThoiGianKetThucTime" class="form-control edit-input" value="@item.ThoiGianKetThuc.Value.ToString("HH:mm")" style="display:none;" />
                     }
                     else
                     {
@@ -79,13 +81,15 @@
                     <input type="checkbox" name="KyThi[@item.MaDe].CongKhai" class="edit-input" @(item.CongKhai ? "checked" : "") style="display:none;" />
                     <span class="text-display">@item.CongKhai</span>
                 </div>
-                <div class="col">
+                <div style="display:none;">
                     <input type="hidden" name="KyThi[@item.MaDe].MaDe" value="@item.MaDe" />
                     <input type="hidden" name="KyThi[@item.MaDe].isDeleted" value="@item.isDeleted" class="isDeleted-input" />
                 </div>
                 <div class="col">
                     <button type="button" class="btn btn-primary btn-sm edit-btn" onclick="toggleEdit(this)">Edit</button>
                     <button type="button" class="btn btn-danger btn-sm delete-btn" onclick="deleteItem(this)">Delete</button>
+                    @Html.ActionLink("ChiTiet", "ChiTietDeThi", "QuanLyDeThi", new { made = item.MaDe }, new { @class = "btn btn-outline-success" })
+
                 </div>
             </div>
         }
