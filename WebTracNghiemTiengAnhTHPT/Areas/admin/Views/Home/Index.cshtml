@@ -199,15 +199,41 @@
 
 </style>
 <script>
+
+  
+    function searchUser() {
+       
+        let searchInput = document.getElementById('searchInput').value.toLowerCase();
+        let filterSelect = document.getElementById('filterSelect').value.toLowerCase();
+        let tableBody = document.getElementById('userTableBody');
+        let rows = tableBody.getElementsByTagName('tr');
+
+       
+        for (let i = 0; i < rows.length; i++) {
+            let usernameCell = rows[i].getElementsByTagName('td')[0]; 
+            let roleCell = rows[i].getElementsByTagName('td')[1]; 
+
+            if (usernameCell && roleCell) {
+                let username = usernameCell.textContent.toLowerCase();
+                let role = roleCell.textContent.toLowerCase();
+
+               
+                let isUsernameMatch = username.indexOf(searchInput) > -1;
+                let isRoleMatch = filterSelect === "" || role === filterSelect;
+
+              
+                if (isUsernameMatch && isRoleMatch) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+   
     function filterUsers() {
-        const filterValue = document.getElementById("filterSelect").value;
-
-        // Cập nhật URL với tham số truy vấn
-        const baseUrl = window.location.pathname; // Lấy đường dẫn hiện tại
-        const queryString = filterValue ? `?role=${filterValue}` : ''; // Tạo chuỗi truy vấn
-        window.history.pushState({}, '', baseUrl + queryString); // Cập nhật URL mà không tải lại trang
-
-      
+        searchUser();
     }
 
 </script>
