@@ -200,28 +200,28 @@
 </style>
 <script>
 
-  
+
     function searchUser() {
-       
+
         let searchInput = document.getElementById('searchInput').value.toLowerCase();
         let filterSelect = document.getElementById('filterSelect').value.toLowerCase();
         let tableBody = document.getElementById('userTableBody');
         let rows = tableBody.getElementsByTagName('tr');
 
-       
+
         for (let i = 0; i < rows.length; i++) {
-            let usernameCell = rows[i].getElementsByTagName('td')[0]; 
-            let roleCell = rows[i].getElementsByTagName('td')[1]; 
+            let usernameCell = rows[i].getElementsByTagName('td')[0];
+            let roleCell = rows[i].getElementsByTagName('td')[1];
 
             if (usernameCell && roleCell) {
                 let username = usernameCell.textContent.toLowerCase();
                 let role = roleCell.textContent.toLowerCase();
 
-               
+
                 let isUsernameMatch = username.indexOf(searchInput) > -1;
                 let isRoleMatch = filterSelect === "" || role === filterSelect;
 
-              
+
                 if (isUsernameMatch && isRoleMatch) {
                     rows[i].style.display = "";
                 } else {
@@ -231,9 +231,42 @@
         }
     }
 
-   
+
     function filterUsers() {
         searchUser();
     }
+    //change Status
+  function changeStatus(Username, isActive) {
+      
+    var confirmation = isActive
+        ? confirm("Bạn có chắc chắn muốn dừng hoạt động người dùng này?")
+        : confirm("Bạn có chắc chắn muốn kích hoạt lại người dùng này?");
+
+    if (!confirmation) return;
+
+    $.ajax({
+        url: '@Url.Action("ChangeStatus", "Home")', 
+        type: 'POST',
+        data: {
+            Username: Username,
+            isActive: isActive
+        },
+        success: function(response) {
+            if (response.success) {
+                
+                if (!isActive) {
+                    $("button[onclick*='" + Username + "']").removeClass('btn-danger').addClass('btn-success').text('Hoạt động').attr('onclick', `changeStatus('${Username}', false)`);
+                } else {
+                    $("button[onclick*='" + Username + "']").removeClass('btn-success').addClass('btn-danger').text('Dừng hoạt động').attr('onclick', `changeStatus('${Username}', true)`);
+                }
+            } else {
+                alert("Đã có lỗi xảy ra khi thay đổi trạng thái.");
+            }
+        },
+        error: function() {
+            alert("Đã có lỗi xảy ra khi gửi yêu cầu.");
+        }
+    });
+}
 
 </script>

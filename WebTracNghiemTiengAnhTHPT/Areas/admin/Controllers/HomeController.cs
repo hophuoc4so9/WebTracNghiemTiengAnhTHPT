@@ -18,6 +18,31 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public JsonResult ChangeStatus(string Username, bool isActive)
+        {
+            try
+            {
+                var gg = Username; 
+                TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
+                List<TaiKhoan> model = db.TaiKhoans.ToList();
+                // Assuming you have a DbContext for accessing the database
+                var user = model.SingleOrDefault(u => u.Username == gg);
+                if (user != null)
+                {
+                    user.isDeleted = isActive;  
+                    db.SaveChanges(); 
+                }
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+               
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
         public ActionResult Render_QLLOPHOC()
         {
 

@@ -11,9 +11,8 @@
         <input type="text" id="searchInput" placeholder="Tìm kiếm..." onkeyup="searchUser()">
         <button onclick="searchUser()">Tìm</button> <!-- Nút Tìm kiếm -->
         <div class="btn-cn">
-            <button class="btn" onclick="addUser()">Thêm</button>
-            <button class="btn" onclick="editUser()">Sửa</button>
-            <button class="btn" onclick="deleteUser()">Xóa</button>
+            <button class="btn">Thêm</button>
+            
         </div>
 
     </div>
@@ -24,6 +23,7 @@
                 <th>Username</th>
                 <th>Quyền</th>
                 <th>Gmail</th>
+                <th>Trạng Thái</th>
                 <th>Hoạt Động</th>
             </tr>
         </thead>
@@ -34,18 +34,26 @@
                     <td>@item.Username</td>
                     <td>@item.PhanQuyen</td>
                     <td>@item.Gmail</td>
-                    @if (@item.isDeleted == null)
+                    @if (@item.isDeleted == false|| @item.isDeleted ==null )
                     {
                         <td>
-                            <button class=" btn-success" >Hoạt động</button>
+                            <button class="b btn-success" onclick="changeStatus('@item.Username', true)">Hoạt động</button>
                         </td>
                     }
                     else
                     {
                         <td>
-                            <button class=" btn-danger" >Ngưng hoạt động</button>
+                            <button class="btn-danger" onclick="changeStatus('@item.Username', false)">Dừng hoạt động</button>
                         </td>
                     }
+              
+                <td>
+                    
+                        <button class="btn-warning">Sửa</button>
+                        <button class="btn-danger">Xóa</button>
+                    
+                    
+                </td>
                 </tr>
             }
         </tbody>
