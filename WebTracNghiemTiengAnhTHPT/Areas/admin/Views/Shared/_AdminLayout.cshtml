@@ -18,7 +18,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 </head>
 <body>
-
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
     @{
         Html.RenderAction("RenderNavbar", "Home", new { area = "admin" });
     }
@@ -46,7 +51,15 @@
             </div>
         </div>
     </div>
-
+    <script>
+        // Hide the success message after 2 seconds
+        setTimeout(function () {
+            var messageDiv = document.querySelector('.alert-success');
+            if (messageDiv) {
+                messageDiv.style.display = "none"; // Hide the message
+            }
+        }, 2000); // 2000 milliseconds = 2 seconds
+    </script>
     <!-- Custom CSS -->
     <style>
         /* Styling the sidebar */

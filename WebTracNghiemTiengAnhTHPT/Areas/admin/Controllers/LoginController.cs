@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Xml.Linq;
 using WebTracNghiemTiengAnhTHPT.Models;
 using static System.Collections.Specialized.BitVector32;
 
@@ -21,7 +24,8 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
         {
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {
-                var user = db.TaiKhoans.SingleOrDefault(u => u.Username == username && u.Password == password);
+                var Hashpassword = HashPassword(password);
+                var user = db.TaiKhoans.SingleOrDefault(u => u.Username == username && (u.Password == password||u.Password== Hashpassword));
                 if (user != null)
                 {
                    var PhanQuyen = user.PhanQuyen; 
@@ -36,14 +40,18 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
                         {
                           
                             case "admin":
+                                TempData["SuccessMessage"] = $"Chào {username}, bạn đã đăng nhập thành công thành công.";
+
                                 return RedirectToAction("Index", "Home");
-                              
-                            case "giaovien":
-                                return RedirectToAction("Index", "Home", new { area = "giaovien" });
-                              
-                            case "hocsinh":                        
+                                break;
+                            case "giavien":
+                                TempData["SuccessMessage"] = $"Chào {username}, bạn đã đăng nhập thành công thành công.";
                                 return RedirectToAction("Index", "Contests", new { area = "" });
-                               
+                                break;
+                            case "hocsinh":
+                                TempData["SuccessMessage"] = $"Chào {username}, bạn đã đăng nhập thành công thành công.";
+                                return RedirectToAction("Index", "Contests", new { area = "" });
+                                break;
                         }
                     }
                    
@@ -51,12 +59,32 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
                 }
                 else
                 {
-     
+                    
+
                     ModelState.AddModelError("", "Invalid username or password.");
                 }
             }
-
+            ViewBag.Message = "Tài Khoản không tồn tại";
             return View();
+        }
+        private string HashPassword(string password)
+        {
+
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                throw new ArgumentException("Password cannot be null or empty", nameof(password));
+            }
+
+            using (var sha256 = SHA256.Create())
+            {
+
+                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+                var base64Hash = Convert.ToBase64String(hashedBytes);
+
+
+                return base64Hash.Substring(0, Math.Min(28, base64Hash.Length));
+            }
         }
 
     }
