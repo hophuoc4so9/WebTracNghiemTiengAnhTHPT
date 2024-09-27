@@ -261,3 +261,15 @@ GROUP BY
 	CongKhai 
 )
 alter
+
+
+ALTER TABLE KyThi
+ADD UsernameTacGia varchar(30);
+UPDATE KyThi
+SET UsernameTacGia = 'giaovien'
+WHERE MaDe IN ('123', '1', '12');
+
+-- Update the last three records
+UPDATE KyThi
+SET UsernameTacGia = 'admin'
+WHERE MaDe IN ('1234', '12333');

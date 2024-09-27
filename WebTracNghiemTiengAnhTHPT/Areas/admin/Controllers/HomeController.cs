@@ -40,7 +40,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
             }
             else
             {
-                return PartialView("_PartialChucNangGiaoVien");
+                return PartialView("~/Areas/giaovien/Views/Shared/_PartialChucNangGiaoVien.cshtml");
             }    
         }
     }

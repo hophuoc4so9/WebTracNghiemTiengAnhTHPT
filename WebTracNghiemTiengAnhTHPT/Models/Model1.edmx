@@ -91,6 +91,7 @@
           <Property Name="ThoiGianKetThuc" Type="datetime" />
           <Property Name="CongKhai" Type="bit" Nullable="false" />
           <Property Name="isDeleted" Type="bit" />
+          <Property Name="UsernameTacGia" Type="varchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="KyThiCauHoi">
           <Key>
@@ -603,6 +604,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           <NavigationProperty Name="CauHois" Relationship="Self.KyThiCauHoi" FromRole="KyThi" ToRole="CauHoi" />
           <NavigationProperty Name="PhongThis" Relationship="Self.PhongThiKyThi" FromRole="KyThi" ToRole="PhongThi" />
           <Property Name="isDeleted" Type="Boolean" />
+          <Property Name="UsernameTacGia" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="NhomCauHoi">
           <Key>
@@ -950,6 +952,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           <EntitySetMapping Name="KyThis">
             <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.KyThi">
               <MappingFragment StoreEntitySet="KyThi">
+                <ScalarProperty Name="UsernameTacGia" ColumnName="UsernameTacGia" />
                 <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
                 <ScalarProperty Name="MaDe" ColumnName="MaDe" />
                 <ScalarProperty Name="TenKyThi" ColumnName="TenKyThi" />
