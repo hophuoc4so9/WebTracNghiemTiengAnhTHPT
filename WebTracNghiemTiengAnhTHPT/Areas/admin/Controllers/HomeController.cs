@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WebTracNghiemTiengAnhTHPT.Models;
 
 namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
 {
@@ -18,6 +19,14 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
         {
             return PartialView("_Navbar");
         }
+        public ActionResult RenderMain()
+        {
+
+            TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
+            List<TaiKhoan> model = db.TaiKhoans.ToList();
+            return PartialView(model);
+        }
+
         public ActionResult PartialPhanQuyen()
         {
             if(Session["phanquyen"]==null)
