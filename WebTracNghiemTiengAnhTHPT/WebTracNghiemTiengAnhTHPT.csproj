@@ -253,6 +253,8 @@
     <Content Include="Areas\admin\Views\Shared\_PartialChucNangGiaoVien.cshtml" />
     <Content Include="Areas\giaovien\Views\QuanLyDeThi\ChiTietDeThi.cshtml" />
     <Content Include="Areas\admin\Views\Shared\RenderMain.cshtml" />
+    <Content Include="Areas\admin\Views\Home\QL_LOPHOC.cshtml" />
+    <Content Include="Areas\admin\Views\Shared\Render_QLLOPHOC.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />

@@ -5,7 +5,7 @@
     Layout = "~/Areas/admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Quản Lý Đề Thi</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -145,3 +145,159 @@
         }
     }
 </script>
+<style>
+   /* Column Styling - Space Elements Evenly */
+.kyThi-row .col {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Space elements evenly */
+    padding: 5px;
+}
+.col >button {
+    margin-right:5px ; 
+}
+/* Adjustments for Text Display */
+.text-display {
+    padding-right: 10px; /* Optional spacing between text and input */
+}
+
+/* Responsive Design */
+@@media (max-width: 768px) {
+    .kyThi-row .col {
+        flex-direction: column; /* Stack elements on smaller screens */
+        align-items: flex-start;
+    }
+}
+
+    /* Container Styling */
+    .kyThi-form {
+        padding: 20px;
+        background-color: #ffffff; /* White background for clean look */
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Light shadow for depth */
+        margin-top: 20px;
+    }
+
+/* Row Styling */
+.kyThi-row {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd; /* Divider between rows */
+    transition: background-color 0.3s ease;
+}
+
+.kyThi-row:hover {
+    background-color: #f1f1f1; /* Slight hover effect on row */
+}
+
+/* Column Styling */
+.kyThi-row .col {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 5px;
+}
+
+/* Title Row Styling */
+.kyThi-form .row strong {
+    font-size: 14px;
+    color: #333;
+    font-weight: 600;
+}
+
+/* Text Display */
+.text-display {
+    display: inline-block;
+    padding: 5px 10px;
+    min-width: 150px;
+    color: #555;
+    font-weight: 500;
+}
+
+/* Input Styling */
+.edit-input {
+    display: none; /* Hidden by default */
+    padding: 5px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    transition: border-color 0.2s ease-in-out;
+    font-size: 14px;
+}
+
+.edit-input:focus {
+    border-color: #80bdff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25); /* Soft glow effect when focused */
+}
+
+/* Button Styling */
+button {
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    padding: 5px 15px;
+}
+
+/* Edit and Delete Buttons */
+.btn-primary.edit-btn {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+}
+
+.btn-primary.edit-btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
+.btn-danger.delete-btn {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
+}
+
+.btn-danger.delete-btn:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+}
+
+/* Success Button */
+.btn-outline-success {
+    border-color: #28a745;
+    color: #28a745;
+}
+
+.btn-outline-success:hover {
+    background-color: #28a745;
+    color: #fff;
+}
+
+/* Save Button Styling */
+.btn-success.btn-sm {
+    margin: 10px 0;
+    padding: 5px 15px;
+}
+
+.btn-success.btn-sm:hover {
+    background-color: #218838;
+}
+
+/* Checkbox Styling */
+input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #28a745;
+}
+
+/* Responsive Design */
+@@media (max-width: 768px) {
+    .kyThi-row .col {
+        flex-basis: 100%;
+        text-align: left;
+        padding: 10px 0;
+    }
+
+    .kyThi-form {
+        padding: 10px;
+    }
+}
+
+</style>

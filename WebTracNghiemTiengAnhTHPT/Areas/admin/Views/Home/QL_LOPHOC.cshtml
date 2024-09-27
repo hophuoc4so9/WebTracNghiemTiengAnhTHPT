@@ -1,0 +1,215 @@
+﻿
+@{
+    ViewBag.Title = "QL_LOPHOC";
+    Layout = "~/Areas/admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="render-main-content">
+    @Html.Action("RenderMain", "Home", new { area = "admin" })
+</div>
+
+<!-- Minimalist CSS with white theme and subtle effects -->
+<style>
+    .btn-cn {
+        display: flex; /* Sử dụng flexbox */
+        justify-content: flex-end; /* Căn các nút về phía bên phải */
+        margin-top: 10px; /* Khoảng cách từ trên */
+    }
+
+    .btn {
+        background-color: #007BFF; /* Màu nền xanh biển */
+        color: white; /* Màu chữ trắng */
+        border: none; /* Không viền */
+        padding: 12px 20px; /* Khoảng cách bên trong (dài hơn) */
+        text-align: center; /* Căn giữa chữ */
+        text-decoration: none; /* Không gạch chân */
+        display: inline-block; /* Hiển thị theo dòng */
+        font-size: 16px; /* Kích thước chữ */
+        margin-right: 5px; /* Khoảng cách giữa các nút */
+        border-radius: 5px; /* Bo góc */
+        cursor: pointer; /* Con trỏ chuột dạng tay */
+        transition: background-color 0.3s; /* Hiệu ứng chuyển màu nền */
+        min-width: 100px; /* Độ rộng tối thiểu để nút dài hơn */
+    }
+
+        .btn:hover {
+            background-color: #0056b3; /* Màu nền khi di chuột qua */
+        }
+
+    .button-container {
+        margin-bottom: 10px;
+    }
+
+    button {
+        background-color: #4CAF50; /* Màu nền xanh */
+        color: white; /* Màu chữ trắng */
+        border: none; /* Không viền */
+        padding: 10px 15px; /* Khoảng cách bên trong */
+        text-align: center; /* Căn giữa chữ */
+        text-decoration: none; /* Không gạch chân */
+        display: inline-block; /* Hiển thị theo dòng */
+        font-size: 16px; /* Kích thước chữ */
+        margin-right: 5px; /* Khoảng cách giữa các nút */
+        border-radius: 5px; /* Bo góc */
+        cursor: pointer; /* Con trỏ chuột dạng tay */
+        transition: background-color 0.3s; /* Hiệu ứng chuyển màu nền */
+    }
+
+        button:hover {
+            background-color: #45a049; /* Màu nền khi di chuột qua */
+        }
+
+    input[type="text"],
+    select {
+        padding: 10px; /* Khoảng cách bên trong */
+        margin-left: 5px; /* Khoảng cách bên trái */
+        border: 1px solid #ccc; /* Viền xám */
+        border-radius: 5px; /* Bo góc */
+        font-size: 16px; /* Kích thước chữ */
+    }
+
+        input[type="text"]:focus,
+        select:focus {
+            border-color: #4CAF50; /* Màu viền khi chọn */
+            outline: none; /* Không hiển thị đường viền mặc định */
+        }
+
+    /* Wrapper element with relative positioning and soft edges */
+    .render-main-content {
+        background-color: #ffffff; /* White background */
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06); /* Softer, larger shadow */
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        position: relative;
+    }
+
+        .render-main-content:hover {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1); /* Stronger shadow on hover */
+            transform: scale(1.02); /* Slight zoom on hover for effect */
+        }
+
+    /* Button positioning and styling */
+    .add-record {
+        background-color: #007bff; /* Primary blue */
+        color: white;
+        padding: 12px 28px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        position: absolute; /* Positioned at top right */
+        top: 10px;
+        right: 10px;
+        transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out, box-shadow 0.3s;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    }
+
+        .add-record:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+            transform: scale(1.05); /* Slightly larger on hover */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+        }
+
+        .add-record:active {
+            background-color: #004085; /* Darker blue on click */
+            transform: scale(0.98); /* Slight shrink on click */
+        }
+
+    /* Table styling for a clean and minimalist look */
+    .render-main-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden; /* Ensure no content spills over the borders */
+    }
+
+    .render-main-content th,
+    .render-main-content td {
+        padding: 15px;
+        border-bottom: 1px solid #eeeeee; /* Soft grey borders */
+        text-align: left;
+        color: #333; /* Darker text for readability */
+        transition: all 0.3s ease;
+    }
+
+    .render-main-content th {
+        background-color: #f5f5f5; /* Light grey header background */
+        font-weight: 700; /* Bolder font for headers */
+        text-transform: uppercase; /* Uppercase headers for distinction */
+    }
+
+    .render-main-content tr:nth-child(even) {
+        background-color: #fafafa; /* Slight grey background for alternate rows */
+    }
+
+    .render-main-content tr:nth-child(odd) {
+        background-color: #ffffff; /* White for other rows */
+    }
+
+    .render-main-content tr:hover {
+        background-color: #f0f0f0; /* Light grey hover effect */
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    /* Link styling for a cleaner appearance */
+    .render-main-content td a {
+        text-decoration: none;
+        color: #007bff; /* Blue links */
+        font-weight: 500;
+        position: relative;
+        transition: color 0.3s ease-in-out;
+    }
+
+        .render-main-content td a:hover {
+            color: #0056b3; /* Darker blue on hover */
+        }
+
+    /* Edit link with a modern green */
+    .render-main-content .edit-link {
+        color: #28a745; /* Soft green */
+    }
+
+        .render-main-content .edit-link:hover {
+            color: #218838; /* Darker green on hover */
+        }
+
+    /* Delete link with a soft red tone */
+    .render-main-content .delete-link {
+        color: #dc3545; /* Soft red */
+    }
+
+        .render-main-content .delete-link:hover {
+            color: #c82333; /* Darker red on hover */
+        }
+
+    /* Smooth transitions for all interactions */
+    .render-main-content td a,
+    .render-main-content th,
+    .render-main-content td {
+        transition: all 0.3s ease;
+    }
+
+    /* Panel body wrapper for full height positioning */
+    .panel-body {
+        position: relative;
+        height: 100%;
+    }
+</style>
+<script>
+    function filterUsers() {
+        const filterValue = document.getElementById("filterSelect").value;
+
+        // Cập nhật URL với tham số truy vấn
+        const baseUrl = window.location.pathname; // Lấy đường dẫn hiện tại
+        const queryString = filterValue ? `?role=${filterValue}` : ''; // Tạo chuỗi truy vấn
+        window.history.pushState({}, '', baseUrl + queryString); // Cập nhật URL mà không tải lại trang
+
+
+    }
+
+</script>
+

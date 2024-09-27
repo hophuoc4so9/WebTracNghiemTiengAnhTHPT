@@ -1,0 +1,55 @@
+﻿
+<div class="table-container">
+    <div class="button-container">
+        <select id="filterSelect" onchange="filterUsers()">
+            <option value="">Lọc theo quyền</option>
+            <option value="Admin">Admin</option>
+            <option value="Editor">Giáo Viên</option>
+            <option value="Viewer">Học Sinh</option>
+            <!-- Thêm tùy chọn khác nếu cần -->
+        </select>
+        <input type="text" id="searchInput" placeholder="Tìm kiếm..." onkeyup="searchUser()">
+        <button onclick="searchUser()">Tìm</button> <!-- Nút Tìm kiếm -->
+        <div class="btn-cn">
+            <button class="btn" onclick="addUser()">Thêm</button>
+            <button class="btn" onclick="editUser()">Sửa</button>
+            <button class="btn" onclick="deleteUser()">Xóa</button>
+        </div>
+
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Quyền</th>
+                <th>Gmail</th>
+                <th>Hoạt Động</th>
+            </tr>
+        </thead>
+        <tbody id="userTableBody">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Username</td>
+                    <td>@item.PhanQuyen</td>
+                    <td>@item.Gmail</td>
+                    @if (@item.isDeleted == null)
+                    {
+                        <td>
+                            <button class=" btn-success">Hoạt động</button>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <button class=" btn-danger">Ngưng hoạt động</button>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+

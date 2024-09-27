@@ -14,6 +14,17 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
         {
             return View();
         }
+        public ActionResult QL_LOPHOC()
+        {
+            return View();
+        }
+        public ActionResult Render_QLLOPHOC()
+        {
+
+            TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
+            List<TaiKhoan> model = db.TaiKhoans.ToList();
+            return PartialView(model);
+        }
         [ChildActionOnly]
         public ActionResult RenderNavbar()
         {
