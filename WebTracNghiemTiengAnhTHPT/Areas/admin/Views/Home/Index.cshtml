@@ -9,6 +9,66 @@
 
 <!-- Minimalist CSS with white theme and subtle effects -->
 <style>
+    .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        width: 90%; /* Increased width to 90% */
+        max-width: 350px; /* Adjusted max width */
+        min-height: 300px; /* Set minimum height for better spacing */
+        overflow: hidden; /* Prevent overflow */
+    }
+    .btn-savee{
+        margin-top:10px ;
+        width:100% ; 
+    }
+    /* Form group styles */
+    .form-group {
+        margin-bottom: 15px; /* Space between form elements */
+    }
+
+
+    label {
+        display: block; /* Block display for labels */
+        margin-bottom: 5px; /* Space below labels */
+        font-weight: bold; /* Bold text for labels */
+    }
+
+    input[type="text"],
+    input[type="email"],
+
+    select {
+        width: 100%; /* Full width */
+        padding: 10px; /* Padding for input fields */
+        border: 1px solid #ccc; /* Light border */
+        border-radius: 4px; /* Slightly rounded corners */
+    }
+
+    /* New Button Container */
+    .button-container {
+        display: flex; /* Use flexbox */
+        justify-content: flex-end; /* Align button to the right */
+        margin-top: 20px; /* Space above the button */
+    }
+
+    .save-btn {
+        background-color: #4CAF50; /* Green background */
+        color: white; /* White text */
+        padding: 10px 15px; /* Padding */
+        border: none; /* No border */
+        border-radius: 5px; /* Rounded corners */
+        cursor: pointer; /* Pointer cursor */
+        font-size: 16px; /* Larger text */
+    }
+
+        .save-btn:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+
     .btn-cn {
         display: flex; /* Sử dụng flexbox */
         justify-content: flex-end; /* Căn các nút về phía bên phải */
@@ -231,21 +291,125 @@
         }
     }
 
-
+    //find user
     function filterUsers() {
         searchUser();
     }
+    //edit user
+
+    function editUser(username) {
+
+        var row = document.querySelector(`[onclick="editUser('${username}')"]`).closest('tr');
+        var phanQuyen = row.cells[1].innerText;
+        var gmail = row.cells[2].innerText;
+
+
+        document.getElementById('editUsername').value = username;
+        document.getElementById('editPhanQuyen').value = phanQuyen.toLowerCase();
+        document.getElementById('editGmail').value = gmail;
+
+
+        document.getElementById('editUserModal').style.display = 'block';
+    }
+
+
+    function closeEditModal() {
+        document.getElementById('editUserModal').style.display = 'none';
+    }
+
+    function saveUser() {
+        var username = document.getElementById('editUsername').value;
+        var phanQuyen = document.getElementById('editPhanQuyen').value;
+        var gmail = document.getElementById('editGmail').value;
+         $.ajax({
+             url: '@Url.Action("EditUser", "Home")',
+             type: 'POST',
+             data: {
+                 Username: username,
+                 PhanQuyen: phanQuyen,
+                 Gmail: gmail
+             },
+     success: function(response) {
+         if (response.success) {
+             var row = document.querySelector(`[onclick="editUser('${username}')"]`).closest('tr');
+                row.cells[1].innerText = phanQuyen;
+                row.cells[2].innerText = gmail;
+
+                // Close the modal
+                closeEditModal();
+           
+         } else {
+             alert("Đã có lỗi xảy ra khi thay đổi trạng thái.");
+         }
+         window.location.reload();
+     },
+     error: function() {
+         alert("Đã có lỗi xảy ra khi gửi yêu cầu.");
+     }
+ });
+        //fetch('/admin/Home/Index', {
+        //    method: 'POST',
+        //    headers: {
+        //        'Content-Type': 'application/json'
+        //    },
+        //    body: JSON.stringify({
+        //        Username: username,
+        //        PhanQuyen: phanQuyen,
+        //        Gmail: gmail
+        //    })
+        //})
+        //    .then(response => response.json())
+        //    .then(data => {
+        //        if (data.success) {
+        //            // Update the UI
+        //            var row = document.querySelector(`[onclick="editUser('${username}')"]`).closest('tr');
+        //            row.cells[1].innerText = phanQuyen;
+        //            row.cells[2].innerText = gmail;
+
+        //            // Close the modal
+        //            closeEditModal();
+        //        } else {
+        //            console.error('Failed to save user:', data.message);
+        //            alert(data.message); // Show error message to the user
+        //        }
+        //    })
+        //    .catch(error => console.error('Error:', error));
+    }
+
+
+  // delete user
+function deleteUser(Username) {
+    if (confirm("Bạn có chắc là muốn xóa User này hay không ?")) {
+        $.ajax({
+            url: '@Url.Action("DeleteUser", "Home")',
+            type: 'POST',
+            data: { Username: Username },
+            success: function (response) {
+                if (response.success) {
+
+                    window.location.reload();
+                } else {
+                    alert("Đã có lỗi xảy ra khi thay đổi trạng thái.");
+                }
+            },
+            error: function () {
+                alert("Đã có lỗi xảy ra khi thay đổi trạng thái.");
+            }
+        });
+    }
+}
+
     //change Status
   function changeStatus(Username, isActive) {
-      
+
     var confirmation = isActive
-        ? confirm("Bạn có chắc chắn muốn dừng hoạt động người dùng này?")
-        : confirm("Bạn có chắc chắn muốn kích hoạt lại người dùng này?");
+        ? confirm("Bạn có chắc chắn muốn  kích hoạt lại người dùng này?")
+        : confirm("Bạn có chắc chắn muốn dừng hoạt động người dùng này?");
 
     if (!confirmation) return;
 
     $.ajax({
-        url: '@Url.Action("ChangeStatus", "Home")', 
+        url: '@Url.Action("ChangeStatus", "Home")',
         type: 'POST',
         data: {
             Username: Username,
@@ -253,7 +417,7 @@
         },
         success: function(response) {
             if (response.success) {
-                
+
                 if (!isActive) {
                     $("button[onclick*='" + Username + "']").removeClass('btn-danger').addClass('btn-success').text('Hoạt động').attr('onclick', `changeStatus('${Username}', false)`);
                 } else {
@@ -262,6 +426,7 @@
             } else {
                 alert("Đã có lỗi xảy ra khi thay đổi trạng thái.");
             }
+            window.location.reload();
         },
         error: function() {
             alert("Đã có lỗi xảy ra khi gửi yêu cầu.");
