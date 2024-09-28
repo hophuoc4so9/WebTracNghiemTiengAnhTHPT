@@ -265,6 +265,8 @@ alter
 ALTER TABLE TaiKhoan
 ADD status BIT NOT NULL DEFAULT 0;
 
+ALTER TABLE CauHoi
+ADD UsernameTacGia varchar(30);
 ALTER TABLE KyThi
 ADD UsernameTacGia varchar(30);
 UPDATE KyThi

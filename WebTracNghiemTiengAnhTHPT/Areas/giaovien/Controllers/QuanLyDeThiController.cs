@@ -2,12 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using WebTracNghiemTiengAnhTHPT.Models;
+using System.Xml.Linq;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
 {
@@ -25,6 +29,45 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
 
            
         }
+        public ActionResult ThemMoiDeThi()
+        {
+            using (var db = new TracNghiemTiengAnhTHPTEntities1())
+            {
+                KyThi model = new KyThi();
+                return View(model);
+            }
+
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ThemMoiDeThi(KyThi model)
+        {
+            using (var db = new TracNghiemTiengAnhTHPTEntities1())
+            {
+                if (ModelState.IsValid)
+                {
+                    // Check if MaDe is unique
+                    var existingKyThi = db.KyThis.FirstOrDefault(k => k.MaDe == model.MaDe);
+                    if (Session["UserName"] != null) model.UsernameTacGia = Session["UserName"].ToString();
+                    if (existingKyThi != null)
+                    {
+                        // Add error to ModelState
+                        ModelState.AddModelError("MaDe", "Mã Đề đã tồn tại, vui lòng nhập mã khác.");
+                        return View(model);
+                    }
+
+                    // If unique, proceed with adding the new KyThi
+                    db.KyThis.Add(model);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+
+              
+                return View(model);
+            }    
+               
+        }
         public ActionResult ChiTietDeThi(string made)
         {
             using (var context = new TracNghiemTiengAnhTHPTEntities1())
@@ -32,12 +75,12 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                 // Get the current exam's questions
                 var model = context.CauHois
                     .Include(c => c.NhomCauHoi)
-                    .Where(item => item.KyThis.Any(c => c.MaDe == made))
+                    .Where(item => item.KyThis.Any(c => c.MaDe == made && c.isDeleted!=true))
                     .ToList();
 
                 // Get questions that are not part of the current exam
                 var otherQuestions = context.CauHois
-                    .Where(item => !item.KyThis.Any(c => c.MaDe == made))
+                    .Where(item => !item.KyThis.Any(c => c.MaDe == made && c.isDeleted != true))
                     .ToList();
 
                 ViewBag.made = made;
@@ -132,7 +175,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                                 // Update CongKhai   KyThi[@item.MaDe].CongKhai
                                 kyThi.CongKhai = form[$"KyThi[{index}].CongKhai"] != null && form[$"KyThi[{index}].CongKhai"] == "on";
 
-                                 kyThi.UsernameTacGia = Session["UserName"].ToString();
+                               if(Session["UserName"]!=null)   kyThi.UsernameTacGia = Session["UserName"].ToString();
 
                                 // Handle isDeleted
                                 kyThi.isDeleted = form[$"KyThi[{index}].isDeleted"] == "true"; // Set as deleted if true
@@ -150,6 +193,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
         }
 
 
+      
 
     }
 }

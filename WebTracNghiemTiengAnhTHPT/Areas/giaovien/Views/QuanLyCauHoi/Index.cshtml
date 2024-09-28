@@ -6,43 +6,8 @@
 }
 
 <h2>Thêm câu hỏi</h2>
-@using (Html.BeginForm("UploadDoc", "QuanLyDeThi", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    <input type="file" name="file" />
-    <input type="submit" value="Upload" />
-}
-<div>
-    <h3>Danh sách câu hỏi khác</h3>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Mã Câu Hỏi</th>
-                <th>Câu Hỏi</th>
-                <th>Thao Tác</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in ViewBag.OtherQuestions as List<WebTracNghiemTiengAnhTHPT.Models.CauHoi>)
-            {
-                <tr>
-                    <td>@item.MaCauHoi</td>
-                    <td>@item.NoiDung</td>
-                    <td>
 
-                        @using (Html.BeginForm("AddQuestionToExam", "QuanLyDeThi", FormMethod.Post))
-                        {
-                            @Html.Hidden("made", (string)ViewBag.made)
-                            @Html.Hidden("maCauHoi", item.MaCauHoi)
-                            <button type="submit" class="btn btn-primary">Thêm</button>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
-
-<h2>Chi tiết đề thi</h2>
+<h2>Chi tiết</h2>
 
 <div class="">
     @foreach (var group in groupedItems)
@@ -56,13 +21,13 @@
                     <th>Câu Hỏi</th>
                     <th>Đáp Án</th>
                     <th>Đáp Án Chính Xác</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in group)
                 {
-                    
-                    <tr>
+                    <tr id="row-@item.MaCauHoi">
                         <td>@item.MaCauHoi</td>
                         <td>@Html.DisplayFor(modelItem => item.NoiDung)</td>
                         <td>
@@ -75,17 +40,36 @@
                         </td>
                         <td>@Html.DisplayFor(modelItem => item.DapAnChinhXac)</td>
                         <td>
-                            @using (Html.BeginForm("DeleteCauHoi", "QuanLyDeThi", new { maCauHoi = item.MaCauHoi, made = ViewBag.made }, FormMethod.Post))
-                            {
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            }
+                            <button type="button" class="btn btn-primary">Sửa</button>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteQuestion('@item.MaCauHoi')">Xóa</button>
                         </td>
-
-
                     </tr>
                 }
             </tbody>
         </table>
     }
-
 </div>
+
+<script>
+    function deleteQuestion(maCauHoi) {
+        if (confirm("Bạn có chắc chắn muốn xóa câu hỏi này không?")) {
+            // Send an AJAX request to update the isDeleted field
+            $.ajax({
+                url: '@Url.Action("DeleteQuestion", "QuanLyDeThi")',
+                type: 'POST',
+                data: { maCauHoi: maCauHoi },
+                success: function (response) {
+                    if (response.success) {
+                        // Hide the row from the table
+                        $('#row-' + maCauHoi).hide();
+                    } else {
+                        alert("Không thể xóa câu hỏi. Vui lòng thử lại.");
+                    }
+                },
+                error: function () {
+                    alert("Có lỗi xảy ra. Vui lòng thử lại.");
+                }
+            });
+        }
+    }
+</script>

@@ -32,6 +32,7 @@
           <Property Name="DapAnChinhXac" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="DaDuyet" Type="bit" />
           <Property Name="isDeleted" Type="bit" />
+          <Property Name="UsernameTacGia" Type="varchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="ChiTietCauHoiDangBai">
           <Key>
@@ -541,6 +542,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           <NavigationProperty Name="DangBais" Relationship="Self.ChiTietCauHoiDangBai" FromRole="CauHoi" ToRole="DangBai" />
           <NavigationProperty Name="KyThis" Relationship="Self.KyThiCauHoi" FromRole="CauHoi" ToRole="KyThi" />
           <Property Name="isDeleted" Type="Boolean" />
+          <Property Name="UsernameTacGia" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="ChiTietKetQua">
           <Key>
@@ -898,6 +900,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           <EntitySetMapping Name="CauHois">
             <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.CauHoi">
               <MappingFragment StoreEntitySet="CauHoi">
+                <ScalarProperty Name="UsernameTacGia" ColumnName="UsernameTacGia" />
                 <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
                 <ScalarProperty Name="MaCauHoi" ColumnName="MaCauHoi" />
                 <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
