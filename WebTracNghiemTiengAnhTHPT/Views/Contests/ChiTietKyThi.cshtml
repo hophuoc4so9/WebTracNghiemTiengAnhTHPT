@@ -29,6 +29,7 @@
                     </div>
                     @foreach (var group in groupedItems)
                     {
+                
                         <div class="group-container" id="group-container-@group.Key.MaNhom" style="display: @(isFirst ? "block" : "none");">
 
                             <div class="bg-light "> @group.Key.NoiDung</div>
@@ -113,14 +114,12 @@
             </div>
         </form>
     </div>
-    <div >
-        điểm
-    </div>
+    
 
 </div>
 <script>
     function showGroup(maNhom) {
-
+        console.log(maNhom);
         var groupContainers = document.querySelectorAll('.group-container');
         groupContainers.forEach(function (container) {
             container.style.display = 'none';
@@ -167,6 +166,6 @@
     startTimer();
  
 
-}
+
 
 </script>

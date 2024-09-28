@@ -7,13 +7,12 @@
 
 <h2>Quản Lý Đề Thi</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+
 
 <!-- Single Save Button -->
 <button type="button" class="btn btn-success btn-sm" onclick="saveAllChanges()">Save All</button>
 
+<button type="button" class="btn btn-success btn-sm" onclick="saveAllChanges()">Thêm mới</button>
 <!-- Bootstrap Grid Layout -->
 <form class="kyThi-form" action="@Url.Action("Update", "QuanLyDeThi")" method="post">
     <div class="container">
@@ -88,7 +87,7 @@
                 <div class="col">
                     <button type="button" class="btn btn-primary btn-sm edit-btn" onclick="toggleEdit(this)">Edit</button>
                     <button type="button" class="btn btn-danger btn-sm delete-btn" onclick="deleteItem(this)">Delete</button>
-                    @Html.ActionLink("ChiTiet", "ChiTietDeThi", "QuanLyDeThi", new { made = item.MaDe }, new { @class = "btn btn-outline-success" })
+                    @Html.ActionLink("ChiTiet", "ChiTietDeThi", "QuanLyDeThi", new { made = item.MaDe }, new { @class = "btn btn-outline-success btn-sm " })
 
                 </div>
             </div>

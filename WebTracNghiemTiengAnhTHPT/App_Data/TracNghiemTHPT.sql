@@ -262,6 +262,8 @@ GROUP BY
 )
 alter
 
+ALTER TABLE TaiKhoan
+ADD status BIT NOT NULL DEFAULT 0;
 
 ALTER TABLE KyThi
 ADD UsernameTacGia varchar(30);

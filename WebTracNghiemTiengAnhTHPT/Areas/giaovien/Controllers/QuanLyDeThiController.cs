@@ -66,6 +66,28 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             }
         }
         [HttpPost]
+        public ActionResult DeleteCauHoi(string maCauHoi, string made)
+        {
+            using (var db = new TracNghiemTiengAnhTHPTEntities1())
+            {
+                var kyThi = db.KyThis.Include(k => k.CauHois)
+                                 .FirstOrDefault(k => k.MaDe == made);
+            if (kyThi == null)
+            {
+                return HttpNotFound();
+            }
+
+            // Find the CauHoi in the KyThi
+            var cauHoiToRemove = kyThi.CauHois.FirstOrDefault(ch => ch.MaCauHoi == maCauHoi);
+            if (cauHoiToRemove != null)
+            {
+                kyThi.CauHois.Remove(cauHoiToRemove);
+                db.SaveChanges();
+            }
+            return RedirectToAction("ChiTietDeThi", new { made });
+            }
+        }
+        [HttpPost]
         public ActionResult Update(FormCollection form)
         {
             using (var db = new TracNghiemTiengAnhTHPTEntities1())

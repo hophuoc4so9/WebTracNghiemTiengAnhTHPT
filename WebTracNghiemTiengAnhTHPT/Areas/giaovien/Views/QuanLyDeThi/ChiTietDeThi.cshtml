@@ -69,6 +69,14 @@
                             </ul>
                         </td>
                         <td>@Html.DisplayFor(modelItem => item.DapAnChinhXac)</td>
+                        <td>
+                            @using (Html.BeginForm("DeleteCauHoi", "QuanLyDeThi", new { maCauHoi = item.MaCauHoi, made = ViewBag.made }, FormMethod.Post))
+                            {
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            }
+                        </td>
+
+
                     </tr>
                 }
             </tbody>

@@ -19,6 +19,12 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
         {
             return View();
         }
+        public ActionResult Logout()
+        {
+            Session["UserName"] = null;
+            Session["phanquyen"] = null;
+            return View("Login");
+        }
         [HttpPost]
         public ActionResult Login(string username, string password)
         {
