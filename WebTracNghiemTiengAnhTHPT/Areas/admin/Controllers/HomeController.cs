@@ -18,6 +18,36 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
         {
             return View();
         }
+        //delete user
+        [HttpPost]
+        public JsonResult DeleteUser(string Username)
+        {
+            try
+            {
+                using (TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1())
+                {
+                    var user = db.TaiKhoans.FirstOrDefault(u => u.Username == Username);  
+
+                    if (user != null)
+                    {
+                        user.isDeleted = true;
+                        db.SaveChanges();
+                        TempData["SuccessMessage"] = "Bạn đã xóa user này thành công. User này sẽ được chuyển vào mục thùng rác !";
+                        return Json(new { success = true});
+                    }
+                    else
+                    {
+                        return Json(new { success = false});
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                
+                return Json(new { success = false, message = "An error occurred while deleting the user." });
+            }
+        }
+
         [HttpPost]
         public JsonResult ChangeStatus(string Username, bool isActive)
         {

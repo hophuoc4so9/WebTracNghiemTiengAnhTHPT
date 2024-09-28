@@ -235,9 +235,31 @@
     function filterUsers() {
         searchUser();
     }
+  // delete user
+function deleteUser(Username) {
+    if (confirm("Are you sure you want to delete this user?")) {
+        $.ajax({
+            url: '@Url.Action("DeleteUser", "Home")',
+            type: 'POST',
+            data: { Username: Username },
+            success: function (response) {
+                if (response.success) {
+                  
+                    window.location.reload();
+                } else {
+                    alert("Đã có lỗi xảy ra khi thay đổi trạng thái.");
+                }
+            },
+            error: function () {
+                alert("Đã có lỗi xảy ra khi thay đổi trạng thái.");
+            }
+        });
+    }
+}
+
     //change Status
   function changeStatus(Username, isActive) {
-      
+
     var confirmation = isActive
         ? confirm("Bạn có chắc chắn muốn  kích hoạt lại người dùng này?")
         : confirm("Bạn có chắc chắn muốn dừng hoạt động người dùng này?");
@@ -245,7 +267,7 @@
     if (!confirmation) return;
 
     $.ajax({
-        url: '@Url.Action("ChangeStatus", "Home")', 
+        url: '@Url.Action("ChangeStatus", "Home")',
         type: 'POST',
         data: {
             Username: Username,
@@ -253,7 +275,7 @@
         },
         success: function(response) {
             if (response.success) {
-                
+
                 if (!isActive) {
                     $("button[onclick*='" + Username + "']").removeClass('btn-danger').addClass('btn-success').text('Hoạt động').attr('onclick', `changeStatus('${Username}', false)`);
                 } else {
