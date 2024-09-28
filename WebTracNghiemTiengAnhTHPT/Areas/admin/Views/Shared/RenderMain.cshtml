@@ -1,4 +1,27 @@
-﻿
+﻿<!-- Edit User Modal -->
+<div id="editUserModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeEditModal()">&times;</span>
+        <h2>Chỉnh Sửa Người Dùng</h2>
+        <form id="editUserForm">
+            <label for="editUsername">Username:</label>
+            <input type="text" id="editUsername" name="editUsername" readonly>
+
+            <label for="editPhanQuyen">Quyền:</label>
+            <select id="editPhanQuyen" name="editPhanQuyen">
+                <option value="admin">Admin</option>
+                <option value="giaovien">Giáo Viên</option>
+                <option value="hocsinh">Học Sinh</option>
+            </select>
+
+            <label for="editGmail">Gmail:</label>
+            <input type="email" id="editGmail" name="editGmail">
+
+            <button class="btn-savee" type="button" onclick="saveUser()">Lưu</button>
+        </form>
+    </div>
+</div>
+@*end edit modal*@
 <div class="table-container">
     <div class="button-container">
         <select id="filterSelect" onchange="filterUsers()">
@@ -12,7 +35,7 @@
         <button onclick="searchUser()">Tìm</button> <!-- Nút Tìm kiếm -->
         <div class="btn-cn">
             <button class="btn">Thêm</button>
-            
+
         </div>
 
     </div>
@@ -30,37 +53,37 @@
         <tbody id="userTableBody">
             @foreach (var item in Model)
             {
-              if (item.isDeleted == false)
-              {
+                if (item.isDeleted == false)
+                {
 
 
-                <tr>
-                    <td>@item.Username</td>
-                    <td>@item.PhanQuyen</td>
-                    <td>@item.Gmail</td>
-                    @if (@item.status == true)
-                    {
+                    <tr>
+                        <td>@item.Username</td>
+                        <td>@item.PhanQuyen</td>
+                        <td>@item.Gmail</td>
+                        @if (@item.status == true)
+                        {
+                            <td>
+                                <button class="b btn-success" onclick="changeStatus('@item.Username', false)">Hoạt động</button>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <button class="btn-danger" onclick="changeStatus('@item.Username', true)">Dừng hoạt động</button>
+                            </td>
+                        }
+
                         <td>
-                            <button class="b btn-success" onclick="changeStatus('@item.Username', false)">Hoạt động</button>
+
+                            <button class="btn-warning" onclick="editUser('@item.Username')">Sửa</button>
+                            <button class="btn-danger" onclick="deleteUser('@item.Username')">Xóa</button>
+
+
                         </td>
-                    }
-                    else
-                    {
-                        <td>
-                            <button class="btn-danger" onclick="changeStatus('@item.Username', true)">Dừng hoạt động</button>
-                        </td>
-                    }
-              
-                <td>
-
-                    <button class="btn-warning">Sửa</button>
-                    <button class="btn-danger" onclick="deleteUser('@item.Username')">Xóa</button>
-
-
-                </td>
-                </tr>
-                  }
-              }
+                    </tr>
+                }
+            }
         </tbody>
 
     </table>

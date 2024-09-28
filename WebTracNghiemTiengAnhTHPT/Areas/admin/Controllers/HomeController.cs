@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -17,6 +18,38 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
         public ActionResult QL_LOPHOC()
         {
             return View();
+        }
+
+        //edit user 
+        [HttpPost]
+        public JsonResult EditUser(string Username,string PhanQuyen, string Gmail)
+        {
+            try
+            {
+                using (TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1())
+                {
+                    var user = db.TaiKhoans.FirstOrDefault(u => u.Username == Username);
+
+                    if (user != null)
+                    {
+                        user.Username = Username;
+                        user.PhanQuyen = PhanQuyen;
+                        user.Gmail = Gmail;
+                        db.SaveChanges();
+                        TempData["SuccessMessage"] = "Bạn đã cập nhật user này thành công!";
+                        return Json(new { success = true });
+                    }
+                    else
+                    {
+                        return Json(new { success = false });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { success = false, message = "An error occurred while deleting the user." });
+            }
         }
         //delete user
         [HttpPost]
