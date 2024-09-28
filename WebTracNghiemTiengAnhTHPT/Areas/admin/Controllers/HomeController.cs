@@ -30,10 +30,10 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
                 var user = model.SingleOrDefault(u => u.Username == gg);
                 if (user != null)
                 {
-                    user.isDeleted = isActive;  
+                    user.status = isActive;  
                     db.SaveChanges(); 
                 }
-
+                TempData["SuccessMessage"] = "Bạn đã thay đổi trạng thái thành công.";
                 return Json(new { success = true });
             }
             catch (Exception ex)

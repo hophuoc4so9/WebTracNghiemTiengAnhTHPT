@@ -34,16 +34,16 @@
                     <td>@item.Username</td>
                     <td>@item.PhanQuyen</td>
                     <td>@item.Gmail</td>
-                    @if (@item.isDeleted == false|| @item.isDeleted ==null )
+                    @if (@item.status == true)
                     {
                         <td>
-                            <button class="b btn-success" onclick="changeStatus('@item.Username', true)">Hoạt động</button>
+                            <button class="b btn-success" onclick="changeStatus('@item.Username', false)">Hoạt động</button>
                         </td>
                     }
                     else
                     {
                         <td>
-                            <button class="btn-danger" onclick="changeStatus('@item.Username', false)">Dừng hoạt động</button>
+                            <button class="btn-danger" onclick="changeStatus('@item.Username', true)">Dừng hoạt động</button>
                         </td>
                     }
               

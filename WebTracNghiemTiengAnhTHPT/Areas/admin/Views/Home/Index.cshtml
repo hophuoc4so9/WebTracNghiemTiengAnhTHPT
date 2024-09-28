@@ -239,8 +239,8 @@
   function changeStatus(Username, isActive) {
       
     var confirmation = isActive
-        ? confirm("Bạn có chắc chắn muốn dừng hoạt động người dùng này?")
-        : confirm("Bạn có chắc chắn muốn kích hoạt lại người dùng này?");
+        ? confirm("Bạn có chắc chắn muốn  kích hoạt lại người dùng này?")
+        : confirm("Bạn có chắc chắn muốn dừng hoạt động người dùng này?");
 
     if (!confirmation) return;
 
@@ -262,6 +262,7 @@
             } else {
                 alert("Đã có lỗi xảy ra khi thay đổi trạng thái.");
             }
+            window.location.reload();
         },
         error: function() {
             alert("Đã có lỗi xảy ra khi gửi yêu cầu.");
