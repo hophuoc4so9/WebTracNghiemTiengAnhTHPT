@@ -12,16 +12,16 @@ namespace WebTracNghiemTiengAnhTHPT.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class view_ChitietKyThi
+    public partial class ViewChitietKyThi_2
     {
-        public Nullable<int> SoCauHoi { get; set; }
-        public Nullable<int> DiemTrungBinh { get; set; }
-        public string MaDe { get; set; }
+        public int MaDe { get; set; }
         public string TenKyThi { get; set; }
         public int ThoiGian { get; set; }
         public Nullable<System.DateTime> ThoiGianBatDau { get; set; }
         public Nullable<System.DateTime> ThoiGianKetThuc { get; set; }
         public bool CongKhai { get; set; }
+        public Nullable<int> SoCauHoi { get; set; }
+        public Nullable<int> DiemTrungBinh { get; set; }
         public Nullable<int> Soluot { get; set; }
     }
 }

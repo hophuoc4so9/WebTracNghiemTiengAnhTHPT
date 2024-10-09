@@ -6,7 +6,11 @@
 }
 
 <h2>Thêm câu hỏi</h2>
-
+@using (Html.BeginForm("UploadDoc", "QuanLyDeThi", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input type="file" name="file" />
+    <input type="submit" value="Upload" />
+}
 <div>
     <h3>Danh sách câu hỏi khác</h3>
     <table class="table table-bordered">
@@ -57,6 +61,7 @@
             <tbody>
                 @foreach (var item in group)
                 {
+                    
                     <tr>
                         <td>@item.MaCauHoi</td>
                         <td>@Html.DisplayFor(modelItem => item.NoiDung)</td>
@@ -82,5 +87,5 @@
             </tbody>
         </table>
     }
-    
+
 </div>

@@ -14,10 +14,19 @@ namespace WebTracNghiemTiengAnhTHPT.Models
     
     public partial class KetQua
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public KetQua()
+        {
+            this.ChiTietKetQuas = new HashSet<ChiTietKetQua>();
+        }
+    
+        public int Maketqua { get; set; }
         public string Username { get; set; }
-        public string MaDe { get; set; }
+        public Nullable<int> MaDe { get; set; }
         public Nullable<double> Diem { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ChiTietKetQua> ChiTietKetQuas { get; set; }
         public virtual KyThi KyThi { get; set; }
         public virtual TaiKhoan TaiKhoan { get; set; }
     }

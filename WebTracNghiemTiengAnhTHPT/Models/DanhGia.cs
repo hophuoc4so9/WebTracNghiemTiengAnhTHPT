@@ -17,8 +17,7 @@ namespace WebTracNghiemTiengAnhTHPT.Models
         public string Username { get; set; }
         public int Rate { get; set; }
         public string NoiDung { get; set; }
-        public string MaDe { get; set; }
-        public Nullable<bool> isDeleted { get; set; }
+        public int MaDe { get; set; }
     
         public virtual TaiKhoan TaiKhoan { get; set; }
         public virtual KyThi KyThi { get; set; }

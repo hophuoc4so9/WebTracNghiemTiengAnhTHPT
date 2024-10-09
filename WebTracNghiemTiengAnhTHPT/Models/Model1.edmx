@@ -13,16 +13,15 @@
           </Key>
           <Property Name="NoiDung" Type="nvarchar" MaxLength="300" Nullable="false" />
           <Property Name="Username" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="MaCauHoi" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="MaDe" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="isDeleted" Type="bit" />
+          <Property Name="MaCauHoi" Type="int" Nullable="false" />
+          <Property Name="MaDe" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="CauHoi">
           <Key>
             <PropertyRef Name="MaCauHoi" />
           </Key>
-          <Property Name="MaCauHoi" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="NoiDung" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="MaCauHoi" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NoiDung" Type="varchar" MaxLength="4000" Nullable="false" />
           <Property Name="MaNhom" Type="int" />
           <Property Name="MucDo" Type="int" />
           <Property Name="DapAnA" Type="varchar" MaxLength="100" Nullable="false" />
@@ -31,35 +30,35 @@
           <Property Name="DapAnD" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="DapAnChinhXac" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="DaDuyet" Type="bit" />
-          <Property Name="isDeleted" Type="bit" />
           <Property Name="UsernameTacGia" Type="varchar" MaxLength="30" />
+          <Property Name="isDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="ChiTietCauHoiDangBai">
           <Key>
             <PropertyRef Name="MaCauHoi" />
             <PropertyRef Name="MaLoai" />
           </Key>
-          <Property Name="MaCauHoi" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="MaCauHoi" Type="int" Nullable="false" />
           <Property Name="MaLoai" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ChiTietKetQua">
           <Key>
             <PropertyRef Name="Username" />
-            <PropertyRef Name="MaDe" />
+            <PropertyRef Name="Maketqua" />
             <PropertyRef Name="MaCauHoi" />
           </Key>
           <Property Name="Username" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="MaDe" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="MaCauHoi" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Maketqua" Type="int" Nullable="false" />
+          <Property Name="MaCauHoi" Type="int" Nullable="false" />
           <Property Name="DapAnChon" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="MaDe" Type="int" />
         </EntityType>
         <EntityType Name="DangBai">
           <Key>
             <PropertyRef Name="MaLoai" />
           </Key>
-          <Property Name="MaLoai" Type="int" Nullable="false" />
+          <Property Name="MaLoai" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TenLoai" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="isDeleted" Type="bit" />
         </EntityType>
         <EntityType Name="DanhGia">
           <Key>
@@ -69,23 +68,22 @@
           <Property Name="Username" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Rate" Type="int" Nullable="false" />
           <Property Name="NoiDung" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="MaDe" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="isDeleted" Type="bit" />
+          <Property Name="MaDe" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="KetQua">
           <Key>
-            <PropertyRef Name="Username" />
-            <PropertyRef Name="MaDe" />
+            <PropertyRef Name="Maketqua" />
           </Key>
-          <Property Name="Username" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="MaDe" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Maketqua" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="30" />
+          <Property Name="MaDe" Type="int" />
           <Property Name="Diem" Type="float" />
         </EntityType>
         <EntityType Name="KyThi">
           <Key>
             <PropertyRef Name="MaDe" />
           </Key>
-          <Property Name="MaDe" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="MaDe" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TenKyThi" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="ThoiGian" Type="int" Nullable="false" />
           <Property Name="ThoiGianBatDau" Type="datetime" />
@@ -99,8 +97,8 @@
             <PropertyRef Name="MaDe" />
             <PropertyRef Name="MaCauHoi" />
           </Key>
-          <Property Name="MaDe" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="MaCauHoi" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="MaDe" Type="int" Nullable="false" />
+          <Property Name="MaCauHoi" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.LienHe' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -120,25 +118,24 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.LienHe' does not have a
           <Key>
             <PropertyRef Name="MaNhom" />
           </Key>
-          <Property Name="MaNhom" Type="int" Nullable="false" />
+          <Property Name="MaNhom" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="NoiDung" Type="varchar" MaxLength="8000" Nullable="false" />
-          <Property Name="isDeleted" Type="bit" />
+          <Property Name="isDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PhongThi">
           <Key>
             <PropertyRef Name="MaPhong" />
           </Key>
-          <Property Name="MaPhong" Type="int" Nullable="false" />
+          <Property Name="MaPhong" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="MatKhau" Type="varchar" MaxLength="30" />
           <Property Name="TenPhong" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="isDeleted" Type="bit" />
         </EntityType>
         <EntityType Name="PhongThiKyThi">
           <Key>
             <PropertyRef Name="MaDe" />
             <PropertyRef Name="MaPhong" />
           </Key>
-          <Property Name="MaDe" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="MaDe" Type="int" Nullable="false" />
           <Property Name="MaPhong" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="PhongThiNguoiDung">
@@ -154,22 +151,22 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.LienHe' does not have a
             <PropertyRef Name="Username" />
           </Key>
           <Property Name="Username" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="Password" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="1000" Nullable="false" />
           <Property Name="PhanQuyen" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="Gmail" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="isDeleted" Type="bit" />
           <Property Name="status" Type="bit" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="view_ChitietKyThi">
+warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.ViewChitietKyThi_2' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ViewChitietKyThi_2">
           <Key>
             <PropertyRef Name="MaDe" />
             <PropertyRef Name="TenKyThi" />
             <PropertyRef Name="ThoiGian" />
             <PropertyRef Name="CongKhai" />
           </Key>
-          <Property Name="MaDe" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="MaDe" Type="int" Nullable="false" />
           <Property Name="TenKyThi" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="ThoiGian" Type="int" Nullable="false" />
           <Property Name="ThoiGianBatDau" Type="datetime" />
@@ -239,15 +236,15 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ChiTietKetQua_KyThi">
-          <End Role="KyThi" Type="Self.KyThi" Multiplicity="1" />
+        <Association Name="FK_ChiTietKetQua_Maketqua">
+          <End Role="KetQua" Type="Self.KetQua" Multiplicity="1" />
           <End Role="ChiTietKetQua" Type="Self.ChiTietKetQua" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="KyThi">
-              <PropertyRef Name="MaDe" />
+            <Principal Role="KetQua">
+              <PropertyRef Name="Maketqua" />
             </Principal>
             <Dependent Role="ChiTietKetQua">
-              <PropertyRef Name="MaDe" />
+              <PropertyRef Name="Maketqua" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -287,31 +284,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_KetQua_KyThi">
-          <End Role="KyThi" Type="Self.KyThi" Multiplicity="1" />
-          <End Role="KetQua" Type="Self.KetQua" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="KyThi">
-              <PropertyRef Name="MaDe" />
-            </Principal>
-            <Dependent Role="KetQua">
-              <PropertyRef Name="MaDe" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_KetQua_TaiKhoan">
-          <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="1" />
-          <End Role="KetQua" Type="Self.KetQua" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TaiKhoan">
-              <PropertyRef Name="Username" />
-            </Principal>
-            <Dependent Role="KetQua">
-              <PropertyRef Name="Username" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_KyThiCauHoi_CauHoi">
+        <Association Name="FK_DeThiCauHoi_CauHoi">
           <End Role="CauHoi" Type="Self.CauHoi" Multiplicity="1" />
           <End Role="KyThiCauHoi" Type="Self.KyThiCauHoi" Multiplicity="*" />
           <ReferentialConstraint>
@@ -323,7 +296,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_KyThiCauHoi_KyThi">
+        <Association Name="FK_DeThiCauHoi_KyThi">
           <End Role="KyThi" Type="Self.KyThi" Multiplicity="1" />
           <End Role="KyThiCauHoi" Type="Self.KyThiCauHoi" Multiplicity="*" />
           <ReferentialConstraint>
@@ -331,6 +304,42 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
               <PropertyRef Name="MaDe" />
             </Principal>
             <Dependent Role="KyThiCauHoi">
+              <PropertyRef Name="MaDe" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_KetQua_KyThi">
+          <End Role="KyThi" Type="Self.KyThi" Multiplicity="0..1" />
+          <End Role="KetQua" Type="Self.KetQua" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KyThi">
+              <PropertyRef Name="MaDe" />
+            </Principal>
+            <Dependent Role="KetQua">
+              <PropertyRef Name="MaDe" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_KetQua_TaiKhoan">
+          <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="0..1" />
+          <End Role="KetQua" Type="Self.KetQua" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaiKhoan">
+              <PropertyRef Name="Username" />
+            </Principal>
+            <Dependent Role="KetQua">
+              <PropertyRef Name="Username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_KyThi_BaoLoi">
+          <End Role="KyThi" Type="Self.KyThi" Multiplicity="1" />
+          <End Role="BaoLoi" Type="Self.BaoLoi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KyThi">
+              <PropertyRef Name="MaDe" />
+            </Principal>
+            <Dependent Role="BaoLoi">
               <PropertyRef Name="MaDe" />
             </Dependent>
           </ReferentialConstraint>
@@ -418,18 +427,18 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
     [LienHe].[NoiDung] AS [NoiDung]
     FROM [dbo].[LienHe] AS [LienHe]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="view_ChitietKyThi" EntityType="Self.view_ChitietKyThi" store:Type="Views" store:Schema="dbo">
+          <EntitySet Name="ViewChitietKyThi_2" EntityType="Self.ViewChitietKyThi_2" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
-    [view_ChitietKyThi].[MaDe] AS [MaDe], 
-    [view_ChitietKyThi].[TenKyThi] AS [TenKyThi], 
-    [view_ChitietKyThi].[ThoiGian] AS [ThoiGian], 
-    [view_ChitietKyThi].[ThoiGianBatDau] AS [ThoiGianBatDau], 
-    [view_ChitietKyThi].[ThoiGianKetThuc] AS [ThoiGianKetThuc], 
-    [view_ChitietKyThi].[CongKhai] AS [CongKhai], 
-    [view_ChitietKyThi].[SoCauHoi] AS [SoCauHoi], 
-    [view_ChitietKyThi].[DiemTrungBinh] AS [DiemTrungBinh], 
-    [view_ChitietKyThi].[Soluot] AS [Soluot]
-    FROM [dbo].[view_ChitietKyThi] AS [view_ChitietKyThi]</DefiningQuery>
+    [ViewChitietKyThi_2].[MaDe] AS [MaDe], 
+    [ViewChitietKyThi_2].[TenKyThi] AS [TenKyThi], 
+    [ViewChitietKyThi_2].[ThoiGian] AS [ThoiGian], 
+    [ViewChitietKyThi_2].[ThoiGianBatDau] AS [ThoiGianBatDau], 
+    [ViewChitietKyThi_2].[ThoiGianKetThuc] AS [ThoiGianKetThuc], 
+    [ViewChitietKyThi_2].[CongKhai] AS [CongKhai], 
+    [ViewChitietKyThi_2].[SoCauHoi] AS [SoCauHoi], 
+    [ViewChitietKyThi_2].[DiemTrungBinh] AS [DiemTrungBinh], 
+    [ViewChitietKyThi_2].[Soluot] AS [Soluot]
+    FROM [dbo].[ViewChitietKyThi_2] AS [ViewChitietKyThi_2]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_BaoLoi_CauHoi" Association="Self.FK_BaoLoi_CauHoi">
             <End Role="CauHoi" EntitySet="CauHoi" />
@@ -451,8 +460,8 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
             <End Role="CauHoi" EntitySet="CauHoi" />
             <End Role="ChiTietKetQua" EntitySet="ChiTietKetQua" />
           </AssociationSet>
-          <AssociationSet Name="FK_ChiTietKetQua_KyThi" Association="Self.FK_ChiTietKetQua_KyThi">
-            <End Role="KyThi" EntitySet="KyThi" />
+          <AssociationSet Name="FK_ChiTietKetQua_Maketqua" Association="Self.FK_ChiTietKetQua_Maketqua">
+            <End Role="KetQua" EntitySet="KetQua" />
             <End Role="ChiTietKetQua" EntitySet="ChiTietKetQua" />
           </AssociationSet>
           <AssociationSet Name="FK_ChiTietKetQua_TaiKhoan" Association="Self.FK_ChiTietKetQua_TaiKhoan">
@@ -467,6 +476,14 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
             <End Role="TaiKhoan" EntitySet="TaiKhoan" />
             <End Role="DanhGia" EntitySet="DanhGia" />
           </AssociationSet>
+          <AssociationSet Name="FK_DeThiCauHoi_CauHoi" Association="Self.FK_DeThiCauHoi_CauHoi">
+            <End Role="CauHoi" EntitySet="CauHoi" />
+            <End Role="KyThiCauHoi" EntitySet="KyThiCauHoi" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DeThiCauHoi_KyThi" Association="Self.FK_DeThiCauHoi_KyThi">
+            <End Role="KyThi" EntitySet="KyThi" />
+            <End Role="KyThiCauHoi" EntitySet="KyThiCauHoi" />
+          </AssociationSet>
           <AssociationSet Name="FK_KetQua_KyThi" Association="Self.FK_KetQua_KyThi">
             <End Role="KyThi" EntitySet="KyThi" />
             <End Role="KetQua" EntitySet="KetQua" />
@@ -475,13 +492,9 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
             <End Role="TaiKhoan" EntitySet="TaiKhoan" />
             <End Role="KetQua" EntitySet="KetQua" />
           </AssociationSet>
-          <AssociationSet Name="FK_KyThiCauHoi_CauHoi" Association="Self.FK_KyThiCauHoi_CauHoi">
-            <End Role="CauHoi" EntitySet="CauHoi" />
-            <End Role="KyThiCauHoi" EntitySet="KyThiCauHoi" />
-          </AssociationSet>
-          <AssociationSet Name="FK_KyThiCauHoi_KyThi" Association="Self.FK_KyThiCauHoi_KyThi">
+          <AssociationSet Name="FK_KyThi_BaoLoi" Association="Self.FK_KyThi_BaoLoi">
             <End Role="KyThi" EntitySet="KyThi" />
-            <End Role="KyThiCauHoi" EntitySet="KyThiCauHoi" />
+            <End Role="BaoLoi" EntitySet="BaoLoi" />
           </AssociationSet>
           <AssociationSet Name="FK_KyThiCauHoi_MaDe" Association="Self.FK_KyThiCauHoi_MaDe">
             <End Role="KyThi" EntitySet="KyThi" />
@@ -508,142 +521,215 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TracNghiemTiengAnhTHPTModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="TracNghiemTiengAnhTHPTEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="BaoLois" EntityType="TracNghiemTiengAnhTHPTModel.BaoLoi" />
+          <EntitySet Name="CauHois" EntityType="TracNghiemTiengAnhTHPTModel.CauHoi" />
+          <EntitySet Name="ChiTietKetQuas" EntityType="TracNghiemTiengAnhTHPTModel.ChiTietKetQua" />
+          <EntitySet Name="DangBais" EntityType="TracNghiemTiengAnhTHPTModel.DangBai" />
+          <EntitySet Name="DanhGias" EntityType="TracNghiemTiengAnhTHPTModel.DanhGia" />
+          <EntitySet Name="KetQuas" EntityType="TracNghiemTiengAnhTHPTModel.KetQua" />
+          <EntitySet Name="KyThis" EntityType="TracNghiemTiengAnhTHPTModel.KyThi" />
+          <EntitySet Name="NhomCauHois" EntityType="TracNghiemTiengAnhTHPTModel.NhomCauHoi" />
+          <EntitySet Name="PhongThis" EntityType="TracNghiemTiengAnhTHPTModel.PhongThi" />
+          <EntitySet Name="TaiKhoans" EntityType="TracNghiemTiengAnhTHPTModel.TaiKhoan" />
+          <EntitySet Name="LienHes" EntityType="TracNghiemTiengAnhTHPTModel.LienHe" />
+          <AssociationSet Name="FK_BaoLoi_CauHoi" Association="TracNghiemTiengAnhTHPTModel.FK_BaoLoi_CauHoi">
+            <End Role="CauHoi" EntitySet="CauHois" />
+            <End Role="BaoLoi" EntitySet="BaoLois" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BaoLoi_TaiKhoan" Association="TracNghiemTiengAnhTHPTModel.FK_BaoLoi_TaiKhoan">
+            <End Role="TaiKhoan" EntitySet="TaiKhoans" />
+            <End Role="BaoLoi" EntitySet="BaoLois" />
+          </AssociationSet>
+          <AssociationSet Name="FK_KyThi_BaoLoi" Association="TracNghiemTiengAnhTHPTModel.FK_KyThi_BaoLoi">
+            <End Role="KyThi" EntitySet="KyThis" />
+            <End Role="BaoLoi" EntitySet="BaoLois" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CauHoi_NhomCauHoi" Association="TracNghiemTiengAnhTHPTModel.FK_CauHoi_NhomCauHoi">
+            <End Role="NhomCauHoi" EntitySet="NhomCauHois" />
+            <End Role="CauHoi" EntitySet="CauHois" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ChiTietKetQua_CauHoi" Association="TracNghiemTiengAnhTHPTModel.FK_ChiTietKetQua_CauHoi">
+            <End Role="CauHoi" EntitySet="CauHois" />
+            <End Role="ChiTietKetQua" EntitySet="ChiTietKetQuas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ChiTietKetQua_Maketqua" Association="TracNghiemTiengAnhTHPTModel.FK_ChiTietKetQua_Maketqua">
+            <End Role="KetQua" EntitySet="KetQuas" />
+            <End Role="ChiTietKetQua" EntitySet="ChiTietKetQuas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ChiTietKetQua_TaiKhoan" Association="TracNghiemTiengAnhTHPTModel.FK_ChiTietKetQua_TaiKhoan">
+            <End Role="TaiKhoan" EntitySet="TaiKhoans" />
+            <End Role="ChiTietKetQua" EntitySet="ChiTietKetQuas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DanhGia_TaiKhoan" Association="TracNghiemTiengAnhTHPTModel.FK_DanhGia_TaiKhoan">
+            <End Role="TaiKhoan" EntitySet="TaiKhoans" />
+            <End Role="DanhGia" EntitySet="DanhGias" />
+          </AssociationSet>
+          <AssociationSet Name="FK_KyThiCauHoi_MaDe" Association="TracNghiemTiengAnhTHPTModel.FK_KyThiCauHoi_MaDe">
+            <End Role="KyThi" EntitySet="KyThis" />
+            <End Role="DanhGia" EntitySet="DanhGias" />
+          </AssociationSet>
+          <AssociationSet Name="FK_KetQua_KyThi" Association="TracNghiemTiengAnhTHPTModel.FK_KetQua_KyThi">
+            <End Role="KyThi" EntitySet="KyThis" />
+            <End Role="KetQua" EntitySet="KetQuas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_KetQua_TaiKhoan" Association="TracNghiemTiengAnhTHPTModel.FK_KetQua_TaiKhoan">
+            <End Role="TaiKhoan" EntitySet="TaiKhoans" />
+            <End Role="KetQua" EntitySet="KetQuas" />
+          </AssociationSet>
+          <AssociationSet Name="ChiTietCauHoiDangBai" Association="TracNghiemTiengAnhTHPTModel.ChiTietCauHoiDangBai">
+            <End Role="CauHoi" EntitySet="CauHois" />
+            <End Role="DangBai" EntitySet="DangBais" />
+          </AssociationSet>
+          <AssociationSet Name="KyThiCauHoi" Association="TracNghiemTiengAnhTHPTModel.KyThiCauHoi">
+            <End Role="CauHoi" EntitySet="CauHois" />
+            <End Role="KyThi" EntitySet="KyThis" />
+          </AssociationSet>
+          <AssociationSet Name="PhongThiKyThi" Association="TracNghiemTiengAnhTHPTModel.PhongThiKyThi">
+            <End Role="KyThi" EntitySet="KyThis" />
+            <End Role="PhongThi" EntitySet="PhongThis" />
+          </AssociationSet>
+          <AssociationSet Name="PhongThiNguoiDung" Association="TracNghiemTiengAnhTHPTModel.PhongThiNguoiDung">
+            <End Role="PhongThi" EntitySet="PhongThis" />
+            <End Role="TaiKhoan" EntitySet="TaiKhoans" />
+          </AssociationSet>
+          <EntitySet Name="ViewChitietKyThi_2" EntityType="TracNghiemTiengAnhTHPTModel.ViewChitietKyThi_2" />
+        </EntityContainer>
         <EntityType Name="BaoLoi">
           <Key>
             <PropertyRef Name="Username" />
             <PropertyRef Name="MaCauHoi" />
             <PropertyRef Name="MaDe" />
           </Key>
-          <Property Name="NoiDung" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="MaCauHoi" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="MaDe" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="CauHoi" Relationship="Self.FK_BaoLoi_CauHoi" FromRole="BaoLoi" ToRole="CauHoi" />
-          <NavigationProperty Name="TaiKhoan" Relationship="Self.FK_BaoLoi_TaiKhoan" FromRole="BaoLoi" ToRole="TaiKhoan" />
-          <Property Name="isDeleted" Type="Boolean" />
+          <Property Name="NoiDung" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="MaCauHoi" Type="Int32" Nullable="false" />
+          <Property Name="MaDe" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CauHoi" Relationship="TracNghiemTiengAnhTHPTModel.FK_BaoLoi_CauHoi" FromRole="BaoLoi" ToRole="CauHoi" />
+          <NavigationProperty Name="TaiKhoan" Relationship="TracNghiemTiengAnhTHPTModel.FK_BaoLoi_TaiKhoan" FromRole="BaoLoi" ToRole="TaiKhoan" />
+          <NavigationProperty Name="KyThi" Relationship="TracNghiemTiengAnhTHPTModel.FK_KyThi_BaoLoi" FromRole="BaoLoi" ToRole="KyThi" />
         </EntityType>
         <EntityType Name="CauHoi">
           <Key>
             <PropertyRef Name="MaCauHoi" />
           </Key>
-          <Property Name="MaCauHoi" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="NoiDung" Type="String" MaxLength="300" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MaCauHoi" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NoiDung" Type="String" Nullable="false" MaxLength="4000" FixedLength="false" Unicode="false" />
           <Property Name="MaNhom" Type="Int32" />
           <Property Name="MucDo" Type="Int32" />
-          <Property Name="DapAnA" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="DapAnB" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="DapAnC" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="DapAnD" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="DapAnChinhXac" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DapAnA" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DapAnB" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DapAnC" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DapAnD" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DapAnChinhXac" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="DaDuyet" Type="Boolean" />
-          <NavigationProperty Name="BaoLois" Relationship="Self.FK_BaoLoi_CauHoi" FromRole="CauHoi" ToRole="BaoLoi" />
-          <NavigationProperty Name="NhomCauHoi" Relationship="Self.FK_CauHoi_NhomCauHoi" FromRole="CauHoi" ToRole="NhomCauHoi" />
-          <NavigationProperty Name="ChiTietKetQuas" Relationship="Self.FK_ChiTietKetQua_CauHoi" FromRole="CauHoi" ToRole="ChiTietKetQua" />
-          <NavigationProperty Name="DangBais" Relationship="Self.ChiTietCauHoiDangBai" FromRole="CauHoi" ToRole="DangBai" />
-          <NavigationProperty Name="KyThis" Relationship="Self.KyThiCauHoi" FromRole="CauHoi" ToRole="KyThi" />
-          <Property Name="isDeleted" Type="Boolean" />
           <Property Name="UsernameTacGia" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="BaoLois" Relationship="TracNghiemTiengAnhTHPTModel.FK_BaoLoi_CauHoi" FromRole="CauHoi" ToRole="BaoLoi" />
+          <NavigationProperty Name="NhomCauHoi" Relationship="TracNghiemTiengAnhTHPTModel.FK_CauHoi_NhomCauHoi" FromRole="CauHoi" ToRole="NhomCauHoi" />
+          <NavigationProperty Name="ChiTietKetQuas" Relationship="TracNghiemTiengAnhTHPTModel.FK_ChiTietKetQua_CauHoi" FromRole="CauHoi" ToRole="ChiTietKetQua" />
+          <NavigationProperty Name="DangBais" Relationship="TracNghiemTiengAnhTHPTModel.ChiTietCauHoiDangBai" FromRole="CauHoi" ToRole="DangBai" />
+          <NavigationProperty Name="KyThis" Relationship="TracNghiemTiengAnhTHPTModel.KyThiCauHoi" FromRole="CauHoi" ToRole="KyThi" />
+          <Property Name="isDeleted" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="ChiTietKetQua">
           <Key>
             <PropertyRef Name="Username" />
-            <PropertyRef Name="MaDe" />
+            <PropertyRef Name="Maketqua" />
             <PropertyRef Name="MaCauHoi" />
           </Key>
-          <Property Name="Username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="MaDe" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="MaCauHoi" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="DapAnChon" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="CauHoi" Relationship="Self.FK_ChiTietKetQua_CauHoi" FromRole="ChiTietKetQua" ToRole="CauHoi" />
-          <NavigationProperty Name="KyThi" Relationship="Self.FK_ChiTietKetQua_KyThi" FromRole="ChiTietKetQua" ToRole="KyThi" />
-          <NavigationProperty Name="TaiKhoan" Relationship="Self.FK_ChiTietKetQua_TaiKhoan" FromRole="ChiTietKetQua" ToRole="TaiKhoan" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Maketqua" Type="Int32" Nullable="false" />
+          <Property Name="MaCauHoi" Type="Int32" Nullable="false" />
+          <Property Name="DapAnChon" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="CauHoi" Relationship="TracNghiemTiengAnhTHPTModel.FK_ChiTietKetQua_CauHoi" FromRole="ChiTietKetQua" ToRole="CauHoi" />
+          <NavigationProperty Name="KetQua" Relationship="TracNghiemTiengAnhTHPTModel.FK_ChiTietKetQua_Maketqua" FromRole="ChiTietKetQua" ToRole="KetQua" />
+          <NavigationProperty Name="TaiKhoan" Relationship="TracNghiemTiengAnhTHPTModel.FK_ChiTietKetQua_TaiKhoan" FromRole="ChiTietKetQua" ToRole="TaiKhoan" />
+          <Property Name="MaDe" Type="Int32" />
         </EntityType>
         <EntityType Name="DangBai">
           <Key>
             <PropertyRef Name="MaLoai" />
           </Key>
-          <Property Name="MaLoai" Type="Int32" Nullable="false" />
-          <Property Name="TenLoai" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="CauHois" Relationship="Self.ChiTietCauHoiDangBai" FromRole="DangBai" ToRole="CauHoi" />
-          <Property Name="isDeleted" Type="Boolean" />
+          <Property Name="MaLoai" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TenLoai" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CauHois" Relationship="TracNghiemTiengAnhTHPTModel.ChiTietCauHoiDangBai" FromRole="DangBai" ToRole="CauHoi" />
         </EntityType>
         <EntityType Name="DanhGia">
           <Key>
             <PropertyRef Name="Username" />
             <PropertyRef Name="MaDe" />
           </Key>
-          <Property Name="Username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Rate" Type="Int32" Nullable="false" />
-          <Property Name="NoiDung" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="MaDe" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="TaiKhoan" Relationship="Self.FK_DanhGia_TaiKhoan" FromRole="DanhGia" ToRole="TaiKhoan" />
-          <NavigationProperty Name="KyThi" Relationship="Self.FK_KyThiCauHoi_MaDe" FromRole="DanhGia" ToRole="KyThi" />
-          <Property Name="isDeleted" Type="Boolean" />
+          <Property Name="NoiDung" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MaDe" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TaiKhoan" Relationship="TracNghiemTiengAnhTHPTModel.FK_DanhGia_TaiKhoan" FromRole="DanhGia" ToRole="TaiKhoan" />
+          <NavigationProperty Name="KyThi" Relationship="TracNghiemTiengAnhTHPTModel.FK_KyThiCauHoi_MaDe" FromRole="DanhGia" ToRole="KyThi" />
         </EntityType>
         <EntityType Name="KetQua">
           <Key>
-            <PropertyRef Name="Username" />
-            <PropertyRef Name="MaDe" />
+            <PropertyRef Name="Maketqua" />
           </Key>
-          <Property Name="Username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="MaDe" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Maketqua" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="MaDe" Type="Int32" />
           <Property Name="Diem" Type="Double" />
-          <NavigationProperty Name="KyThi" Relationship="Self.FK_KetQua_KyThi" FromRole="KetQua" ToRole="KyThi" />
-          <NavigationProperty Name="TaiKhoan" Relationship="Self.FK_KetQua_TaiKhoan" FromRole="KetQua" ToRole="TaiKhoan" />
+          <NavigationProperty Name="ChiTietKetQuas" Relationship="TracNghiemTiengAnhTHPTModel.FK_ChiTietKetQua_Maketqua" FromRole="KetQua" ToRole="ChiTietKetQua" />
+          <NavigationProperty Name="KyThi" Relationship="TracNghiemTiengAnhTHPTModel.FK_KetQua_KyThi" FromRole="KetQua" ToRole="KyThi" />
+          <NavigationProperty Name="TaiKhoan" Relationship="TracNghiemTiengAnhTHPTModel.FK_KetQua_TaiKhoan" FromRole="KetQua" ToRole="TaiKhoan" />
         </EntityType>
         <EntityType Name="KyThi">
           <Key>
             <PropertyRef Name="MaDe" />
           </Key>
-          <Property Name="MaDe" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="TenKyThi" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MaDe" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TenKyThi" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ThoiGian" Type="Int32" Nullable="false" />
           <Property Name="ThoiGianBatDau" Type="DateTime" Precision="3" />
           <Property Name="ThoiGianKetThuc" Type="DateTime" Precision="3" />
           <Property Name="CongKhai" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="ChiTietKetQuas" Relationship="Self.FK_ChiTietKetQua_KyThi" FromRole="KyThi" ToRole="ChiTietKetQua" />
-          <NavigationProperty Name="DanhGias" Relationship="Self.FK_KyThiCauHoi_MaDe" FromRole="KyThi" ToRole="DanhGia" />
-          <NavigationProperty Name="KetQuas" Relationship="Self.FK_KetQua_KyThi" FromRole="KyThi" ToRole="KetQua" />
-          <NavigationProperty Name="CauHois" Relationship="Self.KyThiCauHoi" FromRole="KyThi" ToRole="CauHoi" />
-          <NavigationProperty Name="PhongThis" Relationship="Self.PhongThiKyThi" FromRole="KyThi" ToRole="PhongThi" />
           <Property Name="isDeleted" Type="Boolean" />
           <Property Name="UsernameTacGia" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="BaoLois" Relationship="TracNghiemTiengAnhTHPTModel.FK_KyThi_BaoLoi" FromRole="KyThi" ToRole="BaoLoi" />
+          <NavigationProperty Name="DanhGias" Relationship="TracNghiemTiengAnhTHPTModel.FK_KyThiCauHoi_MaDe" FromRole="KyThi" ToRole="DanhGia" />
+          <NavigationProperty Name="KetQuas" Relationship="TracNghiemTiengAnhTHPTModel.FK_KetQua_KyThi" FromRole="KyThi" ToRole="KetQua" />
+          <NavigationProperty Name="CauHois" Relationship="TracNghiemTiengAnhTHPTModel.KyThiCauHoi" FromRole="KyThi" ToRole="CauHoi" />
+          <NavigationProperty Name="PhongThis" Relationship="TracNghiemTiengAnhTHPTModel.PhongThiKyThi" FromRole="KyThi" ToRole="PhongThi" />
         </EntityType>
         <EntityType Name="NhomCauHoi">
           <Key>
             <PropertyRef Name="MaNhom" />
           </Key>
-          <Property Name="MaNhom" Type="Int32" Nullable="false" />
-          <Property Name="NoiDung" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="CauHois" Relationship="Self.FK_CauHoi_NhomCauHoi" FromRole="NhomCauHoi" ToRole="CauHoi" />
-          <Property Name="isDeleted" Type="Boolean" />
+          <Property Name="MaNhom" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NoiDung" Type="String" Nullable="false" MaxLength="8000" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CauHois" Relationship="TracNghiemTiengAnhTHPTModel.FK_CauHoi_NhomCauHoi" FromRole="NhomCauHoi" ToRole="CauHoi" />
+          <Property Name="isDeleted" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="PhongThi">
           <Key>
             <PropertyRef Name="MaPhong" />
           </Key>
-          <Property Name="MaPhong" Type="Int32" Nullable="false" />
+          <Property Name="MaPhong" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="MatKhau" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="TenPhong" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="KyThis" Relationship="Self.PhongThiKyThi" FromRole="PhongThi" ToRole="KyThi" />
-          <NavigationProperty Name="TaiKhoans" Relationship="Self.PhongThiNguoiDung" FromRole="PhongThi" ToRole="TaiKhoan" />
-          <Property Name="isDeleted" Type="Boolean" />
+          <Property Name="TenPhong" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="KyThis" Relationship="TracNghiemTiengAnhTHPTModel.PhongThiKyThi" FromRole="PhongThi" ToRole="KyThi" />
+          <NavigationProperty Name="TaiKhoans" Relationship="TracNghiemTiengAnhTHPTModel.PhongThiNguoiDung" FromRole="PhongThi" ToRole="TaiKhoan" />
         </EntityType>
         <EntityType Name="TaiKhoan">
           <Key>
             <PropertyRef Name="Username" />
           </Key>
-          <Property Name="Username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="PhanQuyen" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Gmail" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="BaoLois" Relationship="Self.FK_BaoLoi_TaiKhoan" FromRole="TaiKhoan" ToRole="BaoLoi" />
-          <NavigationProperty Name="ChiTietKetQuas" Relationship="Self.FK_ChiTietKetQua_TaiKhoan" FromRole="TaiKhoan" ToRole="ChiTietKetQua" />
-          <NavigationProperty Name="DanhGias" Relationship="Self.FK_DanhGia_TaiKhoan" FromRole="TaiKhoan" ToRole="DanhGia" />
-          <NavigationProperty Name="KetQuas" Relationship="Self.FK_KetQua_TaiKhoan" FromRole="TaiKhoan" ToRole="KetQua" />
-          <NavigationProperty Name="PhongThis" Relationship="Self.PhongThiNguoiDung" FromRole="TaiKhoan" ToRole="PhongThi" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="PhanQuyen" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Gmail" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="isDeleted" Type="Boolean" />
           <Property Name="status" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="BaoLois" Relationship="TracNghiemTiengAnhTHPTModel.FK_BaoLoi_TaiKhoan" FromRole="TaiKhoan" ToRole="BaoLoi" />
+          <NavigationProperty Name="ChiTietKetQuas" Relationship="TracNghiemTiengAnhTHPTModel.FK_ChiTietKetQua_TaiKhoan" FromRole="TaiKhoan" ToRole="ChiTietKetQua" />
+          <NavigationProperty Name="DanhGias" Relationship="TracNghiemTiengAnhTHPTModel.FK_DanhGia_TaiKhoan" FromRole="TaiKhoan" ToRole="DanhGia" />
+          <NavigationProperty Name="KetQuas" Relationship="TracNghiemTiengAnhTHPTModel.FK_KetQua_TaiKhoan" FromRole="TaiKhoan" ToRole="KetQua" />
+          <NavigationProperty Name="PhongThis" Relationship="TracNghiemTiengAnhTHPTModel.PhongThiNguoiDung" FromRole="TaiKhoan" ToRole="PhongThi" />
         </EntityType>
         <EntityType Name="LienHe">
           <Key>
@@ -652,14 +738,14 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
             <PropertyRef Name="TieuDe" />
             <PropertyRef Name="NoiDung" />
           </Key>
-          <Property Name="HoVaTen" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Gmail" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="TieuDe" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="NoiDung" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="HoVaTen" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Gmail" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="TieuDe" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="NoiDung" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_BaoLoi_CauHoi">
-          <End Role="CauHoi" Type="Self.CauHoi" Multiplicity="1" />
-          <End Role="BaoLoi" Type="Self.BaoLoi" Multiplicity="*" />
+          <End Type="TracNghiemTiengAnhTHPTModel.CauHoi" Role="CauHoi" Multiplicity="1" />
+          <End Type="TracNghiemTiengAnhTHPTModel.BaoLoi" Role="BaoLoi" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CauHoi">
               <PropertyRef Name="MaCauHoi" />
@@ -670,8 +756,8 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_BaoLoi_TaiKhoan">
-          <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="1" />
-          <End Role="BaoLoi" Type="Self.BaoLoi" Multiplicity="*" />
+          <End Type="TracNghiemTiengAnhTHPTModel.TaiKhoan" Role="TaiKhoan" Multiplicity="1" />
+          <End Type="TracNghiemTiengAnhTHPTModel.BaoLoi" Role="BaoLoi" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TaiKhoan">
               <PropertyRef Name="Username" />
@@ -681,9 +767,21 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_KyThi_BaoLoi">
+          <End Type="TracNghiemTiengAnhTHPTModel.KyThi" Role="KyThi" Multiplicity="1" />
+          <End Type="TracNghiemTiengAnhTHPTModel.BaoLoi" Role="BaoLoi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KyThi">
+              <PropertyRef Name="MaDe" />
+            </Principal>
+            <Dependent Role="BaoLoi">
+              <PropertyRef Name="MaDe" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CauHoi_NhomCauHoi">
-          <End Role="NhomCauHoi" Type="Self.NhomCauHoi" Multiplicity="0..1" />
-          <End Role="CauHoi" Type="Self.CauHoi" Multiplicity="*" />
+          <End Type="TracNghiemTiengAnhTHPTModel.NhomCauHoi" Role="NhomCauHoi" Multiplicity="0..1" />
+          <End Type="TracNghiemTiengAnhTHPTModel.CauHoi" Role="CauHoi" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="NhomCauHoi">
               <PropertyRef Name="MaNhom" />
@@ -694,8 +792,8 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ChiTietKetQua_CauHoi">
-          <End Role="CauHoi" Type="Self.CauHoi" Multiplicity="1" />
-          <End Role="ChiTietKetQua" Type="Self.ChiTietKetQua" Multiplicity="*" />
+          <End Type="TracNghiemTiengAnhTHPTModel.CauHoi" Role="CauHoi" Multiplicity="1" />
+          <End Type="TracNghiemTiengAnhTHPTModel.ChiTietKetQua" Role="ChiTietKetQua" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CauHoi">
               <PropertyRef Name="MaCauHoi" />
@@ -705,21 +803,21 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ChiTietKetQua_KyThi">
-          <End Role="KyThi" Type="Self.KyThi" Multiplicity="1" />
-          <End Role="ChiTietKetQua" Type="Self.ChiTietKetQua" Multiplicity="*" />
+        <Association Name="FK_ChiTietKetQua_Maketqua">
+          <End Type="TracNghiemTiengAnhTHPTModel.KetQua" Role="KetQua" Multiplicity="1" />
+          <End Type="TracNghiemTiengAnhTHPTModel.ChiTietKetQua" Role="ChiTietKetQua" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="KyThi">
-              <PropertyRef Name="MaDe" />
+            <Principal Role="KetQua">
+              <PropertyRef Name="Maketqua" />
             </Principal>
             <Dependent Role="ChiTietKetQua">
-              <PropertyRef Name="MaDe" />
+              <PropertyRef Name="Maketqua" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ChiTietKetQua_TaiKhoan">
-          <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="1" />
-          <End Role="ChiTietKetQua" Type="Self.ChiTietKetQua" Multiplicity="*" />
+          <End Type="TracNghiemTiengAnhTHPTModel.TaiKhoan" Role="TaiKhoan" Multiplicity="1" />
+          <End Type="TracNghiemTiengAnhTHPTModel.ChiTietKetQua" Role="ChiTietKetQua" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TaiKhoan">
               <PropertyRef Name="Username" />
@@ -730,8 +828,8 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_DanhGia_TaiKhoan">
-          <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="1" />
-          <End Role="DanhGia" Type="Self.DanhGia" Multiplicity="*" />
+          <End Type="TracNghiemTiengAnhTHPTModel.TaiKhoan" Role="TaiKhoan" Multiplicity="1" />
+          <End Type="TracNghiemTiengAnhTHPTModel.DanhGia" Role="DanhGia" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TaiKhoan">
               <PropertyRef Name="Username" />
@@ -742,8 +840,8 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_KyThiCauHoi_MaDe">
-          <End Role="KyThi" Type="Self.KyThi" Multiplicity="1" />
-          <End Role="DanhGia" Type="Self.DanhGia" Multiplicity="*" />
+          <End Type="TracNghiemTiengAnhTHPTModel.KyThi" Role="KyThi" Multiplicity="1" />
+          <End Type="TracNghiemTiengAnhTHPTModel.DanhGia" Role="DanhGia" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="KyThi">
               <PropertyRef Name="MaDe" />
@@ -754,8 +852,8 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_KetQua_KyThi">
-          <End Role="KyThi" Type="Self.KyThi" Multiplicity="1" />
-          <End Role="KetQua" Type="Self.KetQua" Multiplicity="*" />
+          <End Type="TracNghiemTiengAnhTHPTModel.KyThi" Role="KyThi" Multiplicity="0..1" />
+          <End Type="TracNghiemTiengAnhTHPTModel.KetQua" Role="KetQua" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="KyThi">
               <PropertyRef Name="MaDe" />
@@ -766,8 +864,8 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_KetQua_TaiKhoan">
-          <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="1" />
-          <End Role="KetQua" Type="Self.KetQua" Multiplicity="*" />
+          <End Type="TracNghiemTiengAnhTHPTModel.TaiKhoan" Role="TaiKhoan" Multiplicity="0..1" />
+          <End Type="TracNghiemTiengAnhTHPTModel.KetQua" Role="KetQua" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TaiKhoan">
               <PropertyRef Name="Username" />
@@ -778,106 +876,36 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           </ReferentialConstraint>
         </Association>
         <Association Name="ChiTietCauHoiDangBai">
-          <End Role="CauHoi" Type="Self.CauHoi" Multiplicity="*" />
-          <End Role="DangBai" Type="Self.DangBai" Multiplicity="*" />
+          <End Type="TracNghiemTiengAnhTHPTModel.CauHoi" Role="CauHoi" Multiplicity="*" />
+          <End Type="TracNghiemTiengAnhTHPTModel.DangBai" Role="DangBai" Multiplicity="*" />
         </Association>
         <Association Name="KyThiCauHoi">
-          <End Role="CauHoi" Type="Self.CauHoi" Multiplicity="*" />
-          <End Role="KyThi" Type="Self.KyThi" Multiplicity="*" />
+          <End Type="TracNghiemTiengAnhTHPTModel.CauHoi" Role="CauHoi" Multiplicity="*" />
+          <End Type="TracNghiemTiengAnhTHPTModel.KyThi" Role="KyThi" Multiplicity="*" />
         </Association>
         <Association Name="PhongThiKyThi">
-          <End Role="KyThi" Type="Self.KyThi" Multiplicity="*" />
-          <End Role="PhongThi" Type="Self.PhongThi" Multiplicity="*" />
+          <End Type="TracNghiemTiengAnhTHPTModel.KyThi" Role="KyThi" Multiplicity="*" />
+          <End Type="TracNghiemTiengAnhTHPTModel.PhongThi" Role="PhongThi" Multiplicity="*" />
         </Association>
         <Association Name="PhongThiNguoiDung">
-          <End Role="PhongThi" Type="Self.PhongThi" Multiplicity="*" />
-          <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="*" />
+          <End Type="TracNghiemTiengAnhTHPTModel.PhongThi" Role="PhongThi" Multiplicity="*" />
+          <End Type="TracNghiemTiengAnhTHPTModel.TaiKhoan" Role="TaiKhoan" Multiplicity="*" />
         </Association>
-        <EntityContainer Name="TracNghiemTiengAnhTHPTEntities1" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="BaoLois" EntityType="Self.BaoLoi" />
-          <EntitySet Name="CauHois" EntityType="Self.CauHoi" />
-          <EntitySet Name="ChiTietKetQuas" EntityType="Self.ChiTietKetQua" />
-          <EntitySet Name="DangBais" EntityType="Self.DangBai" />
-          <EntitySet Name="DanhGias" EntityType="Self.DanhGia" />
-          <EntitySet Name="KetQuas" EntityType="Self.KetQua" />
-          <EntitySet Name="KyThis" EntityType="Self.KyThi" />
-          <EntitySet Name="NhomCauHois" EntityType="Self.NhomCauHoi" />
-          <EntitySet Name="PhongThis" EntityType="Self.PhongThi" />
-          <EntitySet Name="TaiKhoans" EntityType="Self.TaiKhoan" />
-          <EntitySet Name="LienHes" EntityType="Self.LienHe" />
-          <AssociationSet Name="FK_BaoLoi_CauHoi" Association="Self.FK_BaoLoi_CauHoi">
-            <End Role="CauHoi" EntitySet="CauHois" />
-            <End Role="BaoLoi" EntitySet="BaoLois" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BaoLoi_TaiKhoan" Association="Self.FK_BaoLoi_TaiKhoan">
-            <End Role="TaiKhoan" EntitySet="TaiKhoans" />
-            <End Role="BaoLoi" EntitySet="BaoLois" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CauHoi_NhomCauHoi" Association="Self.FK_CauHoi_NhomCauHoi">
-            <End Role="NhomCauHoi" EntitySet="NhomCauHois" />
-            <End Role="CauHoi" EntitySet="CauHois" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ChiTietKetQua_CauHoi" Association="Self.FK_ChiTietKetQua_CauHoi">
-            <End Role="CauHoi" EntitySet="CauHois" />
-            <End Role="ChiTietKetQua" EntitySet="ChiTietKetQuas" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ChiTietKetQua_KyThi" Association="Self.FK_ChiTietKetQua_KyThi">
-            <End Role="KyThi" EntitySet="KyThis" />
-            <End Role="ChiTietKetQua" EntitySet="ChiTietKetQuas" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ChiTietKetQua_TaiKhoan" Association="Self.FK_ChiTietKetQua_TaiKhoan">
-            <End Role="TaiKhoan" EntitySet="TaiKhoans" />
-            <End Role="ChiTietKetQua" EntitySet="ChiTietKetQuas" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DanhGia_TaiKhoan" Association="Self.FK_DanhGia_TaiKhoan">
-            <End Role="TaiKhoan" EntitySet="TaiKhoans" />
-            <End Role="DanhGia" EntitySet="DanhGias" />
-          </AssociationSet>
-          <AssociationSet Name="FK_KyThiCauHoi_MaDe" Association="Self.FK_KyThiCauHoi_MaDe">
-            <End Role="KyThi" EntitySet="KyThis" />
-            <End Role="DanhGia" EntitySet="DanhGias" />
-          </AssociationSet>
-          <AssociationSet Name="FK_KetQua_KyThi" Association="Self.FK_KetQua_KyThi">
-            <End Role="KyThi" EntitySet="KyThis" />
-            <End Role="KetQua" EntitySet="KetQuas" />
-          </AssociationSet>
-          <AssociationSet Name="FK_KetQua_TaiKhoan" Association="Self.FK_KetQua_TaiKhoan">
-            <End Role="TaiKhoan" EntitySet="TaiKhoans" />
-            <End Role="KetQua" EntitySet="KetQuas" />
-          </AssociationSet>
-          <AssociationSet Name="ChiTietCauHoiDangBai" Association="Self.ChiTietCauHoiDangBai">
-            <End Role="CauHoi" EntitySet="CauHois" />
-            <End Role="DangBai" EntitySet="DangBais" />
-          </AssociationSet>
-          <AssociationSet Name="KyThiCauHoi" Association="Self.KyThiCauHoi">
-            <End Role="CauHoi" EntitySet="CauHois" />
-            <End Role="KyThi" EntitySet="KyThis" />
-          </AssociationSet>
-          <AssociationSet Name="PhongThiKyThi" Association="Self.PhongThiKyThi">
-            <End Role="KyThi" EntitySet="KyThis" />
-            <End Role="PhongThi" EntitySet="PhongThis" />
-          </AssociationSet>
-          <AssociationSet Name="PhongThiNguoiDung" Association="Self.PhongThiNguoiDung">
-            <End Role="PhongThi" EntitySet="PhongThis" />
-            <End Role="TaiKhoan" EntitySet="TaiKhoans" />
-          </AssociationSet>
-          <EntitySet Name="view_ChitietKyThi" EntityType="TracNghiemTiengAnhTHPTModel.view_ChitietKyThi" />
-        </EntityContainer>
-        <EntityType Name="view_ChitietKyThi">
+        <EntityType Name="ViewChitietKyThi_2">
           <Key>
             <PropertyRef Name="MaDe" />
             <PropertyRef Name="TenKyThi" />
             <PropertyRef Name="ThoiGian" />
             <PropertyRef Name="CongKhai" />
           </Key>
-          <Property Name="SoCauHoi" Type="Int32" />
-          <Property Name="DiemTrungBinh" Type="Int32" />
-          <Property Name="MaDe" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MaDe" Type="Int32" Nullable="false" />
           <Property Name="TenKyThi" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ThoiGian" Type="Int32" Nullable="false" />
           <Property Name="ThoiGianBatDau" Type="DateTime" Precision="3" />
           <Property Name="ThoiGianKetThuc" Type="DateTime" Precision="3" />
           <Property Name="CongKhai" Type="Boolean" Nullable="false" />
+          <Property Name="SoCauHoi" Type="Int32" />
+          <Property Name="DiemTrungBinh" Type="Int32" />
           <Property Name="Soluot" Type="Int32" />
         </EntityType>
       </Schema>
@@ -889,68 +917,67 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
           <EntitySetMapping Name="BaoLois">
             <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.BaoLoi">
               <MappingFragment StoreEntitySet="BaoLoi">
-                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
-                <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="MaCauHoi" ColumnName="MaCauHoi" />
                 <ScalarProperty Name="MaDe" ColumnName="MaDe" />
+                <ScalarProperty Name="MaCauHoi" ColumnName="MaCauHoi" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CauHois">
             <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.CauHoi">
               <MappingFragment StoreEntitySet="CauHoi">
-                <ScalarProperty Name="UsernameTacGia" ColumnName="UsernameTacGia" />
                 <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
-                <ScalarProperty Name="MaCauHoi" ColumnName="MaCauHoi" />
-                <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
-                <ScalarProperty Name="MaNhom" ColumnName="MaNhom" />
-                <ScalarProperty Name="MucDo" ColumnName="MucDo" />
-                <ScalarProperty Name="DapAnA" ColumnName="DapAnA" />
-                <ScalarProperty Name="DapAnB" ColumnName="DapAnB" />
-                <ScalarProperty Name="DapAnC" ColumnName="DapAnC" />
-                <ScalarProperty Name="DapAnD" ColumnName="DapAnD" />
-                <ScalarProperty Name="DapAnChinhXac" ColumnName="DapAnChinhXac" />
+                <ScalarProperty Name="UsernameTacGia" ColumnName="UsernameTacGia" />
                 <ScalarProperty Name="DaDuyet" ColumnName="DaDuyet" />
+                <ScalarProperty Name="DapAnChinhXac" ColumnName="DapAnChinhXac" />
+                <ScalarProperty Name="DapAnD" ColumnName="DapAnD" />
+                <ScalarProperty Name="DapAnC" ColumnName="DapAnC" />
+                <ScalarProperty Name="DapAnB" ColumnName="DapAnB" />
+                <ScalarProperty Name="DapAnA" ColumnName="DapAnA" />
+                <ScalarProperty Name="MucDo" ColumnName="MucDo" />
+                <ScalarProperty Name="MaNhom" ColumnName="MaNhom" />
+                <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
+                <ScalarProperty Name="MaCauHoi" ColumnName="MaCauHoi" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ChiTietKetQuas">
             <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.ChiTietKetQua">
               <MappingFragment StoreEntitySet="ChiTietKetQua">
-                <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="MaDe" ColumnName="MaDe" />
-                <ScalarProperty Name="MaCauHoi" ColumnName="MaCauHoi" />
                 <ScalarProperty Name="DapAnChon" ColumnName="DapAnChon" />
+                <ScalarProperty Name="MaCauHoi" ColumnName="MaCauHoi" />
+                <ScalarProperty Name="Maketqua" ColumnName="Maketqua" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="DangBais">
             <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.DangBai">
               <MappingFragment StoreEntitySet="DangBai">
-                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
-                <ScalarProperty Name="MaLoai" ColumnName="MaLoai" />
                 <ScalarProperty Name="TenLoai" ColumnName="TenLoai" />
+                <ScalarProperty Name="MaLoai" ColumnName="MaLoai" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="DanhGias">
             <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.DanhGia">
               <MappingFragment StoreEntitySet="DanhGia">
-                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="Rate" ColumnName="Rate" />
-                <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
                 <ScalarProperty Name="MaDe" ColumnName="MaDe" />
+                <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="KetQuas">
             <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.KetQua">
               <MappingFragment StoreEntitySet="KetQua">
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="MaDe" ColumnName="MaDe" />
                 <ScalarProperty Name="Diem" ColumnName="Diem" />
+                <ScalarProperty Name="MaDe" ColumnName="MaDe" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Maketqua" ColumnName="Maketqua" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -959,12 +986,12 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
               <MappingFragment StoreEntitySet="KyThi">
                 <ScalarProperty Name="UsernameTacGia" ColumnName="UsernameTacGia" />
                 <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
-                <ScalarProperty Name="MaDe" ColumnName="MaDe" />
-                <ScalarProperty Name="TenKyThi" ColumnName="TenKyThi" />
-                <ScalarProperty Name="ThoiGian" ColumnName="ThoiGian" />
-                <ScalarProperty Name="ThoiGianBatDau" ColumnName="ThoiGianBatDau" />
-                <ScalarProperty Name="ThoiGianKetThuc" ColumnName="ThoiGianKetThuc" />
                 <ScalarProperty Name="CongKhai" ColumnName="CongKhai" />
+                <ScalarProperty Name="ThoiGianKetThuc" ColumnName="ThoiGianKetThuc" />
+                <ScalarProperty Name="ThoiGianBatDau" ColumnName="ThoiGianBatDau" />
+                <ScalarProperty Name="ThoiGian" ColumnName="ThoiGian" />
+                <ScalarProperty Name="TenKyThi" ColumnName="TenKyThi" />
+                <ScalarProperty Name="MaDe" ColumnName="MaDe" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -972,18 +999,17 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
             <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.NhomCauHoi">
               <MappingFragment StoreEntitySet="NhomCauHoi">
                 <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
-                <ScalarProperty Name="MaNhom" ColumnName="MaNhom" />
                 <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
+                <ScalarProperty Name="MaNhom" ColumnName="MaNhom" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PhongThis">
             <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.PhongThi">
               <MappingFragment StoreEntitySet="PhongThi">
-                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
-                <ScalarProperty Name="MaPhong" ColumnName="MaPhong" />
-                <ScalarProperty Name="MatKhau" ColumnName="MatKhau" />
                 <ScalarProperty Name="TenPhong" ColumnName="TenPhong" />
+                <ScalarProperty Name="MatKhau" ColumnName="MatKhau" />
+                <ScalarProperty Name="MaPhong" ColumnName="MaPhong" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -992,67 +1018,67 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.view_ChitietKyThi' does
               <MappingFragment StoreEntitySet="TaiKhoan">
                 <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="PhanQuyen" ColumnName="PhanQuyen" />
                 <ScalarProperty Name="Gmail" ColumnName="Gmail" />
+                <ScalarProperty Name="PhanQuyen" ColumnName="PhanQuyen" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="LienHes">
             <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.LienHe">
               <MappingFragment StoreEntitySet="LienHe">
-                <ScalarProperty Name="HoVaTen" ColumnName="HoVaTen" />
-                <ScalarProperty Name="Gmail" ColumnName="Gmail" />
-                <ScalarProperty Name="TieuDe" ColumnName="TieuDe" />
                 <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
+                <ScalarProperty Name="TieuDe" ColumnName="TieuDe" />
+                <ScalarProperty Name="Gmail" ColumnName="Gmail" />
+                <ScalarProperty Name="HoVaTen" ColumnName="HoVaTen" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <AssociationSetMapping Name="ChiTietCauHoiDangBai" TypeName="TracNghiemTiengAnhTHPTModel.ChiTietCauHoiDangBai" StoreEntitySet="ChiTietCauHoiDangBai">
-            <EndProperty Name="CauHoi">
-              <ScalarProperty Name="MaCauHoi" ColumnName="MaCauHoi" />
-            </EndProperty>
             <EndProperty Name="DangBai">
               <ScalarProperty Name="MaLoai" ColumnName="MaLoai" />
             </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="KyThiCauHoi" TypeName="TracNghiemTiengAnhTHPTModel.KyThiCauHoi" StoreEntitySet="KyThiCauHoi">
             <EndProperty Name="CauHoi">
               <ScalarProperty Name="MaCauHoi" ColumnName="MaCauHoi" />
             </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="KyThiCauHoi" TypeName="TracNghiemTiengAnhTHPTModel.KyThiCauHoi" StoreEntitySet="KyThiCauHoi">
             <EndProperty Name="KyThi">
               <ScalarProperty Name="MaDe" ColumnName="MaDe" />
+            </EndProperty>
+            <EndProperty Name="CauHoi">
+              <ScalarProperty Name="MaCauHoi" ColumnName="MaCauHoi" />
             </EndProperty>
           </AssociationSetMapping>
           <AssociationSetMapping Name="PhongThiKyThi" TypeName="TracNghiemTiengAnhTHPTModel.PhongThiKyThi" StoreEntitySet="PhongThiKyThi">
+            <EndProperty Name="PhongThi">
+              <ScalarProperty Name="MaPhong" ColumnName="MaPhong" />
+            </EndProperty>
             <EndProperty Name="KyThi">
               <ScalarProperty Name="MaDe" ColumnName="MaDe" />
             </EndProperty>
-            <EndProperty Name="PhongThi">
-              <ScalarProperty Name="MaPhong" ColumnName="MaPhong" />
-            </EndProperty>
           </AssociationSetMapping>
           <AssociationSetMapping Name="PhongThiNguoiDung" TypeName="TracNghiemTiengAnhTHPTModel.PhongThiNguoiDung" StoreEntitySet="PhongThiNguoiDung">
-            <EndProperty Name="PhongThi">
-              <ScalarProperty Name="MaPhong" ColumnName="MaPhong" />
-            </EndProperty>
             <EndProperty Name="TaiKhoan">
               <ScalarProperty Name="Username" ColumnName="Username" />
             </EndProperty>
+            <EndProperty Name="PhongThi">
+              <ScalarProperty Name="MaPhong" ColumnName="MaPhong" />
+            </EndProperty>
           </AssociationSetMapping>
-          <EntitySetMapping Name="view_ChitietKyThi">
-            <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.view_ChitietKyThi">
-              <MappingFragment StoreEntitySet="view_ChitietKyThi">
+          <EntitySetMapping Name="ViewChitietKyThi_2">
+            <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.ViewChitietKyThi_2">
+              <MappingFragment StoreEntitySet="ViewChitietKyThi_2">
                 <ScalarProperty Name="Soluot" ColumnName="Soluot" />
+                <ScalarProperty Name="DiemTrungBinh" ColumnName="DiemTrungBinh" />
+                <ScalarProperty Name="SoCauHoi" ColumnName="SoCauHoi" />
                 <ScalarProperty Name="CongKhai" ColumnName="CongKhai" />
                 <ScalarProperty Name="ThoiGianKetThuc" ColumnName="ThoiGianKetThuc" />
                 <ScalarProperty Name="ThoiGianBatDau" ColumnName="ThoiGianBatDau" />
                 <ScalarProperty Name="ThoiGian" ColumnName="ThoiGian" />
                 <ScalarProperty Name="TenKyThi" ColumnName="TenKyThi" />
                 <ScalarProperty Name="MaDe" ColumnName="MaDe" />
-                <ScalarProperty Name="DiemTrungBinh" ColumnName="DiemTrungBinh" />
-                <ScalarProperty Name="SoCauHoi" ColumnName="SoCauHoi" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -13,12 +13,12 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
         public ActionResult Index()
         {
             TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
-            List<view_ChitietKyThi> model = db.view_ChitietKyThi.ToList();
+            List<ViewChitietKyThi_2> model = db.ViewChitietKyThi_2.ToList();
             return View(model);
             
         }
        
-        public ActionResult ChiTietKyThi(string made)
+        public ActionResult ChiTietKyThi(int made)
         {
             TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
             List<CauHoi> model = db.CauHois.ToList();
@@ -34,39 +34,37 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
 
         }
         [HttpPost]
-        public ActionResult Result(FormCollection form, string made)
+        public ActionResult Result(FormCollection form, int made)
         {
             TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
 
-
-            List<ChiTietKetQua> results = new List<ChiTietKetQua>();
+            List<KetQua> results = db.KetQuas.ToList();
             // Duyệt qua từng câu hỏi
+            KetQua ketqua = new KetQua();
+            ketqua.MaDe = made;
+            ketqua.Username = Session["UserName"].ToString();
+            db.KetQuas.Add(ketqua);
+            db.SaveChanges(); 
 
-            foreach (var item in db.CauHois.ToList())
+            List<CauHoi> cauhois = db.CauHois.Where(c => c.KyThis.Any(k => k.MaDe == made)).ToList();
+            foreach (var item in cauhois)
             {
                 string questionKey = "answer_" + item.MaCauHoi;
                 string selectedValue = form[questionKey];
 
-                if (!string.IsNullOrEmpty(selectedValue))
-                {
-                    ChiTietKetQua tam = new ChiTietKetQua();
-                    tam.MaCauHoi=item.MaCauHoi;
-                    tam.DapAnChon=  selectedValue;
-                    if(Session["UserName"]!=null)
-                    tam.Username = Session["UserName"].ToString();
-                    tam.MaDe = made;
-                   results.Add(tam);
-                }
+                ChiTietKetQua tam = new ChiTietKetQua();
+                tam.MaCauHoi = item.MaCauHoi;
+                tam.DapAnChon = !string.IsNullOrEmpty(selectedValue) ? selectedValue : "N";
+                tam.Username = Session["UserName"]?.ToString();
+                tam.MaDe = made;
+                tam.Maketqua = ketqua.Maketqua; // Now Maketqua should have the correct value
+                db.ChiTietKetQuas.Add(tam);
             }
-         
-            // Xử lý kết quả, ví dụ: lưu vào database hoặc hiển thị ra
-            foreach (var result in results)
-            {
-                // result.MaCauHoi và result.SelectedValue chứa giá trị cần thiết
-              
-            }
+            db.SaveChanges();
             return View(results);
         }
+
+
 
 
     }

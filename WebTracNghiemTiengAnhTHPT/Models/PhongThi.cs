@@ -24,7 +24,6 @@ namespace WebTracNghiemTiengAnhTHPT.Models
         public int MaPhong { get; set; }
         public string MatKhau { get; set; }
         public string TenPhong { get; set; }
-        public Nullable<bool> isDeleted { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<KyThi> KyThis { get; set; }

@@ -23,7 +23,7 @@ namespace WebTracNghiemTiengAnhTHPT.Models
             this.KyThis = new HashSet<KyThi>();
         }
     
-        public string MaCauHoi { get; set; }
+        public int MaCauHoi { get; set; }
         public string NoiDung { get; set; }
         public Nullable<int> MaNhom { get; set; }
         public Nullable<int> MucDo { get; set; }
@@ -33,8 +33,8 @@ namespace WebTracNghiemTiengAnhTHPT.Models
         public string DapAnD { get; set; }
         public string DapAnChinhXac { get; set; }
         public Nullable<bool> DaDuyet { get; set; }
-        public Nullable<bool> isDeleted { get; set; }
         public string UsernameTacGia { get; set; }
+        public bool isDeleted { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BaoLoi> BaoLois { get; set; }
