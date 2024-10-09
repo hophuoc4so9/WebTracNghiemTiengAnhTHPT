@@ -17,8 +17,8 @@
                         <h2>  @Html.DisplayFor(modelItem => item.TenKyThi)</h2>
                         <div>
                             <p> @item.Soluot  Số lượt <img src="~/Content/img/mdi--account-check-outline.svg" /> </p>
-                            <p>  @item.ThoiGian phút <img src="~/Content/img/mingcute--time-line.svg"/> </p>
-                            <p>   @item.DiemTrungBinh Đánh giá <img src="~/Content/img/material-symbols--star-rate.svg"  /> </p>
+                            <p>  @item.ThoiGian phút <img src="~/Content/img/mingcute--time-line.svg" /> </p>
+                            <p>   @item.DiemTrungBinh Đánh giá <img src="~/Content/img/material-symbols--star-rate.svg" /> </p>
                             <p>  @item.SoCauHoi  câu hỏi <img src="~/Content/img/ph--question.svg" /></p>
                         </div>
 
@@ -35,3 +35,42 @@
         }
     </div>
 </div>
+<style>
+    .row.d-flex {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .col-6, .col-md-3 {
+        padding: 0;
+    }
+
+    .contest-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+    }
+
+    .contest-card {
+        min-height: 350px;
+        flex-grow: 1;
+    }
+
+    .contest-card h2 {
+        font-size: 1.25rem;
+    }
+
+    .contest-card p {
+        margin-bottom: 0.5rem;
+    }
+
+    .contest-card img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .btn-outline-success {
+        margin-top: auto;
+    }
+</style>

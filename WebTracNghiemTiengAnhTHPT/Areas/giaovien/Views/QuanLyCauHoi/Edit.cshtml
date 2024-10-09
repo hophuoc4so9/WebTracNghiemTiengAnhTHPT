@@ -1,0 +1,71 @@
+﻿@model WebTracNghiemTiengAnhTHPT.Models.CauHoi
+
+@{
+    ViewBag.Title = "Chỉnh sửa câu hỏi";
+    Layout = "~/Areas/admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Chỉnh sửa câu hỏi</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.Label("Nội dung")
+        @Html.TextAreaFor(m => m.NoiDung, new { @class = "form-control", rows = 2 })
+        @Html.ValidationMessageFor(m => m.NoiDung)
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Đáp án A")
+        @Html.TextBoxFor(m => m.DapAnA, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.DapAnA)
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Đáp án B")
+        @Html.TextBoxFor(m => m.DapAnB, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.DapAnB)
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Đáp án C")
+        @Html.TextBoxFor(m => m.DapAnC, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.DapAnC)
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Đáp án D")
+        @Html.TextBoxFor(m => m.DapAnD, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.DapAnD)
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Đáp án chính xác")
+        @Html.DropDownList("DapAnChinhXac", new SelectList(new[] { "A", "B", "C", "D" }, Model.DapAnChinhXac), new { @class = "form-control" })
+        @Html.ValidationMessage("DapAnChinhXac")
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Mã nhóm")
+        @Html.DropDownListFor(m => m.MaNhom, (IEnumerable<SelectListItem>)ViewBag.NhomList, new { @class = "form-control" })
+        @Html.ValidationMessage("MaNhom")
+    </div>
+
+
+    <div class="form-group">
+        @Html.Label("Mức độ")
+        @Html.DropDownList("MucDo", new SelectList(new[] {
+            new { Value = "1", Text = "Dễ" },
+            new { Value = "2", Text = "Trung bình" },
+            new { Value = "3", Text = "Khó" }
+        }, "Value", "Text", Model.MucDo), new { @class = "form-control" })
+        @Html.ValidationMessage("MucDo")
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+        <a href="@Url.Action("Index", "QuanLyCauHoi")" class="btn btn-secondary">Hủy</a>
+    </div>
+}

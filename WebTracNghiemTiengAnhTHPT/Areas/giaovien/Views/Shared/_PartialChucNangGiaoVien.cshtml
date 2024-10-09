@@ -7,34 +7,56 @@
 <!-- Sidebar menu -->
 <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu" style="width: 100%; padding: 15px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
     <li style="width: 100%;">
-        <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle" style="color: #343a40; padding: 12px; display: flex; align-items: center; font-weight: bold; text-transform: uppercase;">
+        <a href="#submenu1" data-bs-toggle="collapse" class="btn btn-primaryy" style="width: 100%; text-align: left; margin-bottom: 10px;">
             <i class="fas fa-tachometer-alt me-2"></i>
             <span class="ms-1 d-none d-sm-inline">Quản lý chung</span>
         </a>
         <ul class="collapse show nav flex-column ms-1 ml-4" id="submenu1" data-bs-parent="#menu">
             <li class="w-100">
-                <a href="#" class="nav-link px-0" style="color: #495057; padding: 8px 0; text-transform: capitalize;">
+                <a href="#" class="btn btn-primaryy" style="width: 100%; text-align: left; margin-bottom: 10px;">
                     Quản lý tài khoản
                 </a>
             </li>
             <li>
-                <a href="#" class="nav-link px-0" style="color: #495057; padding: 8px 0; text-transform: capitalize;">
+                <a href="#" class="btn btn-primaryy" style="width: 100%; text-align: left; margin-bottom: 10px;">
                     Quản lý lớp học
                 </a>
             </li>
-
-
-            <li><a href="@Url.Action("Index", "QuanLyDeThi", new { area = "giaovien" })">Quản lý đề thi</a></li>
-
-
             <li>
-                <a href="#" class="nav-link px-0" style="color: #495057; padding: 8px 0; text-transform: capitalize;">
+                <a href="@Url.Action("Index", "QuanLyDeThi", new { area = "giaovien" })" class="btn btn-primaryy" style="width: 100%; text-align: left; margin-bottom: 10px;">
+                    Quản lý đề thi
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "QuanLyCauHoi", new { area = "giaovien" })" class="btn btn-primaryy" style="width: 100%; text-align: left;">
                     Quản lý câu hỏi
                 </a>
             </li>
         </ul>
     </li>
-
 </ul>
 
 <hr>
+<style>
+    /* Thêm lớp CSS cho các nút */
+    .nav.collapse.btn-primaryy {
+        background-color: #ffffff;
+        border: none;
+        color: white;
+        font-weight: bold;
+        padding: 10px;
+        text-decoration: none; /* Loại bỏ gạch chân */
+        display: block;
+        width: 100%;
+        text-align: left;
+    }
+
+    .btn-primaryy:hover {
+        background-color: #12ddd5; /* Màu khi hover */
+    }
+
+    .nav-link {
+        text-decoration: none; /* Loại bỏ gạch chân cho các đường dẫn thông thường */
+    }
+
+</style>

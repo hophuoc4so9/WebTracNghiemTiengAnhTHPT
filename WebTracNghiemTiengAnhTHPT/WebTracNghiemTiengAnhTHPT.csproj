@@ -118,6 +118,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\BundleConfig2.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\admin\adminAreaRegistration.cs" />
@@ -125,8 +126,11 @@
     <Compile Include="Areas\admin\Controllers\LoginController.cs" />
     <Compile Include="Areas\admin\Controllers\SignUpController.cs" />
     <Compile Include="Areas\giaovien\Controllers\HomeController.cs" />
+    <Compile Include="Areas\giaovien\Controllers\QuanLyCauHoiController.cs" />
     <Compile Include="Areas\giaovien\Controllers\QuanLyDeThiController.cs" />
     <Compile Include="Areas\giaovien\giaovienAreaRegistration.cs" />
+    <Compile Include="Areas\hocsinh\Controllers\ThongTinCaNhanController.cs" />
+    <Compile Include="Areas\hocsinh\hocsinhAreaRegistration.cs" />
     <Compile Include="Controllers\ContestsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -256,6 +260,13 @@
     <Content Include="Areas\admin\Views\Shared\RenderMain.cshtml" />
     <Content Include="Areas\admin\Views\Home\QL_LOPHOC.cshtml" />
     <Content Include="Areas\admin\Views\Shared\Render_QLLOPHOC.cshtml" />
+    <Content Include="Areas\hocsinh\Views\web.config" />
+    <Content Include="Areas\hocsinh\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\hocsinh\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\giaovien\Views\QuanLyCauHoi\Index.cshtml" />
+    <Content Include="Areas\giaovien\Views\QuanLyCauHoi\Edit.cshtml" />
+    <Content Include="Areas\giaovien\Views\QuanLyCauHoi\Details.cshtml" />
+    <Content Include="Areas\hocsinh\Views\ThongTinCaNhan\Index.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
@@ -303,10 +314,13 @@
     <Content Include="Views\Contests\Index.cshtml" />
     <Content Include="Views\Contests\ChiTietKyThi.cshtml" />
     <Content Include="Views\Contests\Result.cshtml" />
+    <Content Include="Views\Shared\_PartialFooter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\admin\Data\" />
     <Folder Include="Areas\giaovien\Data\" />
+    <Folder Include="Areas\hocsinh\Data\" />
+    <Folder Include="Data\" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
