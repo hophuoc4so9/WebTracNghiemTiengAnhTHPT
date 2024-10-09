@@ -17,14 +17,14 @@ namespace WebTracNghiemTiengAnhTHPT.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public KyThi()
         {
-            this.ChiTietKetQuas = new HashSet<ChiTietKetQua>();
+            this.BaoLois = new HashSet<BaoLoi>();
             this.DanhGias = new HashSet<DanhGia>();
             this.KetQuas = new HashSet<KetQua>();
             this.CauHois = new HashSet<CauHoi>();
             this.PhongThis = new HashSet<PhongThi>();
         }
     
-        public string MaDe { get; set; }
+        public int MaDe { get; set; }
         public string TenKyThi { get; set; }
         public int ThoiGian { get; set; }
         public Nullable<System.DateTime> ThoiGianBatDau { get; set; }
@@ -34,7 +34,7 @@ namespace WebTracNghiemTiengAnhTHPT.Models
         public string UsernameTacGia { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ChiTietKetQua> ChiTietKetQuas { get; set; }
+        public virtual ICollection<BaoLoi> BaoLois { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DanhGia> DanhGias { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -16,13 +16,13 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             {
                 // Get the current exam's questions
                 var model = context.CauHois
-            .Include("NhomCauHoi").Where(c=>c.isDeleted!=true) // Include related data if needed
+            .Include("NhomCauHoi")// Include related data if needed
             .ToList();
                 return View(model);
             }
         }
         [HttpPost]
-        public JsonResult DeleteQuestion(string maCauHoi)
+        public JsonResult DeleteQuestion(int maCauHoi)
         {
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {

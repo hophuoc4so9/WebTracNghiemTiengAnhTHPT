@@ -12,18 +12,22 @@
 <!-- Single Save Button -->
 <button type="button" class="btn btn-success btn-sm" onclick="saveAllChanges()">Save All</button>
 
-@Html.ActionLink("Thêm mới", "ThemMoiDeThi", "QuanLyDeThi", null, new { @class = "btn btn-success btn-sm" })
+@using (Html.BeginForm("Upload", "QuanLyDeThi", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input type="file" name="file" accept=".pdf,.doc,.docx" />
+    <input type="submit" value="Thêm mới đề thi" />
+}
 
 <!-- Bootstrap Grid Layout -->
 <form class="kyThi-form" action="@Url.Action("Update", "QuanLyDeThi")" method="post">
     <div class="container">
         <div class="row">
             <!-- Title Row -->
-            <div class="col"><strong>@Html.DisplayNameFor(model => model.First().TenKyThi)</strong></div>
-            <div class="col"><strong>@Html.DisplayNameFor(model => model.First().ThoiGian)</strong></div>
-            <div class="col"><strong>@Html.DisplayNameFor(model => model.First().ThoiGianBatDau)</strong></div>
-            <div class="col"><strong>@Html.DisplayNameFor(model => model.First().ThoiGianKetThuc)</strong></div>
-            <div class="col"><strong>@Html.DisplayNameFor(model => model.First().CongKhai)</strong></div>
+            <div class="col"><strong>Tên đề thi</strong></div>
+            <div class="col"><strong>Thời gian</strong></div>
+            <div class="col"><strong>Thời gian bắt đầu</strong></div>
+            <div class="col"><strong>Thời gian kết thúc</strong></div>
+            <div class="col"><strong>Công khai</strong></div>
 
             <div class="col"><strong>Hoạt động</strong></div>
         </div>
@@ -48,38 +52,33 @@
                 <div class="col">
                     @if (item.ThoiGianBatDau != null)
                     {
-
-                        <span class="text-display">@item.ThoiGianBatDau</span>
-                        <input type="date" name="KyThi[@item.MaDe].ThoiGianBatDauDate" class="form-control edit-input" value="@item.ThoiGianBatDau.Value.ToString("yyyy-MM-dd")" style="display:none;" />
-
-
-                        <input type="time" name="KyThi[@item.MaDe].ThoiGianBatDauTime" class="form-control edit-input" value="@item.ThoiGianBatDau.Value.ToString("HH:mm")" style="display:none;" />
+                        <span class="text-display">@String.Format("{0:dd-MM-yyyy HH:mm}", item.ThoiGianBatDau)</span>
                     }
                     else
                     {
-                        <span class="text-display">No Start Time</span>
-                        <input type="date" name="KyThi[@item.MaDe].ThoiGianBatDauDate" class="form-control edit-input" value="" style="display:none;" />
-                        <input type="time" name="KyThi[@item.MaDe].ThoiGianBatDauTime" class="form-control edit-input" value="" style="display:none;" />
+                        <span class="text-display">Chưa có thời gian bắt dầu</span>
                     }
+
+                    <input name="KyThi[@item.MaDe].ThoiGianBatDau" type="datetime-local" class="form-control edit-input" value="@String.Format("{0:yyyy-MM-ddTHH:mm}", item.ThoiGianBatDau)" />
+
                 </div>
                 <div class="col">
                     @if (item.ThoiGianKetThuc != null)
                     {
-                        <span class="text-display">@item.ThoiGianKetThuc</span>
-                        <input type="date" name="KyThi[@item.MaDe].ThoiGianKetThucDate" class="form-control edit-input" value="@item.ThoiGianKetThuc.Value.ToString("yyyy-MM-dd")" style="display:none;" />
-
-                        <input type="time" name="KyThi[@item.MaDe].ThoiGianKetThucTime" class="form-control edit-input" value="@item.ThoiGianKetThuc.Value.ToString("HH:mm")" style="display:none;" />
+                        <span class="text-display">@String.Format("{0:dd-MM-yyyy HH:mm}", item.ThoiGianKetThuc)</span>
                     }
                     else
                     {
-                        <span class="text-display">No End Time</span>
-                        <input type="date" name="KyThi[@item.MaDe].ThoiGianKetThucDate" class="form-control edit-input" value="" style="display:none;" />
-                        <input type="time" name="KyThi[@item.MaDe].ThoiGianKetThucTime" class="form-control edit-input" value="" style="display:none;" />
+                        <span class="text-display">Chưa có thời gian kết thúc</span>
                     }
+                    <input name="KyThi[@item.MaDe].ThoiGianKetThuc" type="datetime-local" class="form-control edit-input" value="@String.Format("{0:yyyy-MM-ddTHH:mm}", item.ThoiGianBatDau)" />
+
                 </div>
                 <div class="col">
+
                     <input type="checkbox" name="KyThi[@item.MaDe].CongKhai" class="edit-input" @(item.CongKhai ? "checked" : "") style="display:none;" />
                     <span class="text-display">@item.CongKhai</span>
+
                 </div>
                 <div style="display:none;">
                     <input type="hidden" name="KyThi[@item.MaDe].MaDe" value="@item.MaDe" />

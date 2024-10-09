@@ -10,8 +10,15 @@ using System.Web.Mvc;
 using System.Web.Security;
 using WebTracNghiemTiengAnhTHPT.Models;
 using System.Xml.Linq;
+using System.Text.RegularExpressions;
+using System.Threading;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using Aspose.Words;
+using iText.Kernel.Pdf.Canvas.Parser;
+using iText.Kernel.Pdf;
+using DocumentFormat.OpenXml.Office.SpreadSheetML.Y2023.MsForms;
+
 
 namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
 {
@@ -68,7 +75,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             }    
                
         }
-        public ActionResult ChiTietDeThi(string made)
+        public ActionResult ChiTietDeThi(int made)
         {
             using (var context = new TracNghiemTiengAnhTHPTEntities1())
             {
@@ -89,7 +96,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             }
         }
         [HttpPost]
-        public ActionResult AddQuestionToExam(string made, string maCauHoi)
+        public ActionResult AddQuestionToExam(int made, int maCauHoi)
         {
             using (var context = new TracNghiemTiengAnhTHPTEntities1())
             {
@@ -109,7 +116,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             }
         }
         [HttpPost]
-        public ActionResult DeleteCauHoi(string maCauHoi, string made)
+        public ActionResult DeleteCauHoi(int maCauHoi, int made)
         {
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {
@@ -159,18 +166,16 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                                 kyThi.ThoiGian = int.TryParse(form[$"KyThi[{index}].ThoiGian"], out var thoiGian) ? thoiGian : 0;
 
                                 // Update ThoiGianBatDau
-                                var batDauDate = form[$"KyThi[{index}].ThoiGianBatDauDate"];
-                                var batDauTime = form[$"KyThi[{index}].ThoiGianBatDauTime"];
-                                kyThi.ThoiGianBatDau = string.IsNullOrEmpty(batDauDate) || string.IsNullOrEmpty(batDauTime)
+                                var batDauDate = form[$"KyThi[{index}].ThoiGianBatDau"];
+                                kyThi.ThoiGianBatDau = string.IsNullOrEmpty(batDauDate) 
                                     ? (DateTime?)null
-                                    : DateTime.Parse($"{batDauDate} {batDauTime}");
+                                    : DateTime.Parse(batDauDate);
 
                                 // Update ThoiGianKetThuc
-                                var ketThucDate = form[$"KyThi[{index}].ThoiGianKetThucDate"];
-                                var ketThucTime = form[$"KyThi[{index}].ThoiGianKetThucTime"];
-                                kyThi.ThoiGianKetThuc = string.IsNullOrEmpty(ketThucDate) || string.IsNullOrEmpty(ketThucTime)
+                                var ketThucDate = form[$"KyThi[{index}].ThoiGianKetThuc"];
+                                kyThi.ThoiGianKetThuc = string.IsNullOrEmpty(ketThucDate) 
                                     ? (DateTime?)null
-                                    : DateTime.Parse($"{ketThucDate} {ketThucTime}");
+                                    : DateTime.Parse(ketThucDate);
 
                                 // Update CongKhai   KyThi[@item.MaDe].CongKhai
                                 kyThi.CongKhai = form[$"KyThi[{index}].CongKhai"] != null && form[$"KyThi[{index}].CongKhai"] == "on";
@@ -192,8 +197,126 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public ActionResult Upload(HttpPostedFileBase file)
+            {
+            string contents = string.Empty;
 
-      
+            try
+            {
+                using (var ms = new MemoryStream())
+                {
+                    file.InputStream.CopyTo(ms);
+                    ms.Position = 0;
 
-    }
+                    string fileExtension = Path.GetExtension(file.FileName).ToLower();
+
+                    if (fileExtension == ".docx")
+                    {
+                        using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(ms, false))
+                        {
+                            DocumentFormat.OpenXml.Wordprocessing.Body body = wordDoc.MainDocumentPart.Document.Body;
+                            contents = body.InnerText;
+                        }
+                    }
+                    else if (fileExtension == ".doc")
+                    {
+                        Aspose.Words.Document doc = new Aspose.Words.Document(ms);
+                        contents = doc.ToString(SaveFormat.Text);
+                    }
+                    else if (fileExtension == ".pdf")
+                    {
+                        using (PdfReader reader = new PdfReader(ms))
+                        using (PdfDocument pdfDoc = new PdfDocument(reader))
+                        {
+                            for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
+                            {
+                                contents += PdfTextExtractor.GetTextFromPage(pdfDoc.GetPage(i));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        throw new FileFormatException("Unsupported file format.");
+                    }
+                }
+
+                List<NhomCauHoi> questions = ProcessExamText(contents);
+                Session["questions"] = questions;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception for further analysis
+                System.Diagnostics.Debug.WriteLine("Exception: " + ex.Message);
+                return View("Error");
+            }
+
+            return View("AddFile");
+        }
+
+        private List<NhomCauHoi> ProcessExamText(string text)
+        {
+            TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
+            List<NhomCauHoi> nhomCauHois = db.NhomCauHois.ToList();
+            var questionPattern = @"Question\s\d+.*?(?=Question\s\d+|$)";
+            var questionMatches = Regex.Matches(text, questionPattern, RegexOptions.Singleline);
+            bool newGroup = true;
+            int groupId = 1;
+            int index = 1;
+            string newGroupContent = "";
+
+            foreach (Match match in questionMatches)
+            {
+                var questionText = match.Value;
+                var parts = Regex.Split(questionText, @"(?=A\.\s|B\.\s|C\.\s|D\.\s)");
+
+                if (newGroup && newGroupContent!="")
+                {
+                    NhomCauHoi nhomCauHoi = new NhomCauHoi
+                    {
+                        NoiDung = groupId == 1 ? text.Substring(0, match.Index).Trim() : newGroupContent
+                    };
+                    nhomCauHois.Add(nhomCauHoi);
+                    index = nhomCauHoi.MaNhom;
+                    newGroup = false;
+                }
+
+                if (parts.Length < 5)
+                {
+                    // Handle error: not enough parts
+                    continue;
+                }
+
+                if (parts[4].Contains("\n") && !Regex.IsMatch(parts[4], @"Question\s\d+"))
+                {
+                    newGroup = true;
+                    groupId++;
+                    newGroupContent = parts[4].Substring(parts[4].IndexOf("\n")).Trim();
+                    parts[4] = parts[4].Substring(0, parts[4].IndexOf("\n")).Trim();
+                }
+
+                var cauHoi = new CauHoi
+                {
+                    NoiDung = parts[0].Trim(),
+                    DapAnA = parts[1].Substring(2).Trim(),
+                    DapAnB = parts[2].Substring(2).Trim(),
+                    DapAnC = parts[3].Substring(2).Trim(),
+                    DapAnD = parts[4].Substring(2).Trim(),
+                    MaNhom = index
+                    
+                };
+                
+                nhomCauHois.Last().CauHois.Add(cauHoi);
+            }
+            //nếu newGroupContent có dạng Đáp án 1.A 2.B 3.D thì cặp nhật câu hỏi thứ i cauHoi.DapAnChinhXac=A
+            return nhomCauHois;
+        }
+   
+}
+
+
+
+
+
+
 }
