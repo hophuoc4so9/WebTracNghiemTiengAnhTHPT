@@ -18,6 +18,7 @@ using Aspose.Words;
 using iText.Kernel.Pdf.Canvas.Parser;
 using iText.Kernel.Pdf;
 using DocumentFormat.OpenXml.Office.SpreadSheetML.Y2023.MsForms;
+using System.Data.Entity.Validation;
 
 
 namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
@@ -156,7 +157,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                         if (int.TryParse(indexString, out index))
                         {
                             // Get the MaDe value to find the specific KyThi item
-                            var maDe = form[$"KyThi[{index}].MaDe"];
+                            int maDe =int.Parse( form[$"KyThi[{index}].MaDe"]);
                             var kyThi = db.KyThis.Find(maDe);
 
                             if (kyThi != null)
@@ -200,8 +201,11 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
         [HttpPost]
         public ActionResult Upload(HttpPostedFileBase file)
             {
+           
             string contents = string.Empty;
-
+        
+            KyThi ktthi = new KyThi();
+            ktthi.TenKyThi = Path.ChangeExtension(file.FileName, null);
             try
             {
                 using (var ms = new MemoryStream())
@@ -240,9 +244,11 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                         throw new FileFormatException("Unsupported file format.");
                     }
                 }
-
-                List<NhomCauHoi> questions = ProcessExamText(contents);
-                Session["questions"] = questions;
+                TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
+                db.KyThis.Add(ktthi);
+                db.SaveChanges();
+                ProcessExamText(contents,ktthi);
+             
             }
             catch (Exception ex)
             {
@@ -251,68 +257,178 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                 return View("Error");
             }
 
-            return View("AddFile");
+            return RedirectToAction("ChiTietDeThi", new { made = ktthi.MaDe });
         }
 
-        private List<NhomCauHoi> ProcessExamText(string text)
+        private void ProcessExamText(string text,KyThi kt)
         {
             TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
-            List<NhomCauHoi> nhomCauHois = db.NhomCauHois.ToList();
+     
+
             var questionPattern = @"Question\s\d+.*?(?=Question\s\d+|$)";
             var questionMatches = Regex.Matches(text, questionPattern, RegexOptions.Singleline);
             bool newGroup = true;
-            int groupId = 1;
-            int index = 1;
+            bool fi = true;
             string newGroupContent = "";
-
+            int maxMaCauHoi = db.CauHois.Max(ch => (int?)ch.MaCauHoi)?? 1;
+            int maxgr = db.NhomCauHois.Max(ch => (int?)ch.MaNhom) ?? 1;
+            NhomCauHoi nhomcauhoilast= new NhomCauHoi();
             foreach (Match match in questionMatches)
             {
                 var questionText = match.Value;
+
+                // Stop processing if "Đáp án" is found
+               
+
                 var parts = Regex.Split(questionText, @"(?=A\.\s|B\.\s|C\.\s|D\.\s)");
-
-                if (newGroup && newGroupContent!="")
-                {
-                    NhomCauHoi nhomCauHoi = new NhomCauHoi
-                    {
-                        NoiDung = groupId == 1 ? text.Substring(0, match.Index).Trim() : newGroupContent
-                    };
-                    nhomCauHois.Add(nhomCauHoi);
-                    index = nhomCauHoi.MaNhom;
-                    newGroup = false;
-                }
-
                 if (parts.Length < 5)
                 {
                     // Handle error: not enough parts
                     continue;
                 }
+                if (newGroup == true)
+                {
+
+                    NhomCauHoi nhomCauHoi = new NhomCauHoi
+                    {
+                        NoiDung = fi == true ? text.Substring(0, match.Index).Trim() : newGroupContent
+                    };
+                   maxgr++;
+                    nhomCauHoi.MaNhom = maxgr ;
+                    db.NhomCauHois.Add(nhomCauHoi);
+                    db.SaveChanges();
+                    nhomcauhoilast= nhomCauHoi;
+                    newGroup = false;
+                    fi = false;
+                }
+
+                
 
                 if (parts[4].Contains("\n") && !Regex.IsMatch(parts[4], @"Question\s\d+"))
                 {
-                    newGroup = true;
-                    groupId++;
                     newGroupContent = parts[4].Substring(parts[4].IndexOf("\n")).Trim();
+                    if(newGroupContent!="")
+                    {
+                        newGroup = true;
+                    }
                     parts[4] = parts[4].Substring(0, parts[4].IndexOf("\n")).Trim();
+                 
                 }
-
+     
                 var cauHoi = new CauHoi
                 {
+                    MaCauHoi = maxMaCauHoi + 1,
+                    
                     NoiDung = parts[0].Trim(),
                     DapAnA = parts[1].Substring(2).Trim(),
                     DapAnB = parts[2].Substring(2).Trim(),
                     DapAnC = parts[3].Substring(2).Trim(),
                     DapAnD = parts[4].Substring(2).Trim(),
-                    MaNhom = index
-                    
+                    MaNhom = maxgr,
+                    DapAnChinhXac = "A"
+
                 };
-                
-                nhomCauHois.Last().CauHois.Add(cauHoi);
+                cauHoi.KyThis.Add(kt);
+                              
+                db.CauHois.Add(cauHoi);
+               
+                db.SaveChanges();
+                maxMaCauHoi++;
+
+                if (newGroupContent.ToLower().Contains("đáp án"))
+                {
+                    break;
+                }
             }
+            db.SaveChanges();    
             //nếu newGroupContent có dạng Đáp án 1.A 2.B 3.D thì cặp nhật câu hỏi thứ i cauHoi.DapAnChinhXac=A
-            return nhomCauHois;
+            return ;
         }
-   
-}
+        [HttpPost]
+        public ActionResult LuuThayDoi(FormCollection f)
+        {
+            using (var db = new TracNghiemTiengAnhTHPTEntities1())
+            {
+                List<KyThi> results = db.KyThis.ToList();
+                KyThi kyThi = new KyThi
+                {
+                    MaDe = db.KyThis.Max(k => k.MaDe) + 1,
+                };
+
+                List<NhomCauHoi> a = Session["questions"] as List<NhomCauHoi>;
+                if (a != null)
+                {
+                    foreach (var nhomCauHoi in a)
+                    {
+                        db.NhomCauHois.Add(nhomCauHoi);
+                        foreach (var cauHoi in nhomCauHoi.CauHois)
+                        {
+                            db.CauHois.Add(cauHoi);
+                            kyThi.CauHois.Add(cauHoi);
+
+                        }
+                    }
+
+                    db.KyThis.Add(kyThi);
+                    db.SaveChanges();
+                }
+
+
+                //foreach (var item in a)
+                //{
+                //    string q = "NoiDung_" + item.MaNhom;
+                //    item.NoiDung = f[q];
+                //    foreach (var item1 in item.CauHois)
+                //    {
+                //        string questionKey = "answer_" + item1.MaCauHoi;
+
+                //        item1.DapAnChinhXac = f[questionKey];
+                //        questionKey = "NoiDung_" + item1.MaCauHoi;
+                //        item1.NoiDung = f[questionKey];
+                //        CauHoi find2 = db.CauHois.Where(c => c.MaCauHoi == item1.MaCauHoi).FirstOrDefault();
+                //        if (find2 != null)
+                //        {
+
+                //            find2 = item1;
+                //        }
+                //        else
+                //        {
+                //            db.CauHois.Add(item1);
+                //        }
+                //        db.SaveChanges();
+
+
+                //    }
+                //    NhomCauHoi find = db.NhomCauHois.Where(c => c.MaNhom == item.MaNhom).FirstOrDefault();
+                //    if (find != null)
+                //    {
+
+                //        find = item;
+                //    }
+                //    else
+                //    {
+                //        db.NhomCauHois.Add(item);
+
+                //    }
+                //    db.SaveChanges();
+
+
+                //}
+                //var find3 = db.KyThis.Where(c => c.MaDe == kyThi.MaDe).FirstOrDefault();
+                //if(find3!=null)
+                //{
+                //    find3 = kyThi;
+                //}    
+                //else 
+                //{
+                //    db.KyThis.Add(kyThi);
+                //}
+                db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+        }
+    }
 
 
 
