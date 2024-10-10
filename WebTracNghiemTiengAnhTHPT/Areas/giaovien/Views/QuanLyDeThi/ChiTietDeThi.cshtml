@@ -31,7 +31,7 @@
 
                         @using (Html.BeginForm("AddQuestionToExam", "QuanLyDeThi", FormMethod.Post))
                         {
-                            @Html.Hidden("made", (string)ViewBag.made)
+                            @Html.Hidden("made", (int)ViewBag.made)
                             @Html.Hidden("maCauHoi", item.MaCauHoi)
                             <button type="submit" class="btn btn-primary">Thêm</button>
                         }
@@ -47,45 +47,58 @@
 <div class="">
     @foreach (var group in groupedItems)
     {
-        <h4>@group.Key.NoiDung</h4>
+        @Html.TextArea("NoiDung_" + group.Key.MaNhom, group.Key.NoiDung, new { @class = "form-control", style = "width: 100%;" })
 
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Mã Câu Hỏi</th>
-                    <th>Câu Hỏi</th>
-                    <th>Đáp Án</th>
-                    <th>Đáp Án Chính Xác</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in group)
+      
+               foreach (var item in group)
                 {
-                    
-                    <tr>
-                        <td>@item.MaCauHoi</td>
-                        <td>@Html.DisplayFor(modelItem => item.NoiDung)</td>
-                        <td>
-                            <ul>
-                                <li>A: @Html.DisplayFor(modelItem => item.DapAnA)</li>
-                                <li>B: @Html.DisplayFor(modelItem => item.DapAnB)</li>
-                                <li>C: @Html.DisplayFor(modelItem => item.DapAnC)</li>
-                                <li>D: @Html.DisplayFor(modelItem => item.DapAnD)</li>
-                            </ul>
-                        </td>
-                        <td>@Html.DisplayFor(modelItem => item.DapAnChinhXac)</td>
-                        <td>
-                            @using (Html.BeginForm("DeleteCauHoi", "QuanLyDeThi", new { maCauHoi = item.MaCauHoi, made = ViewBag.made }, FormMethod.Post))
-                            {
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            }
-                        </td>
 
+                    using (Html.BeginForm("DeleteCauHoi", "QuanLyDeThi", new { maCauHoi = item.MaCauHoi, made = ViewBag.made }, FormMethod.Post))
+                    {
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    }
+                    <div class="item-container border p-3 mb-3">
+                        <div class="field mb-2">
+                            @item.MaCauHoi :
+                            @Html.TextArea("NoiDung_" + item.MaNhom, item.NoiDung, new { @class = "form-control", style = "width: 100%;" })
+                        </div>
 
-                    </tr>
+                        <!-- Answer choices with radio buttons -->
+                        <label class="form-check-label bg-info w-100 my-1 border-danger border-2" for="dapAnA_@item.MaCauHoi">
+                            <span class="form-check mb-2">
+                                <input @(item.DapAnChinhXac == "A" ? "checked" : "")
+                                       class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAnA_@item.MaCauHoi" value="A">
+                                @Html.DisplayFor(modelItem => item.DapAnA)
+                            </span>
+                        </label>
+                        <label class="form-check-label bg-info w-100 my-1" for="dapAnB_@item.MaCauHoi">
+                            <span class="form-check mb-2">
+                                <input @(item.DapAnChinhXac == "B" ? "checked" : "")
+                                       class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAnB_@item.MaCauHoi" value="B">
+                                @Html.DisplayFor(modelItem => item.DapAnB)
+                            </span>
+                        </label>
+                        <label class="form-check-label bg-info w-100 my-1" for="dapAnC_@item.MaCauHoi">
+                            <span class="form-check mb-2">
+                                <input @(item.DapAnChinhXac == "C" ? "checked" : "")
+                                       class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAnC_@item.MaCauHoi" value="C">
+                                @Html.DisplayFor(modelItem => item.DapAnC)
+                            </span>
+                        </label>
+                        <label class="form-check-label bg-info w-100 my-1" for="dapAnD_@item.MaCauHoi">
+                            <span class="form-check mb-2">
+                                <input @(item.DapAnChinhXac == "D" ? "checked" : "")
+                                       class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAnD_@item.MaCauHoi" value="D">
+                                @Html.DisplayFor(modelItem => item.DapAnD)
+                            </span>
+                        </label>
+                        <div class="field">
+                            <strong>Đáp án đúng là:</strong> @Html.DisplayFor(modelItem => item.DapAnChinhXac)
+                        </div>
+                    </div>
+
                 }
-            </tbody>
-        </table>
+     
     }
 
 </div>
