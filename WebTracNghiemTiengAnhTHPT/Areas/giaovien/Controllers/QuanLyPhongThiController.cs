@@ -35,7 +35,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                 using (var context = new TracNghiemTiengAnhTHPTEntities1())
                 {
 
-                    phongThi.MaPhong = PhongThi.GenerateMaPhong(1000);  // Tạo mã phòng ngẫu nhiên
+                    //phongThi.MaPhong = PhongThi.GenerateMaPhong(1000);  // Tạo mã phòng ngẫu nhiên
                     context.PhongThis.Add(phongThi);
                     context.SaveChanges();
                     return RedirectToAction("Index");
