@@ -12,24 +12,21 @@ namespace WebTracNghiemTiengAnhTHPT.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PhongThi
+    public partial class LopHoc
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PhongThi()
+        public LopHoc()
         {
-            this.KyThis = new HashSet<KyThi>();
             this.TaiKhoans = new HashSet<TaiKhoan>();
+            this.PhongThis = new HashSet<PhongThi>();
         }
     
-        public int MaPhong { get; set; }
-        public string MatKhau { get; set; }
-        public string TenPhong { get; set; }
-        public Nullable<int> malop { get; set; }
+        public int MaLop { get; set; }
+        public string TenLop { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<KyThi> KyThis { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TaiKhoan> TaiKhoans { get; set; }
-        public virtual LopHoc LopHoc { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PhongThi> PhongThis { get; set; }
     }
 }

@@ -30,6 +30,7 @@ namespace WebTracNghiemTiengAnhTHPT.Models
         public string Gmail { get; set; }
         public Nullable<bool> isDeleted { get; set; }
         public bool status { get; set; }
+        public Nullable<int> MaLop { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BaoLoi> BaoLois { get; set; }
@@ -41,5 +42,6 @@ namespace WebTracNghiemTiengAnhTHPT.Models
         public virtual ICollection<KetQua> KetQuas { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhongThi> PhongThis { get; set; }
+        public virtual LopHoc LopHoc { get; set; }
     }
 }
