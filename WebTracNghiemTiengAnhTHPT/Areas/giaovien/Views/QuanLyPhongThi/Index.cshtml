@@ -1,0 +1,49 @@
+﻿@model IEnumerable<WebTracNghiemTiengAnhTHPT.Models.PhongThi>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @*@Html.DisplayNameFor(model => model.MaPhong)*@
+            Mã Phòng
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.MatKhau)*@
+            Tên Phòng
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.TenPhong)*@
+            Mật Khẩu Phòng
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.MaPhong)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TenPhong)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MatKhau)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>
