@@ -260,173 +260,147 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             return RedirectToAction("ChiTietDeThi", new { made = ktthi.MaDe });
         }
 
-        private void ProcessExamText(string text,KyThi kt)
-        {
-            TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
-     
-
-            var questionPattern = @"Question\s\d+.*?(?=Question\s\d+|$)";
-            var questionMatches = Regex.Matches(text, questionPattern, RegexOptions.Singleline);
-            bool newGroup = true;
-            bool fi = true;
-            string newGroupContent = "";
-            int maxMaCauHoi = db.CauHois.Max(ch => (int?)ch.MaCauHoi)?? 1;
-            int maxgr = db.NhomCauHois.Max(ch => (int?)ch.MaNhom) ?? 1;
-            NhomCauHoi nhomcauhoilast= new NhomCauHoi();
-            foreach (Match match in questionMatches)
-            {
-                var questionText = match.Value;
-
-                // Stop processing if "Đáp án" is found
-               
-
-                var parts = Regex.Split(questionText, @"(?=A\.\s|B\.\s|C\.\s|D\.\s)");
-                if (parts.Length < 5)
-                {
-                    // Handle error: not enough parts
-                    continue;
-                }
-                if (newGroup == true)
-                {
-
-                    NhomCauHoi nhomCauHoi = new NhomCauHoi
-                    {
-                        NoiDung = fi == true ? text.Substring(0, match.Index).Trim() : newGroupContent
-                    };
-                   maxgr++;
-                    nhomCauHoi.MaNhom = maxgr ;
-                    db.NhomCauHois.Add(nhomCauHoi);
-                    db.SaveChanges();
-                    nhomcauhoilast= nhomCauHoi;
-                    newGroup = false;
-                    fi = false;
-                }
-
-                
-
-                if (parts[4].Contains("\n") && !Regex.IsMatch(parts[4], @"Question\s\d+"))
-                {
-                    newGroupContent = parts[4].Substring(parts[4].IndexOf("\n")).Trim();
-                    if(newGroupContent!="")
-                    {
-                        newGroup = true;
-                    }
-                    parts[4] = parts[4].Substring(0, parts[4].IndexOf("\n")).Trim();
-                 
-                }
-     
-                var cauHoi = new CauHoi
-                {
-                    MaCauHoi = maxMaCauHoi + 1,
-                    
-                    NoiDung = parts[0].Trim(),
-                    DapAnA = parts[1].Substring(2).Trim(),
-                    DapAnB = parts[2].Substring(2).Trim(),
-                    DapAnC = parts[3].Substring(2).Trim(),
-                    DapAnD = parts[4].Substring(2).Trim(),
-                    MaNhom = maxgr,
-                    DapAnChinhXac = "A"
-
-                };
-                cauHoi.KyThis.Add(kt);
-                              
-                db.CauHois.Add(cauHoi);
-               
-                db.SaveChanges();
-                maxMaCauHoi++;
-
-                if (newGroupContent.ToLower().Contains("đáp án"))
-                {
-                    break;
-                }
-            }
-            db.SaveChanges();    
-            //nếu newGroupContent có dạng Đáp án 1.A 2.B 3.D thì cặp nhật câu hỏi thứ i cauHoi.DapAnChinhXac=A
-            return ;
-        }
-        [HttpPost]
-        public ActionResult LuuThayDoi(FormCollection f)
+        private void ProcessExamText(string text, KyThi kt)
         {
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {
-                List<KyThi> results = db.KyThis.ToList();
-                KyThi kyThi = new KyThi
-                {
-                    MaDe = db.KyThis.Max(k => k.MaDe) + 1,
-                };
+                var questionPattern = @"Question\s\d+.*?(?=Question\s\d+|$)";
+                var questionMatches = Regex.Matches(text, questionPattern, RegexOptions.Singleline);
+                bool newGroup = true;
+                bool fi = true;
+                string newGroupContent = "";
+                int maxMaCauHoi = db.CauHois.Max(ch => (int?)ch.MaCauHoi) ?? 1;
+                int maxgr = db.NhomCauHois.Max(ch => (int?)ch.MaNhom) ?? 1;
+                NhomCauHoi nhomcauhoilast = new NhomCauHoi();
+                List<CauHoi> cauhois123 = new List<CauHoi>();
 
-                List<NhomCauHoi> a = Session["questions"] as List<NhomCauHoi>;
-                if (a != null)
+                foreach (Match match in questionMatches)
                 {
-                    foreach (var nhomCauHoi in a)
+                    var questionText = match.Value;
+
+                    var parts = Regex.Split(questionText, @"(?=A\.\s|B\.\s|C\.\s|D\.\s)");
+                    if (parts.Length < 5)
                     {
-                        db.NhomCauHois.Add(nhomCauHoi);
-                        foreach (var cauHoi in nhomCauHoi.CauHois)
+                        continue;
+                    }
+
+                    if (newGroup)
+                    {
+                        NhomCauHoi nhomCauHoi = new NhomCauHoi
                         {
-                            db.CauHois.Add(cauHoi);
-                            kyThi.CauHois.Add(cauHoi);
+                            NoiDung = fi ? text.Substring(0, match.Index).Trim() : newGroupContent
+                        };
+                        maxgr++;
+                        nhomCauHoi.MaNhom = maxgr;
+                        db.NhomCauHois.Add(nhomCauHoi);
+                        nhomcauhoilast = nhomCauHoi;
+                        newGroup = false;
+                        fi = false;
+                    }
+
+                    if (parts[4].Contains("\n") && !Regex.IsMatch(parts[4], @"Question\s\d+"))
+                    {
+                        newGroupContent = parts[4].Substring(parts[4].IndexOf("\n")).Trim();
+                        if (!string.IsNullOrEmpty(newGroupContent))
+                        {
+                            newGroup = true;
+                        }
+                        parts[4] = parts[4].Substring(0, parts[4].IndexOf("\n")).Trim();
+                    }
+
+                    var cauHoi = new CauHoi
+                    {
+                        MaCauHoi = ++maxMaCauHoi,
+                        NoiDung = parts[0].Trim(),
+                        DapAnA = parts[1].Substring(2).Trim(),
+                        DapAnB = parts[2].Substring(2).Trim(),
+                        DapAnC = parts[3].Substring(2).Trim(),
+                        DapAnD = parts[4].Substring(2).Trim(),
+                        MaNhom = maxgr,
+                        DapAnChinhXac = "A"
+                    };
+                    cauHoi.KyThis.Add(kt);
+
+                    db.CauHois.Add(cauHoi);
+                    cauhois123.Add(cauHoi);
+
+                    if (newGroupContent.ToLower().Contains("đáp án"))
+                    {
+                        break;
+                    }
+                }
+
+                if (newGroupContent.ToLower().Contains("đáp án"))
+                {
+                    var answerPattern = new Regex(@"\d+\.\s*[A-D]", RegexOptions.Compiled);
+                    var answerMatches = answerPattern.Matches(newGroupContent);
+
+                    foreach (Match answerMatch in answerMatches)
+                    {
+                        var answerParts = answerMatch.Value.Split('.');
+                        if (answerParts.Length == 2)
+                        {
+                            if (int.TryParse(answerParts[0].Trim(), out int questionIndex) && questionIndex <= cauhois123.Count)
+                            {
+                                cauhois123[questionIndex - 1].DapAnChinhXac = answerParts[1].Trim(new char[] { ' ', '\n', '\r', '\t' });
+                            }
+                        }
+                    }
+                }
+
+                db.SaveChanges();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult LuuThayDoi(int made, string action, FormCollection f)
+        {
+            if (action.StartsWith("delete_"))
+            {
+                int maCauHoi = int.Parse(action.Split('_')[1]);
+                return DeleteCauHoi(maCauHoi, made);
+                // Handle delete logic
+            }
+            else
+            {
+                using (var db = new TracNghiemTiengAnhTHPTEntities1())
+                {
+
+                    List<NhomCauHoi> a = db.NhomCauHois.ToList();
+
+
+                    foreach (var item in a)
+                    {
+                        string q = "NoiDung_" + item.MaNhom;
+                       
+                        if (!string.IsNullOrEmpty(f[q]))
+                        {
+                            item.NoiDung = f[q];
+                        }
+                        foreach (var item1 in item.CauHois)
+                        {
+
+                            string questionKey = "answer_" + item1.MaCauHoi;
+                            if (!string.IsNullOrEmpty(f[questionKey]))
+                            {
+                                item1.DapAnChinhXac = f[questionKey];
+                            }
+
+                            questionKey = "NoiDung_" + item1.MaCauHoi;
+                            if (!string.IsNullOrEmpty(f[questionKey]))
+                            {
+                                item1.NoiDung = f[questionKey];
+                            }
 
                         }
                     }
-
-                    db.KyThis.Add(kyThi);
                     db.SaveChanges();
+
+                    return RedirectToAction("ChiTietDeThi", new { made });
                 }
-
-
-                //foreach (var item in a)
-                //{
-                //    string q = "NoiDung_" + item.MaNhom;
-                //    item.NoiDung = f[q];
-                //    foreach (var item1 in item.CauHois)
-                //    {
-                //        string questionKey = "answer_" + item1.MaCauHoi;
-
-                //        item1.DapAnChinhXac = f[questionKey];
-                //        questionKey = "NoiDung_" + item1.MaCauHoi;
-                //        item1.NoiDung = f[questionKey];
-                //        CauHoi find2 = db.CauHois.Where(c => c.MaCauHoi == item1.MaCauHoi).FirstOrDefault();
-                //        if (find2 != null)
-                //        {
-
-                //            find2 = item1;
-                //        }
-                //        else
-                //        {
-                //            db.CauHois.Add(item1);
-                //        }
-                //        db.SaveChanges();
-
-
-                //    }
-                //    NhomCauHoi find = db.NhomCauHois.Where(c => c.MaNhom == item.MaNhom).FirstOrDefault();
-                //    if (find != null)
-                //    {
-
-                //        find = item;
-                //    }
-                //    else
-                //    {
-                //        db.NhomCauHois.Add(item);
-
-                //    }
-                //    db.SaveChanges();
-
-
-                //}
-                //var find3 = db.KyThis.Where(c => c.MaDe == kyThi.MaDe).FirstOrDefault();
-                //if(find3!=null)
-                //{
-                //    find3 = kyThi;
-                //}    
-                //else 
-                //{
-                //    db.KyThis.Add(kyThi);
-                //}
-                db.SaveChanges();
-
-                return RedirectToAction("Index");
             }
+
+            
         }
     }
 

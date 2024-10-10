@@ -239,7 +239,8 @@ GROUP BY
 	CongKhai 
 )
 
-
+ALTER table PhongThi
+add malop int
 ALTER TABLE TaiKhoan
 ADD status BIT NOT NULL DEFAULT 0;
 ALTER TABLE CauHoi
