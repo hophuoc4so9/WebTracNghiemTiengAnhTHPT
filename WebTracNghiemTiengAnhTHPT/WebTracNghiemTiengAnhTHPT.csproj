@@ -223,6 +223,7 @@
     <Compile Include="Areas\giaovien\Controllers\HomeController.cs" />
     <Compile Include="Areas\giaovien\Controllers\QuanLyCauHoiController.cs" />
     <Compile Include="Areas\giaovien\Controllers\QuanLyDeThiController.cs" />
+    <Compile Include="Areas\giaovien\Controllers\QuanLyPhongThiController.cs" />
     <Compile Include="Areas\giaovien\giaovienAreaRegistration.cs" />
     <Compile Include="Controllers\ContestsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -355,6 +356,8 @@
     <Content Include="Areas\admin\Views\Shared\Render_QLLOPHOC.cshtml" />
     <Content Include="Areas\giaovien\Views\QuanLyDeThi\ThemMoiDeThi.cshtml" />
     <Content Include="Areas\giaovien\Views\QuanLyCauHoi\Index.cshtml" />
+    <Content Include="Areas\giaovien\Views\QuanLyDeThi\AddFile.cshtml" />
+    <Content Include="Areas\giaovien\Views\QuanLyPhongThi\Index.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
