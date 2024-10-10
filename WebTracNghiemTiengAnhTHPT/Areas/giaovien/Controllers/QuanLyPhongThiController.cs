@@ -10,39 +10,84 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
 {
     public class QuanLyPhongThiController : Controller
     {
-        // GET: giaovien/QuanLyPhongThi
         public ActionResult Index()
         {
             using (var context = new TracNghiemTiengAnhTHPTEntities1())
             {
-                List<PhongThi> model = context.PhongThis.ToList();
-                return View(model);
+                // Lấy danh sách PhongThi và bao gồm thông tin từ bảng LopHoc
+                var phongThiList = context.PhongThis.Include("LopHoc").ToList();
+
+                // Tạo danh sách PhongThiViewModel
+                var viewModelList = phongThiList.Select(pt => new PhongThiViewModel
+                {
+                    PhongThi = pt,
+                    LopHocList = pt.LopHoc != null
+                        ? new List<SelectListItem>
+                        {
+                    new SelectListItem { Value = pt.LopHoc.MaLop.ToString(), Text = pt.LopHoc.TenLop }
+                        }
+                        : new List<SelectListItem>() // Trả về danh sách rỗng nếu LopHoc là null
+                }).ToList();
+
+                return View(viewModelList);
             }
         }
+
+
+
         // GET: PhongThi/Create
         public ActionResult Create()
         {
-            return View();
+            using (var context = new TracNghiemTiengAnhTHPTEntities1())
+            {
+                // Truy vấn danh sách lớp học từ bảng LopHoc
+                var lopHocList = context.LopHocs.Select(l => new SelectListItem
+                {
+                    Value = l.MaLop.ToString(),
+                    Text = l.TenLop
+                }).ToList();
+
+                // Tạo ViewModel và gán danh sách LopHocList
+                var viewModel = new PhongThiViewModel
+                {
+                    LopHocList = lopHocList,
+                    PhongThi = new PhongThi() // Khởi tạo đối tượng PhongThi
+                };
+
+                return View(viewModel);
+            }
         }
+
 
         // POST: PhongThi/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(PhongThi phongThi)
+        public ActionResult Create(PhongThiViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
                 using (var context = new TracNghiemTiengAnhTHPTEntities1())
                 {
-
-                    //phongThi.MaPhong = PhongThi.GenerateMaPhong(1000);  // Tạo mã phòng ngẫu nhiên
-                    context.PhongThis.Add(phongThi);
+                    // Lưu phòng thi với MaLop được chọn từ dropdown
+                    context.PhongThis.Add(viewModel.PhongThi);
                     context.SaveChanges();
                     return RedirectToAction("Index");
                 }
             }
-            return View(phongThi);
+
+            // Nếu có lỗi, tải lại danh sách LopHocList
+            using (var context = new TracNghiemTiengAnhTHPTEntities1())
+            {
+                viewModel.LopHocList = context.LopHocs.Select(l => new SelectListItem
+                {
+                    Value = l.MaLop.ToString(),
+                    Text = l.TenLop
+                }).ToList();
+            }
+
+            return View(viewModel);
         }
+
         public ActionResult Details(int id)
         {
             using (var context = new TracNghiemTiengAnhTHPTEntities1())
@@ -60,44 +105,73 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
         {
             using (var context = new TracNghiemTiengAnhTHPTEntities1())
             {
+                // Lấy thông tin phòng thi theo id
                 PhongThi phongThi = context.PhongThis.Find(id);
-                Session["maphong"] = id;
+                Session["maphong"] = id;  // Lưu id phòng thi vào Session
+
                 if (phongThi == null)
                 {
                     return HttpNotFound();
                 }
-                return View(phongThi);
+
+                // Truy vấn danh sách lớp học từ bảng LopHoc
+                var lopHocList = context.LopHocs.Select(l => new SelectListItem
+                {
+                    Value = l.MaLop.ToString(),
+                    Text = l.TenLop
+                }).ToList();
+
+                // Tạo ViewModel và gán dữ liệu
+                var viewModel = new PhongThiViewModel
+                {
+                    PhongThi = phongThi,
+                    LopHocList = lopHocList
+                };
+
+                return View(viewModel);
             }
         }
+
         // POST: PhongThi/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(PhongThi phongThi)
+        public ActionResult Edit(PhongThiViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
                 using (var context = new TracNghiemTiengAnhTHPTEntities1())
                 {
+                    // Lấy id phòng thi từ Session
                     int maphong = (int)Session["maphong"];
                     var currentPhong = context.PhongThis.FirstOrDefault(k => k.MaPhong == maphong);
 
                     if (currentPhong != null)
                     {
-
-                        currentPhong.TenPhong = phongThi.TenPhong;
-                        currentPhong.MatKhau = phongThi.MatKhau;
-
+                        // Cập nhật các thuộc tính từ ViewModel
+                        currentPhong.TenPhong = viewModel.PhongThi.TenPhong;
+                        currentPhong.MatKhau = viewModel.PhongThi.MatKhau;
+                        currentPhong.malop = viewModel.PhongThi.malop;  // Cập nhật MaLop từ dropdown
 
                         context.SaveChanges();
                     }
 
                     return RedirectToAction("Index");
                 }
-
-
             }
-            return View(phongThi);
+
+            // Nếu có lỗi, truy vấn lại danh sách LopHocList
+            using (var context = new TracNghiemTiengAnhTHPTEntities1())
+            {
+                viewModel.LopHocList = context.LopHocs.Select(l => new SelectListItem
+                {
+                    Value = l.MaLop.ToString(),
+                    Text = l.TenLop
+                }).ToList();
+            }
+
+            return View(viewModel);
         }
+
         [HttpPost]
         public ActionResult DeleteConfirmed(int id)
         {

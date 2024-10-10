@@ -280,6 +280,7 @@
     <Compile Include="Models\PhongThi.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PhongThiViewModel.cs" />
     <Compile Include="Models\TaiKhoan.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

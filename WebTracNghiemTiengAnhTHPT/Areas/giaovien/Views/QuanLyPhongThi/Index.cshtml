@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebTracNghiemTiengAnhTHPT.Models.PhongThi>
+﻿@model IEnumerable<WebTracNghiemTiengAnhTHPT.Models.PhongThiViewModel>
 
 @{
     ViewBag.Title = "Danh sách phòng thi";
@@ -17,6 +17,7 @@
             <th>Mã Phòng</th>
             <th>Tên Phòng</th>
             <th>Mật Khẩu Phòng</th>
+            <th>Test Lớp</th>
             <th>Hành động</th>
         </tr>
     </thead>
@@ -24,18 +25,20 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@Html.DisplayFor(modelItem => item.MaPhong)</td>
-                <td>@Html.DisplayFor(modelItem => item.TenPhong)</td>
-                <td>@Html.DisplayFor(modelItem => item.MatKhau)</td>
+                <td>@Html.DisplayFor(modelItem => item.PhongThi.MaPhong)</td>
+                <td>@Html.DisplayFor(modelItem => item.PhongThi.TenPhong)</td>
+                <td>@Html.DisplayFor(modelItem => item.PhongThi.MatKhau)</td>
+                <td>@(item.PhongThi.LopHoc != null ? item.PhongThi.LopHoc.TenLop : "Không có lớp")</td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.MaPhong }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.MaPhong }) |
-                    <a href="#" class="btn btn-danger" data-id="@item.MaPhong" data-toggle="modal" data-target="#deleteModal">Xóa</a>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.PhongThi.MaPhong }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.PhongThi.MaPhong }) |
+                    <a href="#" class="btn btn-danger" data-id="@item.PhongThi.MaPhong" data-toggle="modal" data-target="#deleteModal">Xóa</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
 
 <!-- Modal xác nhận xóa -->
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
