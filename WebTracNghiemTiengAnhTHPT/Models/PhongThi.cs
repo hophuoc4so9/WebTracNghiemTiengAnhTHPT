@@ -24,7 +24,13 @@ namespace WebTracNghiemTiengAnhTHPT.Models
         public int MaPhong { get; set; }
         public string MatKhau { get; set; }
         public string TenPhong { get; set; }
-    
+        // Ph??ng th?c ?? t?o mã phòng ng?u nhiên
+        public static int GenerateMaPhong(int maxValue)
+        {
+            Random random = new Random();
+            return random.Next(1, maxValue); // Sinh mã ng?u nhiên trong kho?ng t? 1 ??n maxValue
+        }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<KyThi> KyThis { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
