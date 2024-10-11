@@ -62,7 +62,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
                     Password = HashPassword(password),
                     PhanQuyen = "hocsinh",
                     Gmail = email,
-                   
+                    status = false
 
                 };
                 var test = HashPassword(password).Length;

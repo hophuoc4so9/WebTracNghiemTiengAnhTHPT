@@ -1,0 +1,42 @@
+﻿@model WebTracNghiemTiengAnhTHPT.Models.KyThi
+
+@{
+    ViewBag.Title = "ChiTiet";
+    Layout = "~/Views/Shared/LayoutWeb.cshtml";
+    int made = int.Parse(Request["made"].ToString());
+}
+
+<h2>ChiTiet</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-9 col-12">
+            <h4>KyThi</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    Tên kỳ thi
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.TenKyThi)
+                </dd>
+                <dt>
+                    Thời gian
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.ThoiGian) phút
+                </dd>
+            </dl>
+            @Html.ActionLink("Tham gia", "ChiTietKyThi", "Contests", new { made = made }, new { @class = "btn btn-outline-success " })
+
+        </div>
+        <div class="col-lg-3 col-12" id="partiview">
+            @Html.Action("PartialLichSuLamBai", "Contests", new { made = made })
+
+        </div>
+    </div>
+    <div>
+        @Html.Action("PartialDanhGiaKyThi", "Contests", new { made = made })
+
+    </div>
+</div>

@@ -414,6 +414,9 @@
     <Content Include="Views\Contests\Index.cshtml" />
     <Content Include="Views\Contests\ChiTietKyThi.cshtml" />
     <Content Include="Views\Contests\Result.cshtml" />
+    <Content Include="Views\Contests\ChiTiet.cshtml" />
+    <Content Include="Views\Shared\PartialDanhGiaKyThi.cshtml" />
+    <Content Include="Views\Shared\PartialLichSuLamBai.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\admin\Data\" />

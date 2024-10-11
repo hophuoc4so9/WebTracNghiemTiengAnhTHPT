@@ -1,0 +1,31 @@
+﻿@model IEnumerable<WebTracNghiemTiengAnhTHPT.Models.KetQua>
+
+
+
+@if (!Model.Any())
+{
+    
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>
+               Lịch sử làm bài
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+               
+                    @Html.ActionLink(item.Maketqua.ToString(), "Result", "Contests", new { maketqua = item.Maketqua }, new { @class = "btn btn-outline-success " })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Diem)
+                </td>
+            </tr>
+        }
+    </table>
+}

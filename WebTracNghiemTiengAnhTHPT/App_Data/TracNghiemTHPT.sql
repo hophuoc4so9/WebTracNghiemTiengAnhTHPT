@@ -253,3 +253,34 @@ ALTER TABLE CauHoi
 ADD UsernameTacGia varchar(30);
 ALTER TABLE KyThi
 ADD UsernameTacGia varchar(30);
+alter view ViewChitietKyThi_2 as
+(
+SELECT 
+    k.MaDe ,
+	k.TenKyThi ,
+	ThoiGian ,
+	ThoiGianBatDau ,
+	ThoiGianKetThuc ,
+	CongKhai ,
+    -- Count the number of questions for the test, handling cases where there are no questions
+    COALESCE(COUNT(kch.MaCauHoi), 0) AS SoCauHoi,
+    -- Average rating, handling cases where there is no rating
+    COALESCE(AVG(dg.rate), 0) AS DiemTrungBinh,
+	COALESCE(COUNT(KetQua.Diem), 0) AS Soluot
+FROM 
+    KyThi k
+    -- Left join KyThiCauHoi to include tests even if they have no questions
+    LEFT JOIN KyThiCauHoi kch ON k.MaDe = kch.MaDe
+    -- Left join DanhGia to include tests even if they have no ratings
+    LEFT JOIN DanhGia dg ON k.MaDe = dg.MaDe
+	LEFT JOIN KetQua  ON k.MaDe = KetQua.MaDe
+   WHERE 
+        (k.isDeleted = 0 OR k.isDeleted IS NULL)
+GROUP BY 
+    k.MaDe ,
+	k.TenKyThi ,
+	ThoiGian ,
+	ThoiGianBatDau ,
+	ThoiGianKetThuc ,
+	CongKhai 
+)
