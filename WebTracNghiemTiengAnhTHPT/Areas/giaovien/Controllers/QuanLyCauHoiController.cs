@@ -74,7 +74,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             base.Dispose(disposing);
         }
         [HttpPost]
-        public ActionResult Delete(string maCauHoi, string made)
+        public ActionResult Delete(int maCauHoi)
         {
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {
@@ -94,7 +94,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             }
         }
         // GET: Hiển thị form chỉnh sửa
-        public ActionResult Edit(string maCauHoi)
+        public ActionResult Edit(int maCauHoi)
         {
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {
@@ -127,7 +127,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                 return View(cauHoi); // Nếu có lỗi, quay lại form chỉnh sửa
             }
         }
-        public ActionResult Details(string maCauHoi)
+        public ActionResult Details(int maCauHoi)
         {
             var cauHoi = db.CauHois.Find(maCauHoi);
             if (cauHoi == null)
@@ -148,41 +148,36 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
 
             return View(cauHoi);
         }
+        public ActionResult TimKiem(string query)
+        {
+            // Tìm kiếm câu hỏi dựa trên từ khóa
+            var cauHois = db.CauHois
+                .Where(c => c.NoiDung.Contains(query) || c.MaCauHoi.ToString().Contains(query))
+                .ToList();
 
-        // GET: giaovien/QuanLyCauHoi
-        public ActionResult Index()
-        {
-            using (var context = new TracNghiemTiengAnhTHPTEntities1())
+            // Tạo chuỗi HTML kết quả trả về
+            string result = "";
+            foreach (var cauHoi in cauHois)
             {
-                // Get the current exam's questions
-                var model = context.CauHois
-            .Include("NhomCauHoi")// Include related data if needed
-            .ToList();
-                return View(model);
+                result += $"<tr>" +
+                          $"<td>{cauHoi.MaCauHoi}</td>" +
+                          $"<td>{cauHoi.NoiDung}</td>" +
+                          $"<td>{cauHoi.MaNhom}</td>" +
+                          $"<td>{cauHoi.MucDo}</td>" +
+                          $"<td>{cauHoi.DapAnChinhXac}</td>" +
+                          $"<td>" +
+                          $"<a class='btn btn-warning' href='/QuanLyCauHoi/Edit/{cauHoi.MaCauHoi}'>Sửa</a> " +
+                          $"<form action='/QuanLyCauHoi/Delete' method='post' style='display:inline;'>" +
+                          $"<input type='hidden' name='maCauHoi' value='{cauHoi.MaCauHoi}' />" +
+                          $"<button type='submit' class='btn btn-danger' onclick='return confirm(\"Bạn có chắc chắn muốn xóa câu hỏi này không?\");'>Xóa</button>" +
+                          $"</form> " +
+                          $"<a class='btn btn-success' href='/QuanLyCauHoi/Details/{cauHoi.MaCauHoi}'>Chi tiết</a>" +
+                          $"</td>" +
+                          $"</tr>";
             }
+
+            return Content(result);
         }
-        [HttpPost]
-        public JsonResult DeleteQuestion(int maCauHoi)
-        {
-            using (var db = new TracNghiemTiengAnhTHPTEntities1())
-            {
-                try
-                {
-                    var question = db.CauHois.FirstOrDefault(q => q.MaCauHoi == maCauHoi);
-                    if (question != null)
-                    {
-                        question.isDeleted = true;
-                        db.SaveChanges();
-                        return Json(new { success = true });
-                    }
-                    return Json(new { success = false });
-                }
-                catch (Exception)
-                {
-                    return Json(new { success = false });
-                }
-            }    
-                
-        }
+
     }
 }

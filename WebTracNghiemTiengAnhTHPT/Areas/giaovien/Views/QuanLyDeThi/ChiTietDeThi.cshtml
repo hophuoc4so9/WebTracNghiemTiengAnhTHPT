@@ -31,7 +31,7 @@
 
                         @using (Html.BeginForm("AddQuestionToExam", "QuanLyDeThi", FormMethod.Post))
                         {
-                            @Html.Hidden("made", (string)ViewBag.made)
+                            @Html.Hidden("made", (int)ViewBag.made)
                             @Html.Hidden("maCauHoi", item.MaCauHoi)
                             <button type="submit" class="btn btn-primary">Thêm</button>
                         }

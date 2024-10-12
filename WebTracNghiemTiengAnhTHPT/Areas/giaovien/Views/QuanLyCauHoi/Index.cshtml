@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebTracNghiemTiengAnhTHPT.Models.CauHoi>
+﻿﻿@model IEnumerable<WebTracNghiemTiengAnhTHPT.Models.CauHoi>
 
 @{
     ViewBag.Title = "Index";
@@ -13,14 +13,16 @@
     </div>
     <div class="col-sm-4 col-sm-offset-6 text-right">
         <div class="input-group">
-            <input type="text" class="form-control" placeholder="Tìm kiếm" id="txtSearch" /> <div class="input-group-btn">
-                <button class="btn btn-primary" type="submit" id="btnSearch">
-                    <span class="glyphicon glyphicon-search"><i class="fa fa-search" aria-hidden="true"></i></span>
+            <input type="text" class="form-control" placeholder="Tìm kiếm" id="txtSearch" />
+            <div class="input-group-btn">
+                <button class="btn btn-primary" id="btnSearch">
+                    <i class="fa fa-search" aria-hidden="true"></i>
                 </button>
             </div>
         </div>
     </div>
 </div>
+
 <nav aria-label="...">
     <ul class="pagination pagination-sm" id="phanTrang"></ul>
 </nav>
@@ -33,10 +35,10 @@
             <th>MaNhom</th>
             <th>MucDo</th>
             <th>DapAnChinhXac</th>
-            <th>Hành động</th>
+            <th style="width: 220px;">Hành động</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="tableBody">
         @foreach (var item in Model)
         {
             <tr>
@@ -46,11 +48,11 @@
                 <td>@item.MucDo</td>
                 <td>@item.DapAnChinhXac</td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { maCauHoi = item.MaCauHoi }, new { @class = "btn btn-warning" }) |
+                    @Html.ActionLink("Sửa", "Edit", new { maCauHoi = item.MaCauHoi }, new { @class = "btn btn-warning" }) 
                     <form action="@Url.Action("Delete", "QuanLyCauHoi")" method="post" style="display:inline;">
                         <input type="hidden" name="maCauHoi" value="@item.MaCauHoi" />
-                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa câu hỏi này không?');">Delete</button>
-                    </form> |
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa câu hỏi này không?');">Xóa</button>
+                    </form> 
                     @Html.ActionLink("Chi tiết", "Details", new { maCauHoi = item.MaCauHoi }, new { @class = "btn btn-success" })
                 </td>
 
@@ -211,15 +213,32 @@
                 });
             });
         });
+        // Lắng nghe sự kiện input trong ô tìm kiếm
+        document.getElementById('txtSearch').addEventListener('input', function () {
+            var searchQuery = this.value;
+
+            $.ajax({
+                url: '/QuanLyCauHoi/TimKiem', // Đường dẫn đến action tìm kiếm
+                type: 'GET',
+                data: { query: searchQuery },
+                success: function (result) {
+                    // Cập nhật lại phần thân của bảng câu hỏi với kết quả tìm kiếm
+                    $('#tableBody').html(result);
+                },
+                error: function () {
+                    alert('Có lỗi xảy ra khi tìm kiếm!');
+                }
+            });
+        });
     </script>
 }
 
-
-
-
-
-
 <style>
+    .btn.btn-warning {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: #fff;
+    }
     .input-group {
         justify-content: right;
     }
@@ -256,6 +275,5 @@
         width: 498px;
         margin-left: 0px;
     }
-
 </style>
 
