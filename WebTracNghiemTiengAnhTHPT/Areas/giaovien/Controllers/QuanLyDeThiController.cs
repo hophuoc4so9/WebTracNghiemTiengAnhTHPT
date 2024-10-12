@@ -245,8 +245,8 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                     }
                 }
                 TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
-                db.KyThis.Add(ktthi);
-                db.SaveChanges();
+                //db.KyThis.Add(ktthi);
+                //db.SaveChanges();
                 ProcessExamText(contents,ktthi);
              
             }

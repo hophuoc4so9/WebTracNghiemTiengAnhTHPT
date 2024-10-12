@@ -67,6 +67,17 @@ create table KyThi
 	CongKhai bit not null,
 	isDeleted bit,
 )
+CREATE TRIGGER trg_SetDefaultThoiGian
+ON KyThi
+AFTER INSERT
+AS
+BEGIN
+    UPDATE KyThi
+    SET ThoiGian = 15
+    FROM KyThi k
+    INNER JOIN Inserted i ON k.MaDe = i.MaDe
+    WHERE i.ThoiGian <= 0;
+END;
 create table BaoLoi
 (
 	NoiDung nvarchar(300) NOT NULL,
@@ -284,3 +295,14 @@ GROUP BY
 	ThoiGianKetThuc ,
 	CongKhai 
 )
+create TRIGGER trg_SetDefaultThoiGian
+ON KyThi
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    UPDATE KyThi
+    SET ThoiGian = 15
+    FROM KyThi k
+    INNER JOIN Inserted i ON k.MaDe = i.MaDe
+    WHERE i.ThoiGian <= 0;
+END;
