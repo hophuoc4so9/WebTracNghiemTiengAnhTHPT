@@ -18,6 +18,7 @@ using Aspose.Words;
 using iText.Kernel.Pdf.Canvas.Parser;
 using iText.Kernel.Pdf;
 using DocumentFormat.OpenXml.Office.SpreadSheetML.Y2023.MsForms;
+using System.Data.Entity.Validation;
 
 
 namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
@@ -156,7 +157,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                         if (int.TryParse(indexString, out index))
                         {
                             // Get the MaDe value to find the specific KyThi item
-                            var maDe = form[$"KyThi[{index}].MaDe"];
+                            int maDe =int.Parse( form[$"KyThi[{index}].MaDe"]);
                             var kyThi = db.KyThis.Find(maDe);
 
                             if (kyThi != null)
@@ -200,8 +201,11 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
         [HttpPost]
         public ActionResult Upload(HttpPostedFileBase file)
             {
+           
             string contents = string.Empty;
-
+        
+            KyThi ktthi = new KyThi();
+            ktthi.TenKyThi = Path.ChangeExtension(file.FileName, null);
             try
             {
                 using (var ms = new MemoryStream())
@@ -240,9 +244,11 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                         throw new FileFormatException("Unsupported file format.");
                     }
                 }
-
-                List<NhomCauHoi> questions = ProcessExamText(contents);
-                Session["questions"] = questions;
+                TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
+                db.KyThis.Add(ktthi);
+                db.SaveChanges();
+                ProcessExamText(contents,ktthi);
+             
             }
             catch (Exception ex)
             {
@@ -251,68 +257,152 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                 return View("Error");
             }
 
-            return View("AddFile");
+            return RedirectToAction("ChiTietDeThi", new { made = ktthi.MaDe });
         }
 
-        private List<NhomCauHoi> ProcessExamText(string text)
+        private void ProcessExamText(string text, KyThi kt)
         {
-            TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
-            List<NhomCauHoi> nhomCauHois = db.NhomCauHois.ToList();
-            var questionPattern = @"Question\s\d+.*?(?=Question\s\d+|$)";
-            var questionMatches = Regex.Matches(text, questionPattern, RegexOptions.Singleline);
-            bool newGroup = true;
-            int groupId = 1;
-            int index = 1;
-            string newGroupContent = "";
-
-            foreach (Match match in questionMatches)
+            using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {
-                var questionText = match.Value;
-                var parts = Regex.Split(questionText, @"(?=A\.\s|B\.\s|C\.\s|D\.\s)");
+                var questionPattern = @"Question\s\d+.*?(?=Question\s\d+|$)";
+                var questionMatches = Regex.Matches(text, questionPattern, RegexOptions.Singleline);
+                bool newGroup = true;
+                bool fi = true;
+                string newGroupContent = "";
+                int maxMaCauHoi = db.CauHois.Max(ch => (int?)ch.MaCauHoi) ?? 1;
+                int maxgr = db.NhomCauHois.Max(ch => (int?)ch.MaNhom) ?? 1;
+                NhomCauHoi nhomcauhoilast = new NhomCauHoi();
+                List<CauHoi> cauhois123 = new List<CauHoi>();
 
-                if (newGroup && newGroupContent!="")
+                foreach (Match match in questionMatches)
                 {
-                    NhomCauHoi nhomCauHoi = new NhomCauHoi
+                    var questionText = match.Value;
+
+                    var parts = Regex.Split(questionText, @"(?=A\.\s|B\.\s|C\.\s|D\.\s)");
+                    if (parts.Length < 5)
                     {
-                        NoiDung = groupId == 1 ? text.Substring(0, match.Index).Trim() : newGroupContent
+                        continue;
+                    }
+
+                    if (newGroup)
+                    {
+                        NhomCauHoi nhomCauHoi = new NhomCauHoi
+                        {
+                            NoiDung = fi ? text.Substring(0, match.Index).Trim() : newGroupContent
+                        };
+                        maxgr++;
+                        nhomCauHoi.MaNhom = maxgr;
+                        db.NhomCauHois.Add(nhomCauHoi);
+                        nhomcauhoilast = nhomCauHoi;
+                        newGroup = false;
+                        fi = false;
+                    }
+
+                    if (parts[4].Contains("\n") && !Regex.IsMatch(parts[4], @"Question\s\d+"))
+                    {
+                        newGroupContent = parts[4].Substring(parts[4].IndexOf("\n")).Trim();
+                        if (!string.IsNullOrEmpty(newGroupContent))
+                        {
+                            newGroup = true;
+                        }
+                        parts[4] = parts[4].Substring(0, parts[4].IndexOf("\n")).Trim();
+                    }
+
+                    var cauHoi = new CauHoi
+                    {
+                        MaCauHoi = ++maxMaCauHoi,
+                        NoiDung = parts[0].Trim(),
+                        DapAnA = parts[1].Substring(2).Trim(),
+                        DapAnB = parts[2].Substring(2).Trim(),
+                        DapAnC = parts[3].Substring(2).Trim(),
+                        DapAnD = parts[4].Substring(2).Trim(),
+                        MaNhom = maxgr,
+                        DapAnChinhXac = "A"
                     };
-                    nhomCauHois.Add(nhomCauHoi);
-                    index = nhomCauHoi.MaNhom;
-                    newGroup = false;
+                    cauHoi.KyThis.Add(kt);
+
+                    db.CauHois.Add(cauHoi);
+                    cauhois123.Add(cauHoi);
+
+                    if (newGroupContent.ToLower().Contains("đáp án"))
+                    {
+                        break;
+                    }
                 }
 
-                if (parts.Length < 5)
+                if (newGroupContent.ToLower().Contains("đáp án"))
                 {
-                    // Handle error: not enough parts
-                    continue;
+                    var answerPattern = new Regex(@"\d+\.\s*[A-D]", RegexOptions.Compiled);
+                    var answerMatches = answerPattern.Matches(newGroupContent);
+
+                    foreach (Match answerMatch in answerMatches)
+                    {
+                        var answerParts = answerMatch.Value.Split('.');
+                        if (answerParts.Length == 2)
+                        {
+                            if (int.TryParse(answerParts[0].Trim(), out int questionIndex) && questionIndex <= cauhois123.Count)
+                            {
+                                cauhois123[questionIndex - 1].DapAnChinhXac = answerParts[1].Trim(new char[] { ' ', '\n', '\r', '\t' });
+                            }
+                        }
+                    }
                 }
 
-                if (parts[4].Contains("\n") && !Regex.IsMatch(parts[4], @"Question\s\d+"))
-                {
-                    newGroup = true;
-                    groupId++;
-                    newGroupContent = parts[4].Substring(parts[4].IndexOf("\n")).Trim();
-                    parts[4] = parts[4].Substring(0, parts[4].IndexOf("\n")).Trim();
-                }
-
-                var cauHoi = new CauHoi
-                {
-                    NoiDung = parts[0].Trim(),
-                    DapAnA = parts[1].Substring(2).Trim(),
-                    DapAnB = parts[2].Substring(2).Trim(),
-                    DapAnC = parts[3].Substring(2).Trim(),
-                    DapAnD = parts[4].Substring(2).Trim(),
-                    MaNhom = index
-                    
-                };
-                
-                nhomCauHois.Last().CauHois.Add(cauHoi);
+                db.SaveChanges();
             }
-            //nếu newGroupContent có dạng Đáp án 1.A 2.B 3.D thì cặp nhật câu hỏi thứ i cauHoi.DapAnChinhXac=A
-            return nhomCauHois;
         }
-   
-}
+
+        [HttpPost]
+        public ActionResult LuuThayDoi(int made, string action, FormCollection f)
+        {
+            if (action.StartsWith("delete_"))
+            {
+                int maCauHoi = int.Parse(action.Split('_')[1]);
+                return DeleteCauHoi(maCauHoi, made);
+                // Handle delete logic
+            }
+            else
+            {
+                using (var db = new TracNghiemTiengAnhTHPTEntities1())
+                {
+
+                    List<NhomCauHoi> a = db.NhomCauHois.ToList();
+
+
+                    foreach (var item in a)
+                    {
+                        string q = "NoiDung_" + item.MaNhom;
+                       
+                        if (!string.IsNullOrEmpty(f[q]))
+                        {
+                            item.NoiDung = f[q];
+                        }
+                        foreach (var item1 in item.CauHois)
+                        {
+
+                            string questionKey = "answer_" + item1.MaCauHoi;
+                            if (!string.IsNullOrEmpty(f[questionKey]))
+                            {
+                                item1.DapAnChinhXac = f[questionKey];
+                            }
+
+                            questionKey = "NoiDung_" + item1.MaCauHoi;
+                            if (!string.IsNullOrEmpty(f[questionKey]))
+                            {
+                                item1.NoiDung = f[questionKey];
+                            }
+
+                        }
+                    }
+                    db.SaveChanges();
+
+                    return RedirectToAction("ChiTietDeThi", new { made });
+                }
+            }
+
+            
+        }
+    }
 
 
 
