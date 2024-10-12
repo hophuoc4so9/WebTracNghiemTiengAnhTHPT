@@ -1,0 +1,106 @@
+﻿@model WebTracNghiemTiengAnhTHPT.Models.CauHoi
+
+@{
+    ViewBag.Title = "Chi tiết câu hỏi";
+    Layout = "~/Areas/admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Chi tiết câu hỏi</h2>
+
+<div class="form-group">
+    @Html.Label("Nội dung")
+    <p>@Html.DisplayFor(m => m.NoiDung)</p>
+</div>
+
+<div class="form-group">
+    @Html.Label("Đáp án A")
+    <p>@Html.DisplayFor(m => m.DapAnA)</p>
+</div>
+
+<div class="form-group">
+    @Html.Label("Đáp án B")
+    <p>@Html.DisplayFor(m => m.DapAnB)</p>
+</div>
+
+<div class="form-group">
+    @Html.Label("Đáp án C")
+    <p>@Html.DisplayFor(m => m.DapAnC)</p>
+</div>
+
+<div class="form-group">
+    @Html.Label("Đáp án D")
+    <p>@Html.DisplayFor(m => m.DapAnD)</p>
+</div>
+
+<div class="form-group">
+    @Html.Label("Đáp án chính xác")
+    <p>@Html.DisplayFor(m => m.DapAnChinhXac)</p>
+</div>
+
+<div class="form-group">
+    @Html.Label("Mã Nhóm")
+    <p>@Html.DisplayFor(m => m.MaNhom)</p>
+</div>
+
+<div class="form-group">
+    @Html.Label("Mức độ")
+    <p>@Html.DisplayFor(m => m.MucDo)</p>
+</div>
+
+<a href="@Url.Action("Index", "QuanLyCauHoi")" class="btn btn-secondary">Quay lại</a>
+
+<style>
+    body {
+        background-color: #f8f9fa; /* Màu nền nhẹ */
+    }
+
+    h2 {
+        margin-bottom: 20px; /* Khoảng cách dưới tiêu đề */
+        color: #333; /* Màu chữ */
+    }
+
+    .card {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Đổ bóng cho card */
+        border-radius: 8px; /* Bo góc cho card */
+    }
+
+    .card-body {
+        background-color: #ffffff; /* Màu nền cho card */
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem; /* Khoảng cách giữa các nhóm */
+    }
+
+        .form-group p {
+            margin: 0; /* Xóa khoảng cách mặc định */
+            color: #555; /* Màu chữ cho nội dung */
+            background-color: #f1f1f1; /* Màu nền cho nội dung */
+            padding: 10px; /* Khoảng cách bên trong */
+            border-radius: 4px; /* Bo góc cho nội dung */
+        }
+
+    .font-weight-bold {
+        font-weight: bold; /* Định dạng chữ đậm */
+        color: #007bff; /* Màu chữ đậm */
+    }
+
+    .btn-secondary {
+        background-color: #6c757d; /* Màu nền cho nút */
+        border-color: #6c757d; /* Màu viền cho nút */
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268; /* Màu nền khi hover */
+            border-color: #545b62; /* Màu viền khi hover */
+        }
+
+    .text-center {
+        text-align: center; /* Căn giữa nội dung */
+    }
+
+    .mt-4 {
+        margin-top: 1.5rem; /* Khoảng cách trên cho phần tử */
+    }
+ 
+</style>

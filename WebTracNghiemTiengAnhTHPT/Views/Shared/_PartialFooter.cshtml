@@ -1,0 +1,96 @@
+﻿<footer class="footer">
+    <div class="container">
+        <div class="row footer-content">
+            <section class="col-md-4" aria-labelledby="gettingStartedTitle">
+                <h2>P2N</h2>
+                <ul>
+                    <li>@Html.ActionLink("Về Chúng Tôi", "About", "Home")</li>
+                    <li>@Html.ActionLink("Liên hệ", "Contact", "Home")</li>
+                </ul>
+            </section>
+            <section class="col-md-4" aria-labelledby="librariesTitle">
+                <h2>Tài Nguyên</h2>
+                <ul>
+                    <li>@Html.ActionLink("Ôn tập", "Index", "Contests")</li>
+                    <li>@Html.ActionLink("Tham Gia Kỳ Thi", "Index", "Contests")</li>
+                </ul>
+            </section>
+            <section class="col-md-4" aria-labelledby="librariesTitle">
+                <h2>Thông Tin Liên Hệ</h2>
+                <ul class="contact-info">
+                    <li><i class="fa fa-phone" aria-hidden="true"></i> Số Điện Thoại: 0123456789</li>
+                    <li><i class="fa fa-address-card" aria-hidden="true"></i> Địa Chỉ: Đại Học Thủ Dầu Một</li>
+                    <li><i class="fa fa-envelope" aria-hidden="true"></i> Email: contact@domain.com</li>
+                </ul>
+            </section>
+        </div>
+    </div>
+</footer>
+
+
+<style>
+    .footer {
+        background-color: #343a40;
+        color: #fff;
+        padding: 40px 0;
+        text-align: center;
+    }
+
+        .footer .row {
+            margin-left: 0px;
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 16px;
+            color: #ccc;
+        }
+
+    .footer-content {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        padding-top: 20px;
+    }
+
+    .footer h2 {
+        font-size: 20px;
+        color: #f8f9fa;
+        margin-bottom: 15px;
+    }
+
+    .footer ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+        .footer ul li {
+            margin-bottom: 10px;
+        }
+
+    .footer a {
+        color: #17a2b8;
+        text-decoration: none;
+    }
+
+        .footer a:hover {
+            color: #f8f9fa;
+            text-decoration: underline;
+        }
+
+    .contact-info li {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+    }
+
+    .contact-info {
+        margin-left: 100px;
+    }
+
+        .contact-info i {
+            margin-right: 10px;
+            color: #f8f9fa;
+        }
+</style>
+

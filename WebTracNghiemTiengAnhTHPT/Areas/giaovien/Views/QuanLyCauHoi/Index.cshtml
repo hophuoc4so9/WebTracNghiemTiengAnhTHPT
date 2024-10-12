@@ -1,75 +1,279 @@
-﻿@model IEnumerable<WebTracNghiemTiengAnhTHPT.Models.CauHoi>
+﻿﻿@model IEnumerable<WebTracNghiemTiengAnhTHPT.Models.CauHoi>
+
 @{
-    ViewBag.Title = "ChiTietDeThi";
+    ViewBag.Title = "Index";
     Layout = "~/Areas/admin/Views/Shared/_AdminLayout.cshtml";
-    var groupedItems = Model.GroupBy(item => new { item.NhomCauHoi.MaNhom, item.NhomCauHoi.NoiDung });
 }
 
-<h2>Thêm câu hỏi</h2>
+<h2>Danh sách câu hỏi</h2>
 
-<h2>Chi tiết</h2>
-
-<div class="">
-    @foreach (var group in groupedItems)
-    {
-        <h4>@group.Key.NoiDung</h4>
-
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Mã Câu Hỏi</th>
-                    <th>Câu Hỏi</th>
-                    <th>Đáp Án</th>
-                    <th>Đáp Án Chính Xác</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in group)
-                {
-                    <tr id="row-@item.MaCauHoi">
-                        <td>@item.MaCauHoi</td>
-                        <td>@Html.DisplayFor(modelItem => item.NoiDung)</td>
-                        <td>
-                            <ul>
-                                <li>A: @Html.DisplayFor(modelItem => item.DapAnA)</li>
-                                <li>B: @Html.DisplayFor(modelItem => item.DapAnB)</li>
-                                <li>C: @Html.DisplayFor(modelItem => item.DapAnC)</li>
-                                <li>D: @Html.DisplayFor(modelItem => item.DapAnD)</li>
-                            </ul>
-                        </td>
-                        <td>@Html.DisplayFor(modelItem => item.DapAnChinhXac)</td>
-                        <td>
-                            <button type="button" class="btn btn-primary">Sửa</button>
-                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteQuestion('@item.MaCauHoi')">Xóa</button>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
+<div class="row">
+    <div class="col-sm-2">
+        <button class="btn btn-success" id="btnAdd"><i class="fa fa-plus" aria-hidden="true"></i> Thêm Câu Hỏi</button>
+    </div>
+    <div class="col-sm-4 col-sm-offset-6 text-right">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Tìm kiếm" id="txtSearch" />
+            <div class="input-group-btn">
+                <button class="btn btn-primary" id="btnSearch">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
-<script>
-    function deleteQuestion(maCauHoi) {
-        if (confirm("Bạn có chắc chắn muốn xóa câu hỏi này không?")) {
-            // Send an AJAX request to update the isDeleted field
-            $.ajax({
-                url: '@Url.Action("DeleteQuestion", "QuanLyDeThi")',
-                type: 'POST',
-                data: { maCauHoi: maCauHoi },
-                success: function (response) {
-                    if (response.success) {
-                        // Hide the row from the table
-                        $('#row-' + maCauHoi).hide();
-                    } else {
-                        alert("Không thể xóa câu hỏi. Vui lòng thử lại.");
+<nav aria-label="...">
+    <ul class="pagination pagination-sm" id="phanTrang"></ul>
+</nav>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>MaCauHoi</th>
+            <th>NoiDung</th>
+            <th>MaNhom</th>
+            <th>MucDo</th>
+            <th>DapAnChinhXac</th>
+            <th style="width: 220px;">Hành động</th>
+        </tr>
+    </thead>
+    <tbody id="tableBody">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MaCauHoi</td>
+                <td>@item.NoiDung</td>
+                <td>@item.MaNhom</td>
+                <td>@item.MucDo</td>
+                <td>@item.DapAnChinhXac</td>
+                <td>
+                    @Html.ActionLink("Sửa", "Edit", new { maCauHoi = item.MaCauHoi }, new { @class = "btn btn-warning" }) 
+                    <form action="@Url.Action("Delete", "QuanLyCauHoi")" method="post" style="display:inline;">
+                        <input type="hidden" name="maCauHoi" value="@item.MaCauHoi" />
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa câu hỏi này không?');">Xóa</button>
+                    </form> 
+                    @Html.ActionLink("Chi tiết", "Details", new { maCauHoi = item.MaCauHoi }, new { @class = "btn btn-success" })
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal form thêm câu hỏi -->
+<div class="modal fade" id="modalCauHoi" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Thêm Câu Hỏi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="row phanloai">
+                <div class="col-sm-3">
+                    <label for="maCauHoi">Mã câu hỏi:</label>
+                    <input type="text" class="form-control" id="maCauHoi" />
+                </div>
+                <div class="col-sm-3 mucdo">
+                    <select class="form-control" id="mucDo">
+                        <option>Mức độ</option>
+                        <option value="1">Dễ</option>
+                        <option value="2">Trung bình</option>
+                        <option value="3">Khó</option>
+                    </select>
+                    <span class="input-group-addon">
+                        <i class="fa fa-angle-down" aria-hidden="true"></i>
+                    </span>
+                </div>
+                <div class="col-sm-3 manhom">
+                    <select class="form-control" id="maNhom">
+                        <option>Dạng</option>
+                        <option value="1">Trắc Nghiệm</option>
+                        <option value="2">Bài Đọc</option>
+                        <option value="3">Nghe</option>
+                    </select>
+                    <span class="inputmanhom">
+                        <i class="fa fa-angle-down" aria-hidden="true"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <!-- Form thêm câu hỏi -->
+                @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formCauHoi" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        <label for="txaCauHoi">Nội Dung:</label>
+                        <textarea class="form-control" rows="2" id="txaCauHoi" name="NoiDung"></textarea>
+                        <span class="text-danger" id="error-NoiDung"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txaDapAnA">Đáp án A:</label>
+                        <textarea class="form-control" rows="2" id="txaDapAnA" name="DapAnA"></textarea>
+                        <span class="text-danger" id="error-DapAnA"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txaDapAnB">Đáp án B:</label>
+                        <textarea class="form-control" rows="2" id="txaDapAnB" name="DapAnB"></textarea>
+                        <span class="text-danger" id="error-DapAnB"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txaDapAnC">Đáp án C:</label>
+                        <textarea class="form-control" rows="2" id="txaDapAnC" name="DapAnC"></textarea>
+                        <span class="text-danger" id="error-DapAnC"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txaDapAnD">Đáp án D:</label>
+                        <textarea class="form-control" rows="2" id="txaDapAnD" name="DapAnD"></textarea>
+                        <span class="text-danger" id="error-DapAnD"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="DapAnChinhXac">Đáp án chính xác</label>
+                        <select class="form-control" id="DapAnChinhXac" name="DapAnChinhXac" required>
+                            <option value="">Chọn đáp án đúng</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                        </select>
+                        <span class="text-danger" id="error-DapAnChinhXac"></span>
+                    </div>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="btnSubmit">Lưu câu hỏi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            // Thiết lập Anti-Forgery Token cho AJAX
+            var token = $('input[name="__RequestVerificationToken"]').val();
+
+            // Hiển thị modal khi nhấn nút "Thêm Câu Hỏi"
+            $('#btnAdd').click(function () {
+                $('#formCauHoi')[0].reset();
+                $('.is-invalid').removeClass('is-invalid');
+                $('.text-danger').text('');
+                $('#modalCauHoi').modal('show');
+            });
+
+            // Đóng modal khi nhấn nút "Đóng" hoặc dấu 'X'
+            $('.btn-secondary, .close').click(function () {
+                $('#modalCauHoi').modal('hide');
+            });
+
+            // Lưu câu hỏi khi nhấn nút "Lưu"
+            $('#btnSubmit').click(function (e) {
+                e.preventDefault();
+
+                var formData = {
+                    MaCauHoi: $('#maCauHoi').val(),
+                    NoiDung: $('#txaCauHoi').val(),
+                    DapAnA: $('#txaDapAnA').val(),
+                    DapAnB: $('#txaDapAnB').val(),
+                    DapAnC: $('#txaDapAnC').val(),
+                    DapAnD: $('#txaDapAnD').val(),
+                    DapAnChinhXac: $('#DapAnChinhXac').val(),
+                    MaNhom: $('#maNhom').val(),
+                    MucDo: $('#mucDo').val(),
+                    __RequestVerificationToken: token
+                };
+
+                $.ajax({
+                    url: '@Url.Action("AddCauHoi", "QuanLyCauHoi")',
+                    type: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            $('#modalCauHoi').modal('hide');
+                            alert('Thêm câu hỏi thành công!');
+                        } else {
+                            $.each(response.errors, function (key, value) {
+                                $('#error-' + key).text(value);
+                                $('#' + key).addClass('is-invalid');
+                            });
+                        }
+                    },
+                    error: function () {
+                        alert('Đã xảy ra lỗi. Vui lòng thử lại.');
                     }
+                });
+            });
+        });
+        // Lắng nghe sự kiện input trong ô tìm kiếm
+        document.getElementById('txtSearch').addEventListener('input', function () {
+            var searchQuery = this.value;
+
+            $.ajax({
+                url: '/QuanLyCauHoi/TimKiem', // Đường dẫn đến action tìm kiếm
+                type: 'GET',
+                data: { query: searchQuery },
+                success: function (result) {
+                    // Cập nhật lại phần thân của bảng câu hỏi với kết quả tìm kiếm
+                    $('#tableBody').html(result);
                 },
                 error: function () {
-                    alert("Có lỗi xảy ra. Vui lòng thử lại.");
+                    alert('Có lỗi xảy ra khi tìm kiếm!');
                 }
             });
-        }
+        });
+    </script>
+}
+
+<style>
+    .btn.btn-warning {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: #fff;
     }
-</script>
+    .input-group {
+        justify-content: right;
+    }
+
+    .is-invalid {
+        border-color: #dc3545;
+    }
+
+    .col-sm-3.mucdo {
+        margin-top: 32px;
+        display: flex;
+        align-items: center;
+    }
+
+    .col-sm-3.manhom {
+        margin-top: 32px;
+        display: flex;
+        align-items: center;
+    }
+
+    .input-group-addon {
+        background: transparent; /* Hoặc màu nền bạn muốn */
+        border: none; /* Loại bỏ đường viền nếu không cần */
+        margin-left: -20px; /* Điều chỉnh khoảng cách nếu cần */
+    }
+
+    .inputmanhom {
+        background: transparent; /* Hoặc màu nền bạn muốn */
+        border: none; /* Loại bỏ đường viền nếu không cần */
+        margin-left: -25px; /* Điều chỉnh khoảng cách nếu cần */
+    }
+
+    .phanloai {
+        width: 498px;
+        margin-left: 0px;
+    }
+</style>
+

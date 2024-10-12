@@ -57,11 +57,9 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
                             case "hocsinh":
                                 TempData["SuccessMessage"] = $"Chào {username}, bạn đã đăng nhập thành công thành công.";
                                 return RedirectToAction("Index", "Contests", new { area = "" });
-                             
                         }
                     }
-                   
-                    
+
                 }
                 else
                 {
