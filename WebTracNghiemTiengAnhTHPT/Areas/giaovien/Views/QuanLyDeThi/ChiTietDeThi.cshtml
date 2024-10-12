@@ -4,7 +4,14 @@
     Layout = "~/Areas/admin/Views/Shared/_AdminLayout.cshtml";
     var groupedItems = Model.GroupBy(item => new { item.NhomCauHoi.MaNhom, item.NhomCauHoi.NoiDung });
 }
-
+<script src="~/Scripts/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: '.mytextarea',
+        license_key: 'gpl|<your-license-key>'
+    });
+  
+</script>
 <div>
     <h3>Danh sách câu hỏi khác</h3>
     <table class="table table-bordered">
@@ -42,14 +49,14 @@
     {
         foreach (var group in groupedItems)
         {
-            @Html.TextArea("NoiDung_" + group.Key.MaNhom, group.Key.NoiDung, new { @class = "form-control", style = "width: 100%;" })
+            @Html.TextArea("NoiDung_" + group.Key.MaNhom, HttpUtility.HtmlDecode( group.Key.NoiDung), new { @class = "form-control mytextarea", style = "width: 100%;" })
 
             foreach (var item in group)
             {
                 <div class="item-container border p-3 mb-3">
                     <div class="field mb-2">
                         @item.MaCauHoi :
-                        @Html.TextArea("NoiDung_" + item.MaCauHoi, item.NoiDung, new { @class = "form-control", style = "width: 100%;" })
+                        @Html.TextArea("NoiDung_" + item.MaCauHoi, HttpUtility.HtmlDecode(item.NoiDung), new { @class = "form-control mytextarea", style = "width: 100%;" })
                         <button type="submit" name="action" value="delete_@item.MaCauHoi" class="btn btn-danger">Xóa câu hỏi khỏi đề thi</button>
                     </div>
 

@@ -352,34 +352,32 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             }
         }
 
+
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult LuuThayDoi(int made, string action, FormCollection f)
         {
             if (action.StartsWith("delete_"))
             {
                 int maCauHoi = int.Parse(action.Split('_')[1]);
                 return DeleteCauHoi(maCauHoi, made);
-                // Handle delete logic
             }
             else
             {
                 using (var db = new TracNghiemTiengAnhTHPTEntities1())
                 {
-
                     List<NhomCauHoi> a = db.NhomCauHois.ToList();
-
 
                     foreach (var item in a)
                     {
                         string q = "NoiDung_" + item.MaNhom;
-                       
+
                         if (!string.IsNullOrEmpty(f[q]))
                         {
                             item.NoiDung = f[q];
                         }
                         foreach (var item1 in item.CauHois)
                         {
-
                             string questionKey = "answer_" + item1.MaCauHoi;
                             if (!string.IsNullOrEmpty(f[questionKey]))
                             {
@@ -389,9 +387,9 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                             questionKey = "NoiDung_" + item1.MaCauHoi;
                             if (!string.IsNullOrEmpty(f[questionKey]))
                             {
-                                item1.NoiDung = f[questionKey];
+                                // Encode the HTML content before saving
+                                item1.NoiDung = HttpUtility.HtmlEncode(f[questionKey]);
                             }
-
                         }
                     }
                     db.SaveChanges();
@@ -399,9 +397,8 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                     return RedirectToAction("ChiTietDeThi", new { made });
                 }
             }
-
-            
         }
+
     }
 
 

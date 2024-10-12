@@ -28,12 +28,12 @@
                     @foreach (var group in groupedItems)
                     {
                         <div class="group-container" id="group-container-@group.Key.MaNhom" style="display: @(isFirst ? "block" : "none");">
-                            <div class="bg-light "> @group.Key.NoiDung</div>
+                            <div class="bg-light "> @Html.Raw(HttpUtility.HtmlDecode(@group.Key.NoiDung)) </div>
                             @foreach (var item in group)
                             {
                                 <div class="item-container border p-3 mb-3">
                                     <div class="field mb-2">
-                                        <strong>@item.MaCauHoi : @Html.DisplayFor(modelItem => item.NoiDung) </strong>
+                                       @item.MaCauHoi : @Html.Raw(HttpUtility.HtmlDecode(item.NoiDung))
                                     </div>
                                     <!-- Answer choices with radio buttons -->
                                     <label class="form-check-label bg-info w-100 my-1 border-danger border-2" for="dapAnA_@item.MaCauHoi">
