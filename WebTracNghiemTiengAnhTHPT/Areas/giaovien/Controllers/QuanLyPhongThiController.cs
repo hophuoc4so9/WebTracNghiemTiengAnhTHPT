@@ -14,10 +14,10 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
         {
             using (var context = new TracNghiemTiengAnhTHPTEntities1())
             {
-                // Lấy danh sách PhongThi và bao gồm thông tin từ bảng LopHoc
+            
                 var phongThiList = context.PhongThis.Include("LopHoc").ToList();
 
-                // Tạo danh sách PhongThiViewModel
+           
                 var viewModelList = phongThiList.Select(pt => new PhongThiViewModel
                 {
                     PhongThi = pt,
@@ -26,7 +26,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                         {
                     new SelectListItem { Value = pt.LopHoc.MaLop.ToString(), Text = pt.LopHoc.TenLop }
                         }
-                        : new List<SelectListItem>() // Trả về danh sách rỗng nếu LopHoc là null
+                        : new List<SelectListItem>() 
                 }).ToList();
 
                 return View(viewModelList);
@@ -40,18 +40,18 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
         {
             using (var context = new TracNghiemTiengAnhTHPTEntities1())
             {
-                // Truy vấn danh sách lớp học từ bảng LopHoc
+             
                 var lopHocList = context.LopHocs.Select(l => new SelectListItem
                 {
                     Value = l.MaLop.ToString(),
                     Text = l.TenLop
                 }).ToList();
 
-                // Tạo ViewModel và gán danh sách LopHocList
+             
                 var viewModel = new PhongThiViewModel
                 {
                     LopHocList = lopHocList,
-                    PhongThi = new PhongThi() // Khởi tạo đối tượng PhongThi
+                    PhongThi = new PhongThi() 
                 };
 
                 return View(viewModel);
@@ -68,14 +68,13 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             {
                 using (var context = new TracNghiemTiengAnhTHPTEntities1())
                 {
-                    // Lưu phòng thi với MaLop được chọn từ dropdown
+                   
                     context.PhongThis.Add(viewModel.PhongThi);
                     context.SaveChanges();
                     return RedirectToAction("Index");
                 }
             }
 
-            // Nếu có lỗi, tải lại danh sách LopHocList
             using (var context = new TracNghiemTiengAnhTHPTEntities1())
             {
                 viewModel.LopHocList = context.LopHocs.Select(l => new SelectListItem

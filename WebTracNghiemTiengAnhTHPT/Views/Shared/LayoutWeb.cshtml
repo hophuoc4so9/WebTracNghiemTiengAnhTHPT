@@ -10,8 +10,14 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm">
-        
+
         <div class="container fw-bold ">
             <img class="navbar-brand" src="~/Content/img/P2N 1.svg" />
             <buton type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
@@ -42,7 +48,7 @@
                 {
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="#" style="color: #007bff; font-weight: bold;">
+                            <a class="nav-link" href="/User/Profile" style="color: #007bff; font-weight: bold;">
                                 <span class="fas fa-user"></span> @Session["UserName"]
                             </a>
                         </li>
@@ -73,7 +79,7 @@
 
         </div>
     </nav>
-  
+
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -87,7 +93,7 @@
                 <h2>P2N</h2>
                 <ul>
 
-            
+
                     <li>@Html.ActionLink("Về Chúng Tôi", "About", "Home")</li>
                     <li>@Html.ActionLink("Liên hệ", "Contact", "Home")</li>
                 </ul>
@@ -110,7 +116,15 @@
             </section>
         </div>
     </footer>
-
+    <script>
+      // Hide the success message after 2 seconds
+      setTimeout(function () {
+          var messageDiv = document.querySelector('.alert-success');
+          if (messageDiv) {
+              messageDiv.style.display = "none"; // Hide the message
+          }
+      }, 2000); // 2000 milliseconds = 2 seconds
+    </script>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

@@ -142,5 +142,9 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
                 return PartialView("~/Areas/giaovien/Views/Shared/_PartialChucNangGiaoVien.cshtml");
             }    
         }
+        public ActionResult AddNew()
+        {
+            return View(); 
+        }
     }
 }
