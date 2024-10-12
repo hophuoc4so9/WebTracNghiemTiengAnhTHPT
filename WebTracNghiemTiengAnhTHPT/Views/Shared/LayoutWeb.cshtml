@@ -10,12 +10,6 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success">
-            @TempData["SuccessMessage"]
-        </div>
-    }
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm">
 
         <div class="container fw-bold ">
@@ -86,14 +80,9 @@
 
     </div>
 
-    <footer>
-        <p>&copy; @DateTime.Now.Year - Footer</p>
-        <div class="row">
-            <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-                <h2>P2N</h2>
-                <ul>
+    @Html.Partial("_PartialFooter")
 
-
+            
                     <li>@Html.ActionLink("Về Chúng Tôi", "About", "Home")</li>
                     <li>@Html.ActionLink("Liên hệ", "Contact", "Home")</li>
                 </ul>
@@ -116,17 +105,107 @@
             </section>
         </div>
     </footer>
-    <script>
-      // Hide the success message after 2 seconds
-      setTimeout(function () {
-          var messageDiv = document.querySelector('.alert-success');
-          if (messageDiv) {
-              messageDiv.style.display = "none"; // Hide the message
-          }
-      }, 2000); // 2000 milliseconds = 2 seconds
-    </script>
+
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>
 </html>
+<style>
+    /* Tổng thể Navbar */
+.navbar {
+    background-color: #2c3e50; /* Màu nền đậm */
+    padding: 10px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo */
+.navbar-brand img {
+    height: 50px; /* Điều chỉnh kích thước logo */
+    margin-right: 15px;
+}
+
+/* Các liên kết trong Navbar */
+.navbar-nav .nav-link {
+    color: #ecf0f1 !important; /* Màu chữ trắng sáng */
+    font-weight: 500;
+    margin-right: 15px;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #3498db !important; /* Màu xanh khi hover */
+}
+
+/* Toggle Button */
+.navbar-toggler {
+    border-color: #ecf0f1;
+}
+
+/* Form tìm kiếm */
+.form-inline .search-bar {
+    border-radius: 20px;
+    padding: 5px 15px;
+    border: none;
+}
+
+.form-inline .btn-outline-secondary {
+    border-radius: 50%;
+    padding: 6px 10px;
+    margin-left: -40px; /* Đặt nút tìm kiếm lên trên thanh nhập */
+    background-color: #3498db;
+    border: none;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.form-inline .btn-outline-secondary:hover {
+    background-color: #2980b9;
+    color: #fff;
+}
+
+/* Các nút đăng nhập và đăng xuất */
+.navbar-nav .nav-item .nav-link {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-nav .nav-item .nav-link .fas {
+    margin-right: 5px;
+}
+
+/* Các liên kết Login và Register */
+.nav-pills .nav-link {
+    border-radius: 50px;
+    padding: 8px 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-pills .nav-link.text-danger {
+    background-color: #e74c3c;
+    color: #fff !important;
+}
+
+.nav-pills .nav-link.text-danger:hover {
+    background-color: #c0392b;
+    color: #fff !important;
+}
+
+.nav-pills .nav-link.bg-primary {
+    background-color: #3498db;
+    color: #fff !important;
+}
+
+.nav-pills .nav-link.bg-primary:hover {
+    background-color: #2980b9;
+    color: #fff !important;
+}
+
+/* Bảng xếp hạng và các phần tử khác */
+.table-ranking {
+    background-color: #ecf0f1;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+</style>

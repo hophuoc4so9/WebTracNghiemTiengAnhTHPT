@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WebTracNghiemTiengAnhTHPT.Models;
 
 namespace WebTracNghiemTiengAnhTHPT.Controllers
 {
@@ -33,6 +34,9 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
 
             return View();
         }
-        
+        public ActionResult Footer()
+        {
+            return PartialView("_PartialFooter");
+        }
     }
 }
