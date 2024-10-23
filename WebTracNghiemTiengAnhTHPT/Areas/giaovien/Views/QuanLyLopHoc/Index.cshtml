@@ -26,20 +26,78 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.MaLop)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TenLop)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaLop)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TenLop)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.MaLop }) |
+                @Html.ActionLink("Details", "Details", new { id = item.MaLop }) |
+                <a href="#" class="btn btn-danger" data-id="@item.MaLop" data-toggle="modal" data-target="#deleteModal">Xóa</a>
+            </td>
+        </tr>
+    }
 
 </table>
+
+<!-- Modal xác nhận xóa -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa lớp học này không?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Thư viện CSS Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Thư viện jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Thư viện JavaScript Bootstrap -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        var deleteUrl = '';
+        var idToDelete = 0;
+
+        // Khi nhấn nút xóa, lưu id của phòng thi
+        $('a[data-target="#deleteModal"]').on('click', function () {
+            idToDelete = $(this).data('id');
+            deleteUrl = '@Url.Action("DeleteConfirmed")/' + idToDelete;
+        });
+
+        // Khi người dùng xác nhận xóa
+        $('#confirmDelete').on('click', function () {
+            $.ajax({
+                url: deleteUrl,
+                type: 'POST',
+                success: function (result) {
+                    // Sau khi xóa thành công, làm mới trang
+                    window.location.reload();
+                },
+                error: function (err) {
+                    alert('Có lỗi xảy ra! Không thể xóa phòng thi.');
+                }
+            });
+        });
+    </script>
+}
+
