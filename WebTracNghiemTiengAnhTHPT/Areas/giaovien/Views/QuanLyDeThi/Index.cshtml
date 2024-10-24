@@ -4,9 +4,21 @@
     ViewBag.Title = "Index";
     Layout = "~/Areas/admin/Views/Shared/_AdminLayout.cshtml";
 }
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
 
 <h2>Quản Lý Đề Thi</h2>
 
+<button type="button" class="btn btn-info btn-sm">
+    <a href="/giaovien/QuanLyDeThi/AutoGenerateExam" class="text-light text-decoration-none">Tự động tạo đề thi</a>
+</button>
 
 
 <!-- Single Save Button -->

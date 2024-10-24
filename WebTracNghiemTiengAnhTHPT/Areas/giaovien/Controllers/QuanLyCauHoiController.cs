@@ -178,6 +178,8 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
 
             return Content(result);
         }
+        // Chức năng tự động sinh đề thi
+        
 
     }
 }

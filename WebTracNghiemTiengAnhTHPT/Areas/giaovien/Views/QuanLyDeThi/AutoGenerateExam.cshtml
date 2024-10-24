@@ -1,0 +1,112 @@
+﻿@model WebTracNghiemTiengAnhTHPT.Models.KyThi
+
+@{
+    ViewBag.Title = "Tạo Đề Thi Mới";
+    Layout = "~/Areas/admin/Views/Shared/_AdminLayout.cshtml";
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<h2>Tạo Đề Thi Mới</h2>
+
+<form method="post" action="@Url.Action("AutoGenerateExam", "QuanLyDeThi")">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+        <!-- Cột bên trái: Số lượng câu hỏi trong CSDL -->
+        <div style="flex: 1; margin-right: 10px;">
+            <h3>Câu hỏi trong CSDL</h3>
+            <div>
+                <label>Tổng số lượng câu hỏi <span>@ViewBag.TotalQuestions</span></label>
+            </div>
+            <div>
+                <label>Số lượng câu hỏi dễ : <span>@ViewBag.EasyQuestions</span></label>
+
+            </div>
+            <div>
+                <label>Số lượng câu hỏi khó : <span>@ViewBag.HardQuestions</span></label>
+
+            </div>
+        </div>
+
+        <!-- Cột bên phải: Lựa chọn số câu hỏi -->
+        <div style="flex: 1; margin-left: 10px;">
+            <h3>Lựa chọn số câu hỏi</h3>
+            <div>
+                <label>Số lượng câu hỏi dễ trong đề thi:</label>
+                <input type="number" name="SoCauHoiDe" min="0" max="@ViewBag.EasyQuestions" required />
+            </div>
+            <div>
+                <label>Số lượng câu hỏi khó trong đề thi:</label>
+                <input type="number" name="SoCauHoiKho" min="0" max="@ViewBag.HardQuestions" required />
+            </div>
+            <div>
+                <label>Thời gian đề thi (phút):</label>
+                <select name="ThoiGian" required>
+                    @for (int i = 10; i <= 120; i += 10)
+                    {
+                        <option value="@i">@i phút</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div>
+        <input type="submit" value="Tạo Đề Thi" />
+    </div>
+</form>
+
+
+<style>
+    form {
+        max-width: 800px;
+        margin: 0 auto; /* Canh giữa form */
+        padding: 20px;
+        background-color: #f9f9f9; /* Màu nền nhẹ */
+        border-radius: 8px; /* Bo tròn các góc */
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+    }
+
+    h3 {
+        margin-top: 0; /* Bỏ lề trên cho tiêu đề */
+        color: #333; /* Màu chữ tiêu đề */
+    }
+
+    div {
+        margin-bottom: 15px; /* Khoảng cách giữa các trường */
+    }
+
+    label {
+        display: block; /* Hiển thị label thành khối để dễ canh lề */
+        font-weight: bold; /* Chữ đậm cho label */
+        margin-bottom: 5px; /* Khoảng cách dưới label */
+    }
+
+    input[type="number"],
+    select {
+        width: 100%; /* Chiều rộng đầy đủ cho các ô nhập */
+        padding: 10px; /* Đệm cho ô nhập */
+        border: 1px solid #ccc; /* Đường viền xám */
+        border-radius: 4px; /* Bo tròn các góc */
+        box-sizing: border-box; /* Bao gồm đệm và đường viền trong chiều rộng */
+    }
+
+    input[type="submit"] {
+        background-color: #4CAF50; /* Màu nền cho nút submit */
+        color: white; /* Màu chữ trắng */
+        border: none; /* Bỏ đường viền */
+        padding: 10px 15px; /* Đệm cho nút */
+        border-radius: 4px; /* Bo tròn các góc */
+        cursor: pointer; /* Thay đổi con trỏ khi di chuột qua */
+        transition: background-color 0.3s; /* Hiệu ứng chuyển đổi màu nền */
+    }
+
+        input[type="submit"]:hover {
+            background-color: #45a049; /* Màu nền khi di chuột qua nút */
+        }
+</style>
