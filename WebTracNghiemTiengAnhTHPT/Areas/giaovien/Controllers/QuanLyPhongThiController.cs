@@ -91,12 +91,38 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
         {
             using (var context = new TracNghiemTiengAnhTHPTEntities1())
             {
-                PhongThi phongThi = context.PhongThis.Find(id);
+                PhongThi phongThi = context.PhongThis.Include("KyThis").FirstOrDefault(pt => pt.MaPhong == id);
+
+                string usernameTacGia = Session["UserName"].ToString();
+
+                ViewBag.otherKyThi = context.KyThis
+                    .Where(k => k.PhongThis.All(n => n.MaPhong != id) && k.UsernameTacGia == usernameTacGia && k.ThoiGianKetThuc> DateTime.Now)
+                    .ToList();
+
                 if (phongThi == null)
                 {
                     return HttpNotFound();
                 }
+
                 return View(phongThi);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult AddKyThiToPhongThi(int MaPhong, int KyThiId)
+        {
+            using (var context = new TracNghiemTiengAnhTHPTEntities1())
+            {
+                var phongThi = context.PhongThis.Include("KyThis").FirstOrDefault(pt => pt.MaPhong == MaPhong);
+                var kyThi = context.KyThis.Find(KyThiId);
+
+                if (phongThi != null && kyThi != null)
+                {
+                    phongThi.KyThis.Add(kyThi);
+                    context.SaveChanges();
+                }
+
+                return RedirectToAction("Details", new { id = MaPhong });
             }
         }
         // GET: PhongThi/Edit/5

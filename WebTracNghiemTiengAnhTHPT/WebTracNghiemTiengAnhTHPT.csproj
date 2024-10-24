@@ -231,6 +231,7 @@
     <Compile Include="Areas\hocsinh\hocsinhAreaRegistration.cs" />
     <Compile Include="Controllers\ContestsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PhongThiController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -608,6 +609,7 @@
     <Content Include="Views\Shared\PartialLichSuLamBai.cshtml" />
     <Content Include="Scripts\tinymce\license.md" />
     <Content Include="Scripts\tinymce\langs\README.md" />
+    <Content Include="Views\PhongThi\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\admin\Data\" />
