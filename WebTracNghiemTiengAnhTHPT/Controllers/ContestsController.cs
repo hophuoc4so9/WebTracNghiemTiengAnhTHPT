@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Drawing.Charts;
+using System;
 using System.Collections.Generic;
 using System.EnterpriseServices.Internal;
 using System.Linq;
@@ -20,10 +21,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
        
         public ActionResult ChiTietKyThi(int made)
         {
-            TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
-            KyThi kt = db.KyThis.SingleOrDefault(k => k.MaDe == made);
-            List<CauHoi> model = kt.CauHois.ToList();
-            ViewBag.MaDe = made;
+           
             if (Session["UserName"] == null)
             {
 
@@ -31,42 +29,87 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             }
             else
             {
-                Session["time" + made] = DateTime.Now.AddMinutes(kt.ThoiGian);
-                return View(model);
+                
+                TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
+                string username = Session["UserName"].ToString();
+                KetQua ketQua=db.KetQuas.FirstOrDefault(k =>  k.Username == username
+                    && k.status==false && k.thoigian_ketthuc>DateTime.Now);
+                if (ketQua != null)
+                {
+               if(ketQua.MaDe!=made)     ViewBag.Message = "Bạn đang ở trong một kỳ thi khác nên không thể tham gia.";
+                    ViewBag.endTime = ketQua.thoigian_ketthuc;
+                    return RedirectToAction("BaiLam", new { id = ketQua.Maketqua });
+                }
+                 
+                KyThi kt = db.KyThis.SingleOrDefault(k => k.MaDe == made);
+                if(!(kt.SoCauHoi.HasValue && kt.SoCauHoi > 0))
+                {
+                    kt.SoCauHoi = kt.CauHois.Count();
+                }
+                ketQua = new KetQua();
+                ketQua.Username = username;
+                ketQua.MaDe = made;
+               
+                ketQua.status = false;
+                db.KetQuas.Add(ketQua);
+                // Shuffle the list of questions
+                Random rng = new Random();
+                List<CauHoi> shuffledQuestions = kt.CauHois.OrderBy(q => rng.Next()).ToList();
+
+                // Take the first kt.SoCauHoi questions
+                List<CauHoi> selectedQuestions = shuffledQuestions.Take(kt.SoCauHoi ?? 0).ToList();
+                db.SaveChanges();
+
+                // Create ChiTietKetQua entries with the answer set to "N"
+                foreach (var question in selectedQuestions)
+                {
+                    ChiTietKetQua chiTietKetQua = new ChiTietKetQua
+                    {
+                        MaCauHoi = question.MaCauHoi,
+                        DapAnChon = "N",
+                        Username = Session["UserName"]?.ToString(),
+                        MaDe = made,
+                        Maketqua = ketQua.Maketqua
+                    };
+                    ketQua.ChiTietKetQuas.Add(chiTietKetQua);
+                }
+
+                ketQua.thoigian_batdau=DateTime.Now;
+                ketQua.thoigian_ketthuc=DateTime.Now.AddMinutes(kt.ThoiGian );
+                db.SaveChanges();
+          
+                return RedirectToAction("BaiLam", new { id = ketQua.Maketqua });
             }    
            
 
+        }
+        public ActionResult BaiLam(int id)
+        {
+            TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
+            KetQua kq = db.KetQuas.SingleOrDefault(k => k.Maketqua == id);
+            ViewBag.MaDe = kq.Maketqua;
+            ViewBag.endTime = kq.thoigian_ketthuc;
+            return View(kq);
         }
         [HttpPost]
         public ActionResult Result(FormCollection form, int made)
         {
             TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
-            KetQua ketqua = new KetQua();
-            ketqua.MaDe = made;
-            ketqua.Username = Session["UserName"].ToString();
-            db.KetQuas.Add(ketqua);
-            db.SaveChanges();
-                        List<CauHoi> cauhois = db.CauHois.Where(c => c.KyThis.Any(k => k.MaDe == made)).ToList();
-            int total=cauhois.Count;
-            int correct = 0;
-            foreach (var item in cauhois)
+            KetQua ketqua = db.KetQuas.Where(n=>n.Maketqua== made).FirstOrDefault();   
+            ketqua.status = true;
+         
+            int total=ketqua.ChiTietKetQuas.Count;
+            double correct = 0;
+            foreach (var item in ketqua.ChiTietKetQuas)
             {
                 string questionKey = "answer_" + item.MaCauHoi;
                 string selectedValue = form[questionKey];
-
-                ChiTietKetQua tam = new ChiTietKetQua();
-                tam.MaCauHoi = item.MaCauHoi;
-                tam.DapAnChon = !string.IsNullOrEmpty(selectedValue) ? selectedValue : "N";
-                tam.Username = Session["UserName"]?.ToString();
-                
-                tam.MaDe = made;
-                tam.Maketqua = ketqua.Maketqua; 
-                if(item.DapAnChinhXac.ToLower().Contains(tam.DapAnChon.ToLower()))
+                item.DapAnChon = !string.IsNullOrEmpty(selectedValue) ? selectedValue : "N";
+                if(item.CauHoi.DapAnChinhXac.ToLower().Contains(item.DapAnChon.ToLower()))
                 {
                     correct++;
                 }
               
-                db.ChiTietKetQuas.Add(tam);
             }
             ketqua.Diem = correct * 10 / total;
             db.SaveChanges();
@@ -103,7 +146,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
          
                 string username = Session["UserName"] == null ? "": Session["UserName"].ToString() ;
             TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
-            List<KetQua> model = db.KetQuas.Where(c => c.MaDe == made && c.Username == username).ToList();
+            List<KetQua> model = db.KetQuas.Where(c => c.MaDe == made && c.Username == username && c.status==true).ToList();
             return View(model);
         }
 

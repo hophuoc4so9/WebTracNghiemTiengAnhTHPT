@@ -78,6 +78,9 @@
           <Property Name="Username" Type="varchar" MaxLength="30" />
           <Property Name="MaDe" Type="int" />
           <Property Name="Diem" Type="float" />
+          <Property Name="status" Type="bit" />
+          <Property Name="thoigian_batdau" Type="datetime" />
+          <Property Name="thoigian_ketthuc" Type="datetime" />
         </EntityType>
         <EntityType Name="KyThi">
           <Key>
@@ -91,6 +94,7 @@
           <Property Name="CongKhai" Type="bit" Nullable="false" />
           <Property Name="isDeleted" Type="bit" />
           <Property Name="UsernameTacGia" Type="varchar" MaxLength="30" />
+          <Property Name="SoCauHoi" Type="int" />
         </EntityType>
         <EntityType Name="KyThiCauHoi">
           <Key>
@@ -175,7 +179,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.ViewChitietKyThi_2' doe
             <PropertyRef Name="ThoiGian" />
             <PropertyRef Name="CongKhai" />
           </Key>
-          <Property Name="MaDe" Type="int" Nullable="false" />
+          <Property Name="MaDe" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TenKyThi" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="ThoiGian" Type="int" Nullable="false" />
           <Property Name="ThoiGianBatDau" Type="datetime" />
@@ -728,6 +732,9 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.ViewChitietKyThi_2' doe
           <NavigationProperty Name="ChiTietKetQuas" Relationship="TracNghiemTiengAnhTHPTModel.FK_ChiTietKetQua_Maketqua" FromRole="KetQua" ToRole="ChiTietKetQua" />
           <NavigationProperty Name="KyThi" Relationship="TracNghiemTiengAnhTHPTModel.FK_KetQua_KyThi" FromRole="KetQua" ToRole="KyThi" />
           <NavigationProperty Name="TaiKhoan" Relationship="TracNghiemTiengAnhTHPTModel.FK_KetQua_TaiKhoan" FromRole="KetQua" ToRole="TaiKhoan" />
+          <Property Name="status" Type="Boolean" />
+          <Property Name="thoigian_batdau" Type="DateTime" Precision="3" />
+          <Property Name="thoigian_ketthuc" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="KyThi">
           <Key>
@@ -746,6 +753,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.ViewChitietKyThi_2' doe
           <NavigationProperty Name="KetQuas" Relationship="TracNghiemTiengAnhTHPTModel.FK_KetQua_KyThi" FromRole="KyThi" ToRole="KetQua" />
           <NavigationProperty Name="CauHois" Relationship="TracNghiemTiengAnhTHPTModel.KyThiCauHoi" FromRole="KyThi" ToRole="CauHoi" />
           <NavigationProperty Name="PhongThis" Relationship="TracNghiemTiengAnhTHPTModel.PhongThiKyThi" FromRole="KyThi" ToRole="PhongThi" />
+          <Property Name="SoCauHoi" Type="Int32" />
         </EntityType>
         <EntityType Name="NhomCauHoi">
           <Key>
@@ -1062,6 +1070,9 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.ViewChitietKyThi_2' doe
           <EntitySetMapping Name="KetQuas">
             <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.KetQua">
               <MappingFragment StoreEntitySet="KetQua">
+                <ScalarProperty Name="thoigian_ketthuc" ColumnName="thoigian_ketthuc" />
+                <ScalarProperty Name="thoigian_batdau" ColumnName="thoigian_batdau" />
+                <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="Diem" ColumnName="Diem" />
                 <ScalarProperty Name="MaDe" ColumnName="MaDe" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
@@ -1072,6 +1083,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.ViewChitietKyThi_2' doe
           <EntitySetMapping Name="KyThis">
             <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.KyThi">
               <MappingFragment StoreEntitySet="KyThi">
+                <ScalarProperty Name="SoCauHoi" ColumnName="SoCauHoi" />
                 <ScalarProperty Name="UsernameTacGia" ColumnName="UsernameTacGia" />
                 <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
                 <ScalarProperty Name="CongKhai" ColumnName="CongKhai" />

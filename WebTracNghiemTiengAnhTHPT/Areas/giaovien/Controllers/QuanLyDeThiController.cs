@@ -90,7 +90,8 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                 var otherQuestions = context.CauHois
                     .Where(item => !item.KyThis.Any(c => c.MaDe == made && c.isDeleted != true))
                     .ToList();
-
+                var kythi=context.KyThis.FirstOrDefault(k => k.MaDe == made);   
+                ViewBag.KyThi = kythi;
                 ViewBag.made = made;
                 ViewBag.OtherQuestions = otherQuestions; // Pass other questions to the view
                 return View(model);
@@ -347,6 +348,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                         }
                     }
                 }
+               if(kt.SoCauHoi==null || kt.SoCauHoi<=0) kt.SoCauHoi=kt.CauHois.Count;
 
                 db.SaveChanges();
             }
@@ -391,6 +393,13 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                                 item1.NoiDung = HttpUtility.HtmlEncode(f[questionKey]);
                             }
                         }
+                    }
+                    KyThi kythi=db.KyThis.FirstOrDefault(k => k.MaDe == made);
+                    if (kythi != null)
+                    {
+                        kythi.ThoiGian =int.Parse( f["KyThi[" + made + "].ThoiGian"]);
+                        kythi.SoCauHoi = int.Parse(f["KyThi[" + made + "].SoCauHoi"]);
+
                     }
                     db.SaveChanges();
 

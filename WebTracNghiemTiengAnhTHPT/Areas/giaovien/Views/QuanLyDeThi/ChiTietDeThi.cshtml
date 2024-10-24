@@ -1,8 +1,11 @@
 ﻿@model IEnumerable<WebTracNghiemTiengAnhTHPT.Models.CauHoi>
+@using System.Linq
 @{
     ViewBag.Title = "ChiTietDeThi";
     Layout = "~/Areas/admin/Views/Shared/_AdminLayout.cshtml";
     var groupedItems = Model.GroupBy(item => new { item.NhomCauHoi.MaNhom, item.NhomCauHoi.NoiDung });
+    WebTracNghiemTiengAnhTHPT.Models.KyThi kyThi = (WebTracNghiemTiengAnhTHPT.Models.KyThi)ViewBag.KyThi;
+    int totalQuestions = Model.Count();
 }
 <script src="~/Scripts/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
@@ -10,11 +13,13 @@
         selector: '.mytextarea',
         license_key: 'gpl|<your-license-key>'
     });
-  
 </script>
 <div>
-    <h3>Danh sách câu hỏi khác</h3>
-    <table class="table table-bordered">
+    <h3>
+        Danh sách câu hỏi khác
+        <button type="button" class="btn btn-secondary" onclick="toggleTable()">Ẩn/Hiện</button>
+    </h3>
+    <table id="otherQuestionsTable" class="table table-bordered" style="display: none;">
         <thead>
             <tr>
                 <th>Mã Câu Hỏi</th>
@@ -42,14 +47,35 @@
     </table>
 </div>
 
-<h2>Chi tiết đề thi</h2>
+<script>
+    function toggleTable() {
+        var table = document.getElementById('otherQuestionsTable');
+        if (table.style.display === 'none' || table.style.display === '') {
+            table.style.display = 'table';
+        } else {
+            table.style.display = 'none';
+        }
+    }
+</script>
+
 
 <div class="">
     @using (Html.BeginForm("LuuThayDoi", "QuanLyDeThi", new { made = ViewBag.made }, FormMethod.Post))
     {
+        <h2>Tên đề thi: @kyThi.TenKyThi </h2>
+        <h3>Tổng số câu hỏi: @totalQuestions </h3>
+        <h3>
+            Số câu hỏi kiểm tra: 
+            <input type="number" min="1" max="@totalQuestions" name="KyThi[@ViewBag.made].SoCauHoi"
+                   class="form-control edit-input"
+            value="@(kyThi.SoCauHoi.HasValue && kyThi.SoCauHoi.Value > 0 ? kyThi.SoCauHoi.Value : totalQuestions)" />        </h3>
+        <h3>
+            Thời gian làm bài:
+            <input type="number" min="10" name="KyThi[@ViewBag.made].ThoiGian" class="form-control edit-input" value="@kyThi.ThoiGian" />
+        </h3>
         foreach (var group in groupedItems)
         {
-            @Html.TextArea("NoiDung_" + group.Key.MaNhom, HttpUtility.HtmlDecode( group.Key.NoiDung), new { @class = "form-control mytextarea", style = "width: 100%;" })
+            @Html.TextArea("NoiDung_" + group.Key.MaNhom, HttpUtility.HtmlDecode(group.Key.NoiDung), new { @class = "form-control mytextarea", style = "width: 100%;" })
 
             foreach (var item in group)
             {

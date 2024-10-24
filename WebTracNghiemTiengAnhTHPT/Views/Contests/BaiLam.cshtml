@@ -1,13 +1,22 @@
-﻿@model IEnumerable<WebTracNghiemTiengAnhTHPT.Models.CauHoi>
+﻿@model WebTracNghiemTiengAnhTHPT.Models.KetQua
+
 
 @{
     ViewBag.Title = "ChiTietKyThi";
     Layout = "~/Views/Shared/LayoutWeb.cshtml";
-    var groupedItems = Model.GroupBy(item => new { item.NhomCauHoi.MaNhom, item.NhomCauHoi.NoiDung });
+    var groupedItems = Model.ChiTietKetQuas
+                         .GroupBy(item => new { item.CauHoi.MaNhom, item.CauHoi.NhomCauHoi.NoiDung });
     var isFirst = true;
     int made = ViewBag.MaDe;
-    DateTime endTime = (DateTime)Session["time" + made];
+    DateTime endTime = (DateTime)ViewBag.endTime;
+
 }
+<style>
+    .selected-button {
+        background-color: gray;
+        color: white;
+    }
+</style>
 
 <h2>ChiTietKyThi</h2>
 
@@ -33,35 +42,42 @@
                             {
                                 <div class="item-container border p-3 mb-3">
                                     <div class="field mb-2">
-                                       @item.MaCauHoi : @Html.Raw(HttpUtility.HtmlDecode(item.NoiDung))
+                                        @item.MaCauHoi : @Html.Raw(HttpUtility.HtmlDecode(item.CauHoi.NoiDung))
                                     </div>
+
                                     <!-- Answer choices with radio buttons -->
                                     <label class="form-check-label bg-info w-100 my-1 border-danger border-2" for="dapAnA_@item.MaCauHoi">
                                         <span class="form-check mb-2">
-                                            <input class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAnA_@item.MaCauHoi" value="A">
-                                            @Html.DisplayFor(modelItem => item.DapAnA)
+                                            <input class="form-check-input"
+                                                   type="radio" name="answer_@item.MaCauHoi" id="dapAnA_@item.MaCauHoi" value="A"
+                                                   @(item.DapAnChon == "A" ? "checked" : "")>
+                                            @Html.DisplayFor(modelItem => item.CauHoi.DapAnA)
                                         </span>
                                     </label>
-                                    <label class="form-check-label bg-info w-100  my-1" for="dapAnB_@item.MaCauHoi">
+                                    <label class="form-check-label bg-info w-100 my-1" for="dapAnB_@item.MaCauHoi">
                                         <span class="form-check mb-2">
-                                            <input class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAnB_@item.MaCauHoi" value="B">
-                                            @Html.DisplayFor(modelItem => item.DapAnB)
+                                            <input class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAnB_@item.MaCauHoi" value="B"
+                                                   @(item.DapAnChon == "B" ? "checked" : "")>
+                                            @Html.DisplayFor(modelItem => item.CauHoi.DapAnB)
                                         </span>
                                     </label>
-                                    <label class="form-check-label bg-info w-100  my-1" for="dapAnC_@item.MaCauHoi">
+                                    <label class="form-check-label bg-info w-100 my-1" for="dapAnC_@item.MaCauHoi">
                                         <span class="form-check mb-2">
-                                            <input class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAnC_@item.MaCauHoi" value="C">
-                                            @Html.DisplayFor(modelItem => item.DapAnC)
+                                            <input class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAnC_@item.MaCauHoi" value="C"
+                                                   @(item.DapAnChon == "C" ? "checked" : "")>
+                                            @Html.DisplayFor(modelItem => item.CauHoi.DapAnC)
                                         </span>
                                     </label>
-                                    <label class="form-check-label bg-info w-100  my-1" for="dapAnD_@item.MaCauHoi">
+                                    <label class="form-check-label bg-info w-100 my-1" for="dapAnD_@item.MaCauHoi">
                                         <span class="form-check mb-2">
-                                            <input class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAnD_@item.MaCauHoi" value="D">
-                                            @Html.DisplayFor(modelItem => item.DapAnD)
+                                            <input class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAnD_@item.MaCauHoi" value="D"
+                                                   @(item.DapAnChon == "D" ? "checked" : "")>
+                                            @Html.DisplayFor(modelItem => item.CauHoi.DapAnD)
                                         </span>
                                     </label>
+
                                     <div class="field">
-                                        <strong>DapAnChinhXac:</strong> @Html.DisplayFor(modelItem => item.DapAnChinhXac)
+                                        <strong>DapAnChinhXac:</strong> @Html.DisplayFor(modelItem => item.CauHoi.DapAnChinhXac)
                                     </div>
                                 </div>
                             }
@@ -134,6 +150,22 @@
             document.getElementById('nopbai').disabled = true;
         }
     }
-
+    function updateButtonColor(maCauHoi) {
+        var buttons = document.querySelectorAll('.group-container-right button');
+        buttons.forEach(function (button) {
+            if (button.textContent.trim() == maCauHoi) {
+                button.classList.add('selected-button');
+            } else {
+                button.classList.remove('selected-button');
+            }
+        });
+    }
+    @if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+    <text>
+    alert('@ViewBag.Message');
+    </text>
+    ViewBag.Message = null;
+}
     startTimer();
 </script>

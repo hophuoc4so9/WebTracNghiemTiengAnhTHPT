@@ -601,7 +601,7 @@
     <Content Include="Views\Shared\LayoutWeb.cshtml" />
     <Content Include="Views\Home\News.cshtml" />
     <Content Include="Views\Contests\Index.cshtml" />
-    <Content Include="Views\Contests\ChiTietKyThi.cshtml" />
+    <Content Include="Views\Contests\BaiLam.cshtml" />
     <Content Include="Views\Contests\Result.cshtml" />
     <Content Include="Views\Shared\_PartialFooter.cshtml" />
     <Content Include="Views\Contests\ChiTiet.cshtml" />

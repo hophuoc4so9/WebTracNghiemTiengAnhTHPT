@@ -24,6 +24,9 @@ namespace WebTracNghiemTiengAnhTHPT.Models
         public string Username { get; set; }
         public Nullable<int> MaDe { get; set; }
         public Nullable<double> Diem { get; set; }
+        public Nullable<bool> status { get; set; }
+        public Nullable<System.DateTime> thoigian_batdau { get; set; }
+        public Nullable<System.DateTime> thoigian_ketthuc { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ChiTietKetQua> ChiTietKetQuas { get; set; }

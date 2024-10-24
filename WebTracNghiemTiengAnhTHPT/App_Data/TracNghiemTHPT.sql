@@ -223,31 +223,34 @@ VALUES
 create view ViewChitietKyThi_2 as
 (
 SELECT 
-    k.MaDe ,
-	k.TenKyThi ,
-	ThoiGian ,
-	ThoiGianBatDau ,
-	ThoiGianKetThuc ,
-	CongKhai ,
-    -- Count the number of questions for the test, handling cases where there are no questions
-    COALESCE(COUNT(kch.MaCauHoi), 0) AS SoCauHoi,
-    -- Average rating, handling cases where there is no rating
-    COALESCE(AVG(dg.rate), 0) AS DiemTrungBinh,
-	COALESCE(COUNT(KetQua.Diem), 0) AS Soluot
+    k.MaDe,
+    k.TenKyThi,
+    k.ThoiGian,
+    k.ThoiGianBatDau,
+    k.ThoiGianKetThuc,
+    k.CongKhai,
+    -- Subquery to count the number of questions for the test
+    (
+        SELECT COUNT(kch.MaCauHoi)
+        FROM KyThiCauHoi kch
+        WHERE k.MaDe = kch.MaDe
+    ) AS SoCauHoi,
+    -- Subquery to get the average rating
+    (
+        SELECT COALESCE(AVG(dg.rate), 0)
+        FROM DanhGia dg
+        WHERE k.MaDe = dg.MaDe
+    ) AS DiemTrungBinh,
+    -- Subquery to count the number of participants who have a score
+    (
+        SELECT COUNT(kq.Diem)
+        FROM KetQua kq
+        WHERE k.MaDe = kq.MaDe
+    ) AS Soluot
 FROM 
     KyThi k
-    -- Left join KyThiCauHoi to include tests even if they have no questions
-    LEFT JOIN KyThiCauHoi kch ON k.MaDe = kch.MaDe
-    -- Left join DanhGia to include tests even if they have no ratings
-    LEFT JOIN DanhGia dg ON k.MaDe = dg.MaDe
-	LEFT JOIN KetQua  ON k.MaDe = KetQua.MaDe
-GROUP BY 
-    k.MaDe ,
-	k.TenKyThi ,
-	ThoiGian ,
-	ThoiGianBatDau ,
-	ThoiGianKetThuc ,
-	CongKhai 
+WHERE 
+    (k.isDeleted = 0 OR k.isDeleted IS NULL);
 )
 
 ALTER table PhongThi
@@ -306,3 +309,9 @@ BEGIN
     INNER JOIN Inserted i ON k.MaDe = i.MaDe
     WHERE i.ThoiGian <= 0;
 END;
+ALTER TABLE KetQua
+ADD status BIT,
+thoigian_batdau DATETIME,
+thoigian_ketthuc DATETIME;
+ALTER TABLE kythi
+ADD SoCauHoi int
