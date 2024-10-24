@@ -1,0 +1,187 @@
+﻿@{
+    Layout = "~/Views/Shared/LayoutWeb.cshtml";
+    var myPhongThis = ViewBag.MyPhongThis as List<WebTracNghiemTiengAnhTHPT.Models.PhongThi>;
+    var otherPhongThis = ViewBag.OtherPhongThis as List<WebTracNghiemTiengAnhTHPT.Models.PhongThi>;
+}
+
+<h2 class="section-title">My PhongThi</h2>
+@if (myPhongThis != null && myPhongThis.Count > 0)
+{
+    <div class="container phongthi-container">
+        <!-- Header row -->
+        <div class="row phongThi-header">
+            <div class="col-md-4">
+                <strong>Room Name</strong>
+            </div>
+            <div class="col-md-4">
+                <strong>Password</strong>
+            </div>
+            <div class="col-md-4">
+                <strong>Class Name</strong>
+            </div>
+        </div>
+        <!-- Data rows -->
+        @foreach (var phongThi in myPhongThis)
+        {
+            <div class="row phongThi-row">
+                <div class="col-md-4">
+                    @phongThi.TenPhong
+                </div>
+                <div class="col-md-4">
+                    @phongThi.MatKhau
+                </div>
+                <div class="col-md-4">
+                    @phongThi.LopHoc.TenLop
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>No PhongThi found.</p>
+}
+
+<h2 class="section-title">Other PhongThi</h2>
+@if (otherPhongThis != null && otherPhongThis.Count > 0)
+{
+    <div class="container phongthi-container">
+        <!-- Header row -->
+        <div class="row phongThi-header">
+            <div class="col-md-4">
+                <strong>Room Name</strong>
+            </div>
+            <div class="col-md-4">
+                <strong>Class Name</strong>
+            </div>
+            <div class="col-md-4">
+
+            </div>
+        </div>
+        <!-- Data rows -->
+        @foreach (var phongThi in otherPhongThis)
+        {
+            <div class="row phongThi-row">
+                <div class="col-md-4">
+                    @phongThi.TenPhong
+                </div>
+                <div class="col-md-4">
+                    @phongThi.LopHoc.TenLop
+                </div>
+                <div class="col-md-4">
+                    @using (Html.BeginForm("JoinPhongThi", "PhongThi", FormMethod.Post, new { @class = "join-form" }))
+                    {
+                        @Html.Hidden("PhongThiId", phongThi.MaPhong)
+                        <div class="form-group join-group">
+                            <input type="password" class="form-control join-password" name="password" placeholder="Enter password" required style="display:none;" />
+                            <button type="button" class="btn btn-primary join-button">Join</button>
+                            <button type="submit" class="btn btn-primary submit-button" style="display:none;">Submit</button>
+                        </div>
+                        <div class="error-message text-danger" style="display:none;"></div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>No other PhongThi found.</p>
+}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var joinButtons = document.querySelectorAll(".join-button");
+        joinButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                // Hide all password inputs and submit buttons
+                document.querySelectorAll(".join-password").forEach(function (input) {
+                    input.style.display = "none";
+                });
+                document.querySelectorAll(".submit-button").forEach(function (button) {
+                    button.style.display = "none";
+                });
+                document.querySelectorAll(".join-button").forEach(function (button) {
+                    button.style.display = "inline-block";
+                });
+
+                // Show the password input and submit button for the clicked join button
+                var formGroup = this.closest(".join-group");
+                var passwordInput = formGroup.querySelector(".join-password");
+                var submitButton = formGroup.querySelector(".submit-button");
+                passwordInput.style.display = "block";
+                submitButton.style.display = "inline-block";
+                this.style.display = "none";
+            });
+        });
+
+        var joinForms = document.querySelectorAll(".join-form");
+        joinForms.forEach(function (form) {
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();
+                var formData = new FormData(form);
+                var errorMessage = form.querySelector(".error-message");
+
+                fetch(form.action, {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload();
+                        } else {
+                            errorMessage.textContent = data.message;
+                            errorMessage.style.display = "block";
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    });
+            });
+        });
+    });
+</script>
+
+<style>
+    .phongthi-container {
+        margin-bottom: 20px;
+    }
+
+    .phongThi-header, .phongThi-row {
+        margin-bottom: 10px;
+    }
+
+    .phongThi-row {
+        padding: 10px;
+        border: 1px solid #ddd;
+        background-color: #f9f9f9;
+    }
+
+    .join-group {
+        display: flex;
+        align-items: center;
+    }
+
+        .join-group .form-control {
+            margin-right: 10px;
+        }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: #fff;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+    .error-message {
+        margin-top: 10px;
+    }
+</style>

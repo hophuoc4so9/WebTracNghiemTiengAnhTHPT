@@ -231,6 +231,7 @@
     <Compile Include="Areas\hocsinh\hocsinhAreaRegistration.cs" />
     <Compile Include="Controllers\ContestsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PhongThiController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -249,6 +250,7 @@
     <Compile Include="Models\DanhGia.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ExamViewModel.cs" />
     <Compile Include="Models\KetQua.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -380,6 +382,7 @@
     <Content Include="Areas\giaovien\Views\QuanLyLopHoc\Index.cshtml" />
     <Content Include="Areas\giaovien\Views\QuanLyLopHoc\Details.cshtml" />
     <Content Include="Areas\giaovien\Views\QuanLyLopHoc\Edit.cshtml" />
+    <Content Include="Areas\giaovien\Views\QuanLyDeThi\AutoGenerateExam.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
@@ -608,6 +611,7 @@
     <Content Include="Views\Shared\PartialLichSuLamBai.cshtml" />
     <Content Include="Scripts\tinymce\license.md" />
     <Content Include="Scripts\tinymce\langs\README.md" />
+    <Content Include="Views\PhongThi\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\admin\Data\" />

@@ -1,8 +1,10 @@
 ﻿@model WebTracNghiemTiengAnhTHPT.Models.PhongThi
-
+@using WebTracNghiemTiengAnhTHPT.Models
 @{
     ViewBag.Title = "Details";
     Layout = "~/Areas/admin/Views/Shared/_AdminLayout.cshtml";
+    var kyThis = Model.KyThis.ToList();
+    List<KyThi> otherKyThis = ViewBag.otherKyThi;
 }
 
 <h2>Details</h2>
@@ -14,30 +16,129 @@
         <dt>
             @Html.DisplayNameFor(model => model.MaPhong)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.MaPhong)
         </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.MatKhau)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.MatKhau)
         </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.TenPhong)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.TenPhong)
         </dd>
-
     </dl>
 </div>
+
+<h2>Danh sách kỳ thi</h2>
+@if (kyThis.Count() > 0)
+{
+    <div class="container">
+        <div class="row title-row">
+            <div class="col"><strong>Tên đề thi</strong></div>
+            <div class="col"><strong>Thời gian</strong></div>
+            <div class="col"><strong>Thời gian bắt đầu</strong></div>
+            <div class="col"><strong>Thời gian kết thúc</strong></div>
+            <div class="col"><strong>Số câu hỏi</strong></div>
+        </div>
+        @foreach (var item in kyThis)
+        {
+            <div class="row align-items-center kyThi-row" data-id="@item.MaDe">
+                <div class="col">
+                    <span class="text-display">@item.TenKyThi</span>
+                </div>
+                <div class="col">
+                    <span class="text-display">@item.ThoiGian</span>
+                </div>
+                <div class="col">
+                    <span class="text-display">@String.Format("{0:dd-MM-yyyy HH:mm}", item.ThoiGianBatDau) </span>
+                </div>
+                <div class="col">
+                    <span class="text-display">@String.Format("{0:dd-MM-yyyy HH:mm}", item.ThoiGianKetThuc) </span>
+                </div>
+                <div class="col">
+                    <span class="text-display">@item.SoCauHoi</span>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<h2>Thêm kỳ thi vào phòng thi</h2>
+@if (otherKyThis.Count() > 0)
+{
+    <div class="container">
+        <div class="row title-row">
+            <div class="col"><strong>Tên đề thi</strong></div>
+            <div class="col"><strong>Thời gian</strong></div>
+            <div class="col"><strong>Thời gian bắt đầu</strong></div>
+            <div class="col"><strong>Thời gian kết thúc</strong></div>
+            <div class="col"><strong>Số câu hỏi</strong></div>
+            <div class="col"></div>
+        </div>
+        @foreach (KyThi otherKyThi in otherKyThis)
+        {
+            <div class="row kyThi-row">
+                <div class="col">@otherKyThi.TenKyThi</div>
+                <div class="col">@otherKyThi.ThoiGian</div>
+                <div class="col">@String.Format("{0:dd-MM-yyyy HH:mm}", otherKyThi.ThoiGianBatDau)</div>
+                <div class="col">@String.Format("{0:dd-MM-yyyy HH:mm}", otherKyThi.ThoiGianKetThuc)</div>
+                <div class="col">@otherKyThi.SoCauHoi</div>
+                <div class="col">
+                    @using (Html.BeginForm("AddKyThiToPhongThi", "QuanLyPhongThi", FormMethod.Post))
+                    {
+                        @Html.HiddenFor(model => model.MaPhong)
+                        @Html.Hidden("KyThiId", otherKyThi.MaDe)
+                        <button type="submit" class="btn btn-primary">Thêm</button>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
+
 <p>
     @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+
+<style>
+    .container {
+        margin-bottom: 20px;
+    }
+
+    .row {
+        margin-bottom: 10px;
+    }
+
+    .title-row {
+        background-color: #f1f1f1;
+        font-weight: bold;
+    }
+
+    .col {
+        padding: 10px;
+        border: 1px solid #ddd;
+        background-color: #f9f9f9;
+    }
+
+        .col strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: #fff;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+</style>
