@@ -1,6 +1,5 @@
 ﻿@model WebTracNghiemTiengAnhTHPT.Models.KetQua
 
-
 @{
     ViewBag.Title = "ChiTietKyThi";
     Layout = "~/Views/Shared/LayoutWeb.cshtml";
@@ -9,7 +8,6 @@
     var isFirst = true;
     int made = ViewBag.MaDe;
     DateTime endTime = (DateTime)ViewBag.endTime;
-
 }
 <style>
     .selected-button {
@@ -23,7 +21,12 @@
 <div class="container">
     <div class="row">
         <!-- Parent Div -->
-        <form action="/Contests/Result?MaDe=@ViewBag.MaDe" method="post">
+        <form id="examForm" action="/Contests/Result?MaDe=@ViewBag.MaDe" method="post">
+            <input type="hidden" name="flag" id="flag" value="0" />
+            <input type="hidden" name="url" id="url" />
+            <input type="hidden" id="endTime" value="@endTime" />
+            <input type="hidden" id="maDe" value="@ViewBag.MaDe" />
+
             <div class="col-12 d-lg-flex flex-lg-row flex-column">
                 <div class="col-lg-9 col-12 ">
                     <div>
@@ -34,47 +37,58 @@
                             </button>
                         }
                     </div>
+                    @functions {
+                        // Helper method to shuffle a list
+                        public static List<T> ShuffleList<T>(List<T> list)
+                        {
+                            Random rng = new Random();
+                            int n = list.Count;
+                            while (n > 1)
+                            {
+                                n--;
+                                int k = rng.Next(n + 1);
+                                T value = list[k];
+                                list[k] = list[n];
+                                list[n] = value;
+                            }
+                            return list;
+                        }
+                    }
                     @foreach (var group in groupedItems)
                     {
                         <div class="group-container" id="group-container-@group.Key.MaNhom" style="display: @(isFirst ? "block" : "none");">
                             <div class="bg-light "> @Html.Raw(HttpUtility.HtmlDecode(@group.Key.NoiDung)) </div>
                             @foreach (var item in group)
                             {
+                                // Create a list of answer choices
+                                var choices = new List<(string Value, string Text)>
+                                                        {
+                                    ("A", item.CauHoi.DapAnA),
+                                    ("B", item.CauHoi.DapAnB),
+                                    ("C", item.CauHoi.DapAnC),
+                                    ("D", item.CauHoi.DapAnD)
+                                };
+
+                                // Shuffle the choices
+                                choices = ShuffleList(choices);
+
                                 <div class="item-container border p-3 mb-3">
                                     <div class="field mb-2">
                                         @item.MaCauHoi : @Html.Raw(HttpUtility.HtmlDecode(item.CauHoi.NoiDung))
                                     </div>
 
-                                    <!-- Answer choices with radio buttons -->
-                                    <label class="form-check-label bg-info w-100 my-1 border-danger border-2" for="dapAnA_@item.MaCauHoi">
-                                        <span class="form-check mb-2">
-                                            <input class="form-check-input"
-                                                   type="radio" name="answer_@item.MaCauHoi" id="dapAnA_@item.MaCauHoi" value="A"
-                                                   @(item.DapAnChon == "A" ? "checked" : "")>
-                                            @Html.DisplayFor(modelItem => item.CauHoi.DapAnA)
-                                        </span>
-                                    </label>
-                                    <label class="form-check-label bg-info w-100 my-1" for="dapAnB_@item.MaCauHoi">
-                                        <span class="form-check mb-2">
-                                            <input class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAnB_@item.MaCauHoi" value="B"
-                                                   @(item.DapAnChon == "B" ? "checked" : "")>
-                                            @Html.DisplayFor(modelItem => item.CauHoi.DapAnB)
-                                        </span>
-                                    </label>
-                                    <label class="form-check-label bg-info w-100 my-1" for="dapAnC_@item.MaCauHoi">
-                                        <span class="form-check mb-2">
-                                            <input class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAnC_@item.MaCauHoi" value="C"
-                                                   @(item.DapAnChon == "C" ? "checked" : "")>
-                                            @Html.DisplayFor(modelItem => item.CauHoi.DapAnC)
-                                        </span>
-                                    </label>
-                                    <label class="form-check-label bg-info w-100 my-1" for="dapAnD_@item.MaCauHoi">
-                                        <span class="form-check mb-2">
-                                            <input class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAnD_@item.MaCauHoi" value="D"
-                                                   @(item.DapAnChon == "D" ? "checked" : "")>
-                                            @Html.DisplayFor(modelItem => item.CauHoi.DapAnD)
-                                        </span>
-                                    </label>
+                                    <!-- Render shuffled answer choices with radio buttons -->
+                                    @foreach (var choice in choices)
+                                    {
+                                        <label class="form-check-label bg-info w-100 my-1 border-danger border-2" for=@($"dapAn{choice.Value}_{item.MaCauHoi}")>
+                                            <span class="form-check mb-2">
+                                                <input class="form-check-input"
+                                                       type="radio" name="answer_@item.MaCauHoi" id=@($"dapAn{choice.Value}_{item.MaCauHoi}") value="@choice.Value"
+                                                       @(item.DapAnChon == choice.Value ? "checked" : "") onchange="updateButtonColor('@item.MaCauHoi')">
+                                                @choice.Text
+                                            </span>
+                                        </label>
+                                    }
 
                                     <div class="field">
                                         <strong>DapAnChinhXac:</strong> @Html.DisplayFor(modelItem => item.CauHoi.DapAnChinhXac)
@@ -94,7 +108,7 @@
                             <div class="bg-light ">Phần thi @group.Key.MaNhom</div>
                             @foreach (var item in group)
                             {
-                                <button class="m-1">@item.MaCauHoi</button>
+                                <button class="m-1" id="button-@item.MaCauHoi" onclick="showQuestion('@item.MaCauHoi')">@item.MaCauHoi</button>
                             }
                         </div>
                     }
@@ -105,8 +119,12 @@
 </div>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        initializeButtonColors();
+        startTimer();
+    });
+
     function showGroup(maNhom) {
-        console.log(maNhom);
         var groupContainers = document.querySelectorAll('.group-container');
         groupContainers.forEach(function (container) {
             container.style.display = 'none';
@@ -118,7 +136,41 @@
         }
     }
 
-    let endTime = new Date('@endTime').getTime();
+    function showQuestion(maCauHoi) {
+        var questionElement = document.querySelector(`input[name="answer_${maCauHoi}"]`);
+        if (questionElement) {
+            var groupContainer = questionElement.closest('.group-container');
+            if (groupContainer) {
+                var groupContainers = document.querySelectorAll('.group-container');
+                groupContainers.forEach(function (container) {
+                    container.style.display = 'none';
+                });
+                groupContainer.style.display = 'block';
+            }
+            questionElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            questionElement.focus();
+        }
+    }
+
+    function updateButtonColor(maCauHoi) {
+        var buttons = document.querySelectorAll('.group-container-right button');
+        buttons.forEach(function (button) {
+            if (button.textContent.trim() == maCauHoi) {
+                button.classList.add('selected-button');
+            }
+        });
+    }
+
+    function initializeButtonColors() {
+        var radioButtons = document.querySelectorAll('.form-check-input');
+        radioButtons.forEach(function (radioButton) {
+            if (radioButton.checked) {
+                updateButtonColor(radioButton.name.split('_')[1]);
+            }
+        });
+    }
+
+    let endTime = new Date(document.getElementById('endTime').value).getTime();
     var interval;
     function startTimer() {
         const timerDiv = document.getElementById('timer');
@@ -126,7 +178,7 @@
         interval = setInterval(() => {
             let now = new Date().getTime();
             let distance = endTime - now;
-            console.log(distance);
+
             if (distance <= 0) {
                 clearInterval(interval);
                 timerDiv.textContent = "00:00";
@@ -148,24 +200,41 @@
         if (t == true || endTime - new Date().getTime() <= 0) {
             clearInterval(interval);
             document.getElementById('nopbai').disabled = true;
+            document.getElementById("examForm").submit();
         }
     }
-    function updateButtonColor(maCauHoi) {
-        var buttons = document.querySelectorAll('.group-container-right button');
-        buttons.forEach(function (button) {
-            if (button.textContent.trim() == maCauHoi) {
-                button.classList.add('selected-button');
-            } else {
-                button.classList.remove('selected-button');
-            }
-        });
-    }
-    @if (!string.IsNullOrEmpty(ViewBag.Message))
+
+    window.addEventListener('beforeunload', function (e) {
+        document.getElementById('flag').value = '1';
+        var currentUrl = window.location.href;
+        document.getElementById('url').value = currentUrl;
+
+        var formData = new FormData(document.getElementById('examForm'));
+        navigator.sendBeacon('/Contests/Result?MaDe=' + document.getElementById('maDe').value, formData);
+
+        e.returnValue = '';
+    });
+
+    window.addEventListener('unload', function (e) {
+        document.getElementById('flag').value = '1';
+        var currentUrl = window.location.href;
+        document.getElementById('url').value = currentUrl;
+
+        var formData = new FormData(document.getElementById('examForm'));
+        navigator.sendBeacon('/Contests/Result?MaDe=' + document.getElementById('maDe').value, formData);
+
+        e.returnValue = '';
+    });
+
+    document.getElementById('examForm').addEventListener('submit', function () {
+        document.getElementById('flag').value = '0';
+    });
+
+</script>
+@if (!string.IsNullOrEmpty(ViewBag.Message))
 {
-    <text>
-    alert('@ViewBag.Message');
-    </text>
+    <script>
+        alert('@ViewBag.Message');
+    </script>
     ViewBag.Message = null;
 }
-    startTimer();
-</script>

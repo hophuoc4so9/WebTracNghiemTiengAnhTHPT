@@ -1,157 +1,192 @@
 ﻿using DocumentFormat.OpenXml.Drawing.Charts;
 using System;
 using System.Collections.Generic;
-using System.EnterpriseServices.Internal;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebTracNghiemTiengAnhTHPT.Models;
+
 namespace WebTracNghiemTiengAnhTHPT.Controllers
 {
     public class ContestsController : Controller
     {
+        private readonly TracNghiemTiengAnhTHPTEntities1 _db;
+
+        // Parameterless constructor
+        public ContestsController() : this(new TracNghiemTiengAnhTHPTEntities1())
+        {
+        }
+
+        public ContestsController(TracNghiemTiengAnhTHPTEntities1 db)
+        {
+            _db = db;
+        }
+
         // GET: Contests
         public ActionResult Index()
         {
-            TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
-            List<ViewChitietKyThi_2> model = db.ViewChitietKyThi_2.ToList();
+            var model = _db.ViewChitietKyThi_2.AsNoTracking().ToList();
             return View(model);
-            
         }
-       
+
         public ActionResult ChiTietKyThi(int made)
         {
-           
             if (Session["UserName"] == null)
             {
-
                 return RedirectToAction("Login", "Login", new { area = "admin" });
             }
-            else
+
+            string username = Session["UserName"].ToString();
+            var ketQua = _db.KetQuas
+            .AsNoTracking()
+            .FirstOrDefault(k => k.Username == username && k.status == false && k.thoigian_ketthuc > DateTime.Now);
+
+            if (ketQua != null)
             {
-                
-                TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
-                string username = Session["UserName"].ToString();
-                KetQua ketQua=db.KetQuas.FirstOrDefault(k =>  k.Username == username
-                    && k.status==false && k.thoigian_ketthuc>DateTime.Now);
-                if (ketQua != null)
+                if (ketQua.MaDe != made)
                 {
-               if(ketQua.MaDe!=made)     ViewBag.Message = "Bạn đang ở trong một kỳ thi khác nên không thể tham gia.";
-                    ViewBag.endTime = ketQua.thoigian_ketthuc;
-                    return RedirectToAction("BaiLam", new { id = ketQua.Maketqua });
+                    ViewBag.Message = "Bạn đang ở trong một kỳ thi khác nên không thể tham gia.";
                 }
-                 
-                KyThi kt = db.KyThis.SingleOrDefault(k => k.MaDe == made);
-                if(!(kt.SoCauHoi.HasValue && kt.SoCauHoi > 0))
-                {
-                    kt.SoCauHoi = kt.CauHois.Count();
-                }
-                ketQua = new KetQua();
-                ketQua.Username = username;
-                ketQua.MaDe = made;
-               
-                ketQua.status = false;
-                db.KetQuas.Add(ketQua);
-                // Shuffle the list of questions
-                Random rng = new Random();
-                List<CauHoi> shuffledQuestions = kt.CauHois.OrderBy(q => rng.Next()).ToList();
-
-                // Take the first kt.SoCauHoi questions
-                List<CauHoi> selectedQuestions = shuffledQuestions.Take(kt.SoCauHoi ?? 0).ToList();
-                db.SaveChanges();
-
-                // Create ChiTietKetQua entries with the answer set to "N"
-                foreach (var question in selectedQuestions)
-                {
-                    ChiTietKetQua chiTietKetQua = new ChiTietKetQua
-                    {
-                        MaCauHoi = question.MaCauHoi,
-                        DapAnChon = "N",
-                        Username = Session["UserName"]?.ToString(),
-                        MaDe = made,
-                        Maketqua = ketQua.Maketqua
-                    };
-                    ketQua.ChiTietKetQuas.Add(chiTietKetQua);
-                }
-
-                ketQua.thoigian_batdau=DateTime.Now;
-                ketQua.thoigian_ketthuc=DateTime.Now.AddMinutes(kt.ThoiGian );
-                db.SaveChanges();
-          
+                ViewBag.endTime = ketQua.thoigian_ketthuc;
                 return RedirectToAction("BaiLam", new { id = ketQua.Maketqua });
-            }    
-           
+            }
 
+            var kt = _db.KyThis.SingleOrDefault(k => k.MaDe == made);
+            if (kt == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (!kt.SoCauHoi.HasValue || kt.SoCauHoi <= 0)
+            {
+                kt.SoCauHoi = kt.CauHois.Count();
+            }
+
+            ketQua = new KetQua
+            {
+                Username = username,
+                MaDe = made,
+                status = false,
+                thoigian_batdau = DateTime.Now,
+                thoigian_ketthuc = DateTime.Now.AddMinutes(kt.ThoiGian)
+            };
+
+            _db.KetQuas.Add(ketQua);
+            _db.SaveChanges();
+
+            var shuffledQuestions = kt.CauHois.OrderBy(q => Guid.NewGuid()).Take(kt.SoCauHoi ?? 0).ToList();
+
+            foreach (var question in shuffledQuestions)
+            {
+                var chiTietKetQua = new ChiTietKetQua
+                {
+                    MaCauHoi = question.MaCauHoi,
+                    DapAnChon = "N",
+                    Username = username,
+                    MaDe = made,
+                    Maketqua = ketQua.Maketqua
+                };
+                ketQua.ChiTietKetQuas.Add(chiTietKetQua);
+            }
+
+            _db.SaveChanges();
+
+            return RedirectToAction("BaiLam", new { id = ketQua.Maketqua });
         }
+
         public ActionResult BaiLam(int id)
         {
-            TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
-            KetQua kq = db.KetQuas.SingleOrDefault(k => k.Maketqua == id);
+            var kq = _db.KetQuas.AsNoTracking().SingleOrDefault(k => k.Maketqua == id);
+            if (kq == null)
+            {
+                return HttpNotFound();
+            }
+
             ViewBag.MaDe = kq.Maketqua;
             ViewBag.endTime = kq.thoigian_ketthuc;
             return View(kq);
         }
+
         [HttpPost]
         public ActionResult Result(FormCollection form, int made)
         {
-            TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
-            KetQua ketqua = db.KetQuas.Where(n=>n.Maketqua== made).FirstOrDefault();   
-            ketqua.status = true;
-         
-            int total=ketqua.ChiTietKetQuas.Count;
+            var ketqua = _db.KetQuas.SingleOrDefault(n => n.Maketqua == made);
+            if (ketqua == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (int.Parse(form["flag"]) == 0 || ketqua.thoigian_ketthuc <= DateTime.Now)
+            {
+                ketqua.status = true;
+            }
+
+            int total = ketqua.ChiTietKetQuas.Count;
             double correct = 0;
+
             foreach (var item in ketqua.ChiTietKetQuas)
             {
                 string questionKey = "answer_" + item.MaCauHoi;
                 string selectedValue = form[questionKey];
                 item.DapAnChon = !string.IsNullOrEmpty(selectedValue) ? selectedValue : "N";
-                if(item.CauHoi.DapAnChinhXac.ToLower().Contains(item.DapAnChon.ToLower()))
+                if (item.CauHoi.DapAnChinhXac.ToLower().Contains(item.DapAnChon.ToLower()))
                 {
                     correct++;
                 }
-              
             }
-            ketqua.Diem = correct * 10 / total;
-            db.SaveChanges();
 
-            return RedirectToAction("Result", new { maketqua = ketqua.Maketqua });  
+            ketqua.Diem = correct * 10 / total;
+            if (int.Parse(form["flag"]) == 0 || ketqua.thoigian_ketthuc <= DateTime.Now)
+            {
+                ketqua.status = true;
+            }
+
+            _db.SaveChanges();
+
+            if (ketqua.status == false && int.Parse(form["flag"]) == 0 && !string.IsNullOrEmpty(form["url"]))
+            {
+                return Redirect(form["url"]);
+            }
+
+            return RedirectToAction("Result", new { maketqua = ketqua.Maketqua });
         }
 
         [HttpGet]
         public ActionResult Result(int maketqua)
         {
-            TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
-            KetQua kq= db.KetQuas.SingleOrDefault(k => k.Maketqua == maketqua);
+            var kq = _db.KetQuas.AsNoTracking().SingleOrDefault(k => k.Maketqua == maketqua);
+            if (kq == null)
+            {
+                return HttpNotFound();
+            }
 
             return View(kq);
         }
+
         [HttpGet]
         public ActionResult ChiTiet(int made)
         {
-            TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
+            var ky = _db.KyThis.AsNoTracking().SingleOrDefault(k => k.MaDe == made);
+            if (ky == null)
+            {
+                return HttpNotFound();
+            }
 
-            KyThi ky =  db.KyThis.SingleOrDefault(k => k.MaDe == made);
             ViewBag.MaDe = made;
-
             return View(ky);
         }
-        public ActionResult PartialDanhGiaKyThi(int  made)
+
+        public ActionResult PartialDanhGiaKyThi(int made)
         {
-            TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
-            List<DanhGia> model = db.DanhGias.Where(c => c.MaDe == made).ToList();
+            var model = _db.DanhGias.AsNoTracking().Where(c => c.MaDe == made).ToList();
             return View(model);
         }
+
         public ActionResult PartialLichSuLamBai(int made)
         {
-         
-                string username = Session["UserName"] == null ? "": Session["UserName"].ToString() ;
-            TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
-            List<KetQua> model = db.KetQuas.Where(c => c.MaDe == made && c.Username == username && c.status==true).ToList();
+            string username = Session["UserName"]?.ToString() ?? string.Empty;
+            var model = _db.KetQuas.AsNoTracking().Where(c => c.MaDe == made && c.Username == username && c.status == true).ToList();
             return View(model);
         }
-
-
-
-
     }
 }
