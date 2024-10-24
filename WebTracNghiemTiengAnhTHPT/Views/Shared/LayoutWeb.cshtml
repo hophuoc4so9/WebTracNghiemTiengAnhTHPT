@@ -42,7 +42,7 @@
                 {
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="/User/Profile" style="color: #007bff; font-weight: bold;">
+                            <a class="nav-link" href="/hocsinh/ThongTinCaNhan/Index" style="color: #007bff; font-weight: bold;">
                                 <span class="fas fa-user"></span> @Session["UserName"]
                             </a>
                         </li>
@@ -81,31 +81,6 @@
     </div>
 
     @Html.Partial("_PartialFooter")
-
-            
-                    <li>@Html.ActionLink("Về Chúng Tôi", "About", "Home")</li>
-                    <li>@Html.ActionLink("Liên hệ", "Contact", "Home")</li>
-                </ul>
-            </section>
-            <section class="col-md-4" aria-labelledby="librariesTitle">
-                <h2>Tài Nguyên</h2>
-                <ul>
-                    <li>@Html.ActionLink("Ôn tập", "Index", "Contests")</li>
-                    <li>@Html.ActionLink("Tham Gia Kỳ Thi", "Index", "Contests")</li>
-
-                </ul>
-            </section>
-            <section class="col-md-4" aria-labelledby="librariesTitle">
-                <h2>Thông Tin Liên Hệ</h2>
-                <ul class="icon">
-                    <li><i class="fa fa-phone" aria-hidden="true">Số Điện Thoại:</i></li>
-                    <li><i class="fa fa-address-card" aria-hidden="true">Địa Chỉ:</i></li>
-                    <li><i class="fa fa-address-book" aria-hidden="true">Email:</i></li>
-                </ul>
-            </section>
-        </div>
-    </footer>
-
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

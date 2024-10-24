@@ -43,19 +43,18 @@
         {
             <tr>
                 <td>@item.MaCauHoi</td>
-                <td>@item.NoiDung</td>
+                <td class="noidung">@item.NoiDung</td> 
                 <td>@item.MaNhom</td>
                 <td>@item.MucDo</td>
                 <td>@item.DapAnChinhXac</td>
                 <td>
-                    @Html.ActionLink("Sửa", "Edit", new { maCauHoi = item.MaCauHoi }, new { @class = "btn btn-warning" }) 
+                    @Html.ActionLink("Sửa", "Edit", new { maCauHoi = item.MaCauHoi }, new { @class = "btn btn-warning" })
                     <form action="@Url.Action("Delete", "QuanLyCauHoi")" method="post" style="display:inline;">
                         <input type="hidden" name="maCauHoi" value="@item.MaCauHoi" />
                         <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa câu hỏi này không?');">Xóa</button>
-                    </form> 
+                    </form>
                     @Html.ActionLink("Chi tiết", "Details", new { maCauHoi = item.MaCauHoi }, new { @class = "btn btn-success" })
                 </td>
-
             </tr>
         }
     </tbody>
@@ -275,5 +274,21 @@
         width: 498px;
         margin-left: 0px;
     }
+    /* Định dạng chung cho cột nội dung */
+    td {
+        max-width: 150px; /* Điều chỉnh độ rộng phù hợp với yêu cầu của bạn */
+        white-space: nowrap; /* Không cho phép xuống dòng */
+        overflow: hidden; /* Ẩn nội dung bị tràn */
+        text-overflow: ellipsis; /* Hiển thị dấu ba chấm nếu nội dung bị tràn */
+    }
+
+        /* Nếu bạn chỉ muốn áp dụng cho cột cụ thể, ví dụ cột nội dung */
+        td.noidung {
+            max-width: 250px; /* Đặt độ rộng tùy ý cho cột nội dung */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
 </style>
 

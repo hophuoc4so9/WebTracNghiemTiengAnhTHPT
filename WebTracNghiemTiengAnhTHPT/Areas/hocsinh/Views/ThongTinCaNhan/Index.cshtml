@@ -1,44 +1,41 @@
-﻿@{
+﻿@model WebTracNghiemTiengAnhTHPT.Models.TaiKhoan
+@{
     ViewBag.Title = "Thông tin cá nhân";
     Layout = "~/Views/Shared/LayoutWeb.cshtml";
 }
 <div class="personal-info-page">
     <h2>Thông tin cá nhân</h2>
-
-    <div class="form-container">
-        <div class="form-group">
-            <label>Họ và tên</label>
-            <input type="text" class="form-control" placeholder="Họ và tên" readonly />
+    @if (Model != null) // Kiểm tra nếu Model không null
+    {
+        <div>
+            <p><strong>Họ tên:</strong> @Model.HoTen</p>
+            <p><strong>Email:</strong> @Model.Gmail</p>
+            <p><strong>Số điện thoại:</strong> @Model.SoDienThoai</p>
+            <p>
+                <strong>Ngày sinh:</strong>
+                @(Model.NgaySinh.HasValue ? Model.NgaySinh.Value.ToString("dd/MM/yyyy") : "Chưa xác định")
+            </p>            
+            <p><strong>Địa chỉ:</strong> @Model.DiaChi</p>
         </div>
+    }
+    else
+    {
+        <p>Không tìm thấy thông tin cá nhân.</p>
+    }
 
-        <div class="form-group">
-            <label>Email</label>
-            <input type="email" class="form-control" placeholder="Email" readonly />
-        </div>
-
-        <div class="form-group">
-            <label>Số điện thoại</label>
-            <input type="tel" class="form-control" placeholder="Số điện thoại" readonly />
-        </div>
-
-        <div class="form-group">
-            <label>Địa chỉ</label>
-            <input type="text" class="form-control" placeholder="Địa chỉ" readonly />
-        </div>
-
-        <a href="@Url.Action("Edit", "User")" class="btn btn-primary">Chỉnh sửa thông tin</a>
-    </div>
+    <a href="@Url.Action("Edit", "User")" class="btn btn-primary">Chỉnh sửa thông tin</a>
 </div>
+
 <style>
     .form-container {
-        background-color: #f9f9f9; 
-        padding: 20px; 
-        border-radius: 8px; 
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         width: 30%;
     }
 
     .form-group {
-        margin-bottom: 20px; 
+        margin-bottom: 20px;
     }
 </style>
