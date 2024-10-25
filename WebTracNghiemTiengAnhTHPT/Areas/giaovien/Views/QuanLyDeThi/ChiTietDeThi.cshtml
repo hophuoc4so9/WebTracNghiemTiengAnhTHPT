@@ -8,12 +8,60 @@
     int totalQuestions = Model.Count();
 }
 <script src="~/Scripts/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+
 <script>
     tinymce.init({
-        selector: '.mytextarea',
-        license_key: 'gpl|<your-license-key>'
+        selector: 'textarea',
+        plugins: 'media code',
+        toolbar: 'undo redo | link media | code',
+        /* enable title field in the Media dialog*/
+        media_title: true,
+        /* enable automatic uploads of media represented by blob or data URIs*/
+        automatic_uploads: true,
+        /*
+          URL of our upload handler (for more details check: https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_url)
+          media_upload_url: 'postAcceptor.php',
+          here we add custom filepicker only to Media dialog
+        */
+        file_picker_types: 'media',
+        /* and here's our custom media picker*/
+        file_picker_callback: (cb, value, meta) => {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'audio/*');
+
+            input.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+
+                const reader = new FileReader();
+                reader.addEventListener('load', () => {
+                    /*
+                      Note: Now we need to register the blob in TinyMCE's media blob
+                      registry. In the next release this part hopefully won't be
+                      necessary, as we are looking to handle it internally.
+                    */
+                    const id = 'blobid' + (new Date()).getTime();
+                    const blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                    const base64 = reader.result.split(',')[1];
+                    const blobInfo = blobCache.create(id, file, base64);
+                    blobCache.add(blobInfo);
+
+                    /* call the callback and populate the Title field with the file name */
+                    cb(blobInfo.blobUri(), { title: file.name });
+                });
+                reader.readAsDataURL(file);
+            });
+
+            input.click();
+        },
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
     });
 </script>
+
+
+
+
+
 <div>
     <h3>
         Danh sách câu hỏi khác
@@ -65,24 +113,25 @@
         <h2>Tên đề thi: @kyThi.TenKyThi </h2>
         <h3>Tổng số câu hỏi: @totalQuestions </h3>
         <h3>
-            Số câu hỏi kiểm tra: 
+            Số câu hỏi kiểm tra:
             <input type="number" min="1" max="@totalQuestions" name="KyThi[@ViewBag.made].SoCauHoi"
                    class="form-control edit-input"
-            value="@(kyThi.SoCauHoi.HasValue && kyThi.SoCauHoi.Value > 0 ? kyThi.SoCauHoi.Value : totalQuestions)" />        </h3>
+                   value="@(kyThi.SoCauHoi.HasValue && kyThi.SoCauHoi.Value > 0 ? kyThi.SoCauHoi.Value : totalQuestions)" />
+        </h3>
         <h3>
             Thời gian làm bài:
             <input type="number" min="10" name="KyThi[@ViewBag.made].ThoiGian" class="form-control edit-input" value="@kyThi.ThoiGian" />
         </h3>
         foreach (var group in groupedItems)
         {
-            @Html.TextArea("NoiDung_" + group.Key.MaNhom, HttpUtility.HtmlDecode(group.Key.NoiDung), new { @class = "form-control mytextarea", style = "width: 100%;" })
+            @Html.TextArea("NoiDung_Nhom" + group.Key.MaNhom, HttpUtility.HtmlDecode(group.Key.NoiDung), new { @class = "form-control mytextarea", style = "width: 100%;" })
 
             foreach (var item in group)
             {
                 <div class="item-container border p-3 mb-3">
                     <div class="field mb-2">
                         @item.MaCauHoi :
-                        @Html.TextArea("NoiDung_" + item.MaCauHoi, HttpUtility.HtmlDecode(item.NoiDung), new { @class = "form-control mytextarea", style = "width: 100%;" })
+                        @Html.TextArea("NoiDung_CauHoi" + item.MaCauHoi, HttpUtility.HtmlDecode(item.NoiDung), new { @class = "form-control mytextarea", style = "width: 100%;" })
                         <button type="submit" name="action" value="delete_@item.MaCauHoi" class="btn btn-danger">Xóa câu hỏi khỏi đề thi</button>
                     </div>
 

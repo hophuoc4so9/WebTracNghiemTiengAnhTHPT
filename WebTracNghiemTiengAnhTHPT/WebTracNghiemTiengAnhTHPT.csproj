@@ -618,6 +618,7 @@
     <Folder Include="Areas\giaovien\Data\" />
     <Folder Include="Areas\hocsinh\Data\" />
     <Folder Include="Data\" />
+    <Folder Include="UploadedAudios\" />
     <Folder Include="Uploads\" />
   </ItemGroup>
   <ItemGroup>

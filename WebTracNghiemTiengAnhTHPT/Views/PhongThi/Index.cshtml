@@ -23,17 +23,19 @@
         <!-- Data rows -->
         @foreach (var phongThi in myPhongThis)
         {
-            <div class="row phongThi-row">
-                <div class="col-md-4">
-                    @phongThi.TenPhong
+            <a href="~/Contests/Index?PhongThiId=@phongThi.MaPhong">
+                <div class="row phongThi-row">
+                    <div class="col-md-4">
+                        @phongThi.TenPhong
+                    </div>
+                    <div class="col-md-4">
+                        @phongThi.MatKhau
+                    </div>
+                    <div class="col-md-4">
+                        @phongThi.LopHoc.TenLop
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    @phongThi.MatKhau
-                </div>
-                <div class="col-md-4">
-                    @phongThi.LopHoc.TenLop
-                </div>
-            </div>
+            </a>
         }
     </div>
 }

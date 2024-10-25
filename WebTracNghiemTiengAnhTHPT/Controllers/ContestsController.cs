@@ -23,8 +23,32 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
         }
 
         // GET: Contests
-        public ActionResult Index()
+        public ActionResult Index(int? PhongThiId)
         {
+            
+            if(PhongThiId!=null)
+            {
+                PhongThi phong = _db.PhongThis.FirstOrDefault(n => n.MaPhong == PhongThiId);
+                List<ViewChitietKyThi_2> list =new List<ViewChitietKyThi_2>();
+                foreach(KyThi item in phong.KyThis)
+                {
+                    ViewChitietKyThi_2 tam = new ViewChitietKyThi_2();
+                    tam.MaDe = item.MaDe;
+                    tam.TenKyThi = item.TenKyThi;
+                    tam.ThoiGian = item.ThoiGian;  
+                    tam.ThoiGianBatDau=item.ThoiGianBatDau;
+                    tam.ThoiGianKetThuc = item.ThoiGianKetThuc;
+                    tam.SoCauHoi = item.SoCauHoi;
+                    tam.Soluot = item.KetQuas.Count(); 
+                     if(item.KetQuas.Count()>0)     tam.DiemTrungBinh = (int)item.KetQuas.Average(k => k.Diem);
+                    else tam.DiemTrungBinh = 0;
+                    list.Add(tam);
+
+                }    
+                return View(list);
+            }    
+          
+            
             var model = _db.ViewChitietKyThi_2.AsNoTracking().ToList();
             return View(model);
         }

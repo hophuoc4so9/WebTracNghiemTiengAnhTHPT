@@ -315,3 +315,15 @@ thoigian_batdau DATETIME,
 thoigian_ketthuc DATETIME;
 ALTER TABLE kythi
 ADD SoCauHoi int
+CREATE TRIGGER trg_InsertKyThi
+ON KyThiCauHoi
+AFTER INSERT
+AS
+BEGIN
+    -- Ki?m tra n?u socauhoi trong b?ng KyThi <= 0 ho?c NULL
+    UPDATE KyThi
+    SET socauhoi = (SELECT COUNT(*) FROM KyThiCauHoi WHERE MaDe = inserted.MaDe)
+    FROM inserted
+    WHERE KyThi.MaDe = inserted.MaDe
+      AND (KyThi.socauhoi <= 0 OR KyThi.socauhoi IS NULL);
+END

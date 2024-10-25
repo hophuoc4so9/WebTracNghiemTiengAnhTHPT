@@ -353,6 +353,36 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                 db.SaveChanges();
             }
         }
+        [HttpPost]
+        public JsonResult UploadAudio(HttpPostedFileBase audioFile)
+        {
+            if (audioFile != null && audioFile.ContentLength > 0)
+            {
+                // Specify the path where you want to save the file
+                string folderPath = Server.MapPath("~/UploadedAudios/");
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);  // Create directory if it doesn't exist
+                }
+
+                // Generate a unique file name to avoid overwriting
+                string fileName = Path.GetFileName(audioFile.FileName);
+                string filePath = Path.Combine(folderPath, fileName);
+                audioFile.SaveAs(filePath);  // Save the file to the server
+
+                // Return the file path and type in the JSON response
+                return Json(new
+                {
+                    success = true,
+                    filePath = Url.Content("~/UploadedAudios/" + fileName),  // Return the URL for the audio file
+                    fileType = audioFile.ContentType  // Return the MIME type of the audio file
+                });
+            }
+
+            return Json(new { success = false, message = "No file uploaded or file is empty." });
+        }
+
+
 
 
         [HttpPost]
@@ -372,7 +402,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
 
                     foreach (var item in a)
                     {
-                        string q = "NoiDung_" + item.MaNhom;
+                        string q = "NoiDung_Nhom" + item.MaNhom;
 
                         if (!string.IsNullOrEmpty(f[q]))
                         {
@@ -386,7 +416,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                                 item1.DapAnChinhXac = f[questionKey];
                             }
 
-                            questionKey = "NoiDung_" + item1.MaCauHoi;
+                            questionKey = "NoiDung_CauHoi" + item1.MaCauHoi;
                             if (!string.IsNullOrEmpty(f[questionKey]))
                             {
                                 // Encode the HTML content before saving

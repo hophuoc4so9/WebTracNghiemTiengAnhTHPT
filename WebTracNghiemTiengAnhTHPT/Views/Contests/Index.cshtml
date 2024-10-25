@@ -2,39 +2,47 @@
 @{
     ViewBag.Title = "Cuộc thi";
     Layout = "~/Views/Shared/LayoutWeb.cshtml";
+    string rq = Request["PhongThiId"]?.ToString()?? "";
 }
 
 <h2>Danh sách kỳ thi</h2>
-
-<div class="container">
-    <div class="row">
-        @foreach (var item in Model)
-        {
-            if (item.CongKhai == true)
+@if (Model != null && Model.Count() > 0)
+{
+    <div class="container">
+        <div class="row">
+            @foreach (var item in Model)
             {
-                <div class="col-6 col-md-3 ">
-                    <div class="bg-light border border-primary rounded-3 p-4 m-3 w-auto">
-                        <h2>  @Html.DisplayFor(modelItem => item.TenKyThi)</h2>
-                        <div>
-                            <p> @item.Soluot  Số lượt <img src="~/Content/img/mdi--account-check-outline.svg" /> </p>
-                            <p>  @item.ThoiGian phút <img src="~/Content/img/mingcute--time-line.svg" /> </p>
-                            <p>   @item.DiemTrungBinh Đánh giá <img src="~/Content/img/material-symbols--star-rate.svg" /> </p>
-                            <p>  @item.SoCauHoi  câu hỏi <img src="~/Content/img/ph--question.svg" /></p>
+                if (item.CongKhai == true || string.IsNullOrEmpty(rq)!=true)
+                {
+                    <div class="col-6 col-md-3 ">
+                        <div class="bg-light border border-primary rounded-3 p-4 m-3 w-auto">
+                            <h2>  @Html.DisplayFor(modelItem => item.TenKyThi)</h2>
+                            <div>
+                                <p> @item.Soluot  Số lượt <img src="~/Content/img/mdi--account-check-outline.svg" /> </p>
+                                <p>  @item.ThoiGian phút <img src="~/Content/img/mingcute--time-line.svg" /> </p>
+                                <p>   @item.DiemTrungBinh Đánh giá <img src="~/Content/img/material-symbols--star-rate.svg" /> </p>
+                                <p>  @item.SoCauHoi  câu hỏi <img src="~/Content/img/ph--question.svg" /></p>
+                            </div>
+
+                            <center>
+
+                                @Html.ActionLink("Tham gia", "ChiTiet", "Contests", new { made = item.MaDe }, new { @class = "btn btn-outline-success " })
+                            </center>
                         </div>
 
-                        <center>
 
-                            @Html.ActionLink("Tham gia", "ChiTiet", "Contests", new { made = item.MaDe }, new { @class = "btn btn-outline-success " })
-                        </center>
                     </div>
+                }
 
-
-                </div>
             }
-
-        }
+        </div>
     </div>
-</div>
+}
+else 
+    {
+    <p>Không có kỳ thi nào</p>
+}
+
 <style>
     .row.d-flex {
         display: flex;
@@ -57,18 +65,18 @@
         flex-grow: 1;
     }
 
-    .contest-card h2 {
-        font-size: 1.25rem;
-    }
+        .contest-card h2 {
+            font-size: 1.25rem;
+        }
 
-    .contest-card p {
-        margin-bottom: 0.5rem;
-    }
+        .contest-card p {
+            margin-bottom: 0.5rem;
+        }
 
-    .contest-card img {
-        width: 20px;
-        height: 20px;
-    }
+        .contest-card img {
+            width: 20px;
+            height: 20px;
+        }
 
     .btn-outline-success {
         margin-top: auto;
