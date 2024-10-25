@@ -13,6 +13,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
         // GET: admin/Home
         public ActionResult Index()
         {
+
             return View();
         }
         public ActionResult QL_LOPHOC()
@@ -142,9 +143,59 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
                 return PartialView("~/Areas/giaovien/Views/Shared/_PartialChucNangGiaoVien.cshtml");
             }    
         }
+        // GET: Admin/TaiKhoan/AddNew
         public ActionResult AddNew()
         {
-            return View(); 
+            using (var db = new TracNghiemTiengAnhTHPTEntities1())
+            {
+                // Fetch distinct roles for the dropdown
+                var roles = db.TaiKhoans
+                              .Select(r => r.PhanQuyen)
+                              .Distinct()
+                              .Select(r => new SelectListItem
+                              {
+                                  Value = r,
+                                  Text = r
+                              })
+                              .ToList();
+                ViewBag.Roles = roles;
+            }
+            return View();
         }
+
+        // POST: Admin/TaiKhoan/AddNew
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddNew(TaiKhoan model)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var db = new TracNghiemTiengAnhTHPTEntities1())
+                {
+                    model.isDeleted = false; 
+                    db.TaiKhoans.Add(model);
+                    db.SaveChanges();
+                    TempData["SuccessMessage"] = "Thêm mới 1 tài khoản thành công!";
+                }
+
+                return RedirectToAction("Index");
+            }
+            using (var db = new TracNghiemTiengAnhTHPTEntities1())
+            {
+                var roles = db.TaiKhoans
+                              .Select(r => r.PhanQuyen)
+                              .Distinct()
+                              .Select(r => new SelectListItem
+                              {
+                                  Value = r,
+                                  Text = r
+                              })
+                              .ToList();
+                ViewBag.Roles = roles;
+            }
+
+            return View(model);
+        }
+
     }
 }
