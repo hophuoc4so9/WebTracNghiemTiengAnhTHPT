@@ -378,12 +378,12 @@
     <Content Include="Areas\giaovien\Views\QuanLyPhongThi\Create.cshtml" />
     <Content Include="Areas\giaovien\Views\QuanLyPhongThi\Edit.cshtml" />
     <Content Include="Areas\giaovien\Views\QuanLyPhongThi\Details.cshtml" />
-    <Content Include="Areas\admin\Views\Home\AddNew.cshtml" />
     <Content Include="Areas\giaovien\Views\QuanLyLopHoc\Create.cshtml" />
     <Content Include="Areas\giaovien\Views\QuanLyLopHoc\Index.cshtml" />
     <Content Include="Areas\giaovien\Views\QuanLyLopHoc\Details.cshtml" />
     <Content Include="Areas\giaovien\Views\QuanLyLopHoc\Edit.cshtml" />
     <Content Include="Areas\giaovien\Views\QuanLyDeThi\AutoGenerateExam.cshtml" />
+    <Content Include="Areas\admin\Views\Home\AddNew.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
