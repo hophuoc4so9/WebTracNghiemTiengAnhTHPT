@@ -2,9 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.Json.Nodes;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using WebTracNghiemTiengAnhTHPT.Models;
+using WebTracNghiemTiengAnhTHPT.Services;
 
 namespace WebTracNghiemTiengAnhTHPT.Controllers
 {
@@ -15,10 +19,14 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
         // Parameterless constructor
         public ContestsController() : this(new TracNghiemTiengAnhTHPTEntities1())
         {
+            DotNetEnv.Env.Load();
+
         }
 
         public ContestsController(TracNghiemTiengAnhTHPTEntities1 db)
         {
+            DotNetEnv.Env.Load();
+
             _db = db;
         }
 
@@ -226,5 +234,80 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             return View("PartialLichSuLamBai", model);
 
         }
+        public async Task<ActionResult> GiveAdvice(int maketqua)
+        {
+            var kq = _db.KetQuas.AsNoTracking().SingleOrDefault(k => k.Maketqua == maketqua);
+            if (kq == null)
+            {
+                return HttpNotFound();
+            }
+            string apiKey = Environment.GetEnvironmentVariable("API_KEY_GROQ");
+
+            var _groqService = new GroqService("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");
+
+            StringBuilder promptBuilder = new StringBuilder();
+            promptBuilder.AppendLine("Đưa ra 1 lời khuyên chung để cái thiện cách học tiếng Anh của những câu trắc nghiệm tiếng anh bị sai sau:");
+
+            bool hasIncorrectAnswers = false;
+
+            foreach (var item in kq.ChiTietKetQuas)
+            {
+                var cauhoi = _db.CauHois.AsNoTracking().SingleOrDefault(c => c.MaCauHoi == item.MaCauHoi);
+                item.CauHoi = cauhoi;
+
+                string cauhois = item.CauHoi.NhomCauHoi.NoiDung + item.CauHoi.NoiDung;
+                string dapana = item.CauHoi.DapAnA;
+                string dapanb = item.CauHoi.DapAnB;
+                string dapanc = item.CauHoi.DapAnC;
+                string dapand = item.CauHoi.DapAnD;
+                string dapanchon = item.DapAnChon;
+                string dapanchinhxac = item.CauHoi.DapAnChinhXac;
+
+                // Only include incorrect answers
+                if (!dapanchinhxac.Equals(dapanchon, StringComparison.OrdinalIgnoreCase))
+                {
+                    hasIncorrectAnswers = true;
+                    promptBuilder.AppendLine($"Question: {cauhois}");
+                    promptBuilder.AppendLine($"A: {dapana}");
+                    promptBuilder.AppendLine($"B: {dapanb}");
+                    promptBuilder.AppendLine($"C: {dapanc}");
+                    promptBuilder.AppendLine($"D: {dapand}");
+                    promptBuilder.AppendLine($"Selected Answer: {dapanchon}");
+                    promptBuilder.AppendLine($"Correct Answer: {dapanchinhxac}");
+                    promptBuilder.AppendLine();
+                }
+            }
+
+            if (!hasIncorrectAnswers)
+            {
+                return Content("Bạn làm tốt lắm!");
+            }
+
+            // Get advice from the API
+            string prompt = promptBuilder.ToString();
+            JsonObject request = new JsonObject
+            {
+                ["model"] = "mixtral-8x7b-32768",
+                ["messages"] = new JsonArray
+        {
+            new JsonObject
+            {
+                ["role"] = "user",
+                ["content"] = prompt,
+            }
+        }
+            };
+
+            var response = await _groqService.CreateChatCompletionAsync(request);
+            string advice = response?["choices"]?[0]?["message"]?["content"]?.ToString();
+
+            return PartialView("GiveAdvice", advice);
+        }
+
+
+
+
+
+
     }
 }

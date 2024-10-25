@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/LayoutWeb.cshtml";
     var groupedItems = Model.ChiTietKetQuas
                             .GroupBy(item => new { item.CauHoi.MaNhom, item.CauHoi.NhomCauHoi.NoiDung });
-    int sodapan= 0;
+    int sodapan = 0;
     int sodapandung = 0;
 }
 
@@ -17,17 +17,17 @@
             <div class="col-12 d-lg-flex flex-lg-row flex-column">
                 <div class="col-lg-9 col-12 ">
                     <div>
-                      
+
                     </div>
                     @foreach (var group in groupedItems)
                     {
-                        <div class="group-container" id="group-container-@group.Key.MaNhom" >
+                        <div class="group-container" id="group-container-@group.Key.MaNhom">
                             <div class="bg-light "> @Html.Raw(HttpUtility.HtmlDecode(@group.Key.NoiDung))</div>
                             @foreach (var item in group)
                             {
                                 <div class="item-container border p-3 mb-3">
                                     <div class="field mb-2">
-                                        @item.MaCauHoi : @Html.Raw(HttpUtility.HtmlDecode(item.CauHoi.NoiDung)) 
+                                        @item.MaCauHoi : @Html.Raw(HttpUtility.HtmlDecode(item.CauHoi.NoiDung))
                                     </div>
 
                                     <!-- Answer choices with radio buttons -->
@@ -46,10 +46,10 @@
                                             </span>
                                         </label>
                                     }
-                                    @if(item.CauHoi.DapAnChinhXac.ToLower().Contains(item.DapAnChon.ToLower()))
+                                    @if (item.CauHoi.DapAnChinhXac.ToLower().Contains(item.DapAnChon.ToLower()))
                                     {
                                         sodapandung++;
-                                            }
+                                    }
                                     <div class="field">
                                         <strong>DapAnChinhXac:</strong> @Html.DisplayFor(modelItem => item.CauHoi.DapAnChinhXac)
                                     </div>
@@ -57,7 +57,7 @@
                                 sodapan++;
                             }
                         </div>
-                      
+
                     }
                 </div>
                 <div class="col-lg-3 col-12 bg-light border border-primary rounded-3 p-4 mx-1 ">
@@ -67,7 +67,11 @@
         </form>
     </div>
 </div>
-
+<div>
+    <div id="advice-container">
+        <!-- Advice will be loaded here -->
+    </div>
+</div>
 <style>
     .correct-answer {
         background-color: green !important;
@@ -79,3 +83,22 @@
         color: white;
     }
 </style>
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var maketqua = @Model.Maketqua;
+            $.ajax({
+                url: '@Url.Action("GiveAdvice", "Contests")',
+                type: 'GET',
+                data: { maketqua: maketqua },
+                success: function (data) {
+                    $('#advice-container').html(data);
+                },
+                error: function () {
+                    $('#advice-container').html('<p>Error loading advice.</p>');
+                }
+            });
+        });
+    </script>
+}

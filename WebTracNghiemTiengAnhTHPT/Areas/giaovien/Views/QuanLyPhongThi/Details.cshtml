@@ -7,26 +7,28 @@
     List<KyThi> otherKyThis = ViewBag.otherKyThi;
 }
 
-<h2>Details</h2>
+<h2>Phòng thi</h2>
 
 <div>
-    <h4>PhongThi</h4>
+    
+    @Html.ActionLink("Xuất kết quả ra file Excel", "ExportToExcel", new { phongThiId = Model.MaPhong }, new { @class = "btn btn-success" })
+
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.MaPhong)
+            Mã phòng
         </dt>
         <dd>
             @Html.DisplayFor(model => model.MaPhong)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.MatKhau)
+            Mật khẩu
         </dt>
         <dd>
             @Html.DisplayFor(model => model.MatKhau)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.TenPhong)
+            Tên phòng
         </dt>
         <dd>
             @Html.DisplayFor(model => model.TenPhong)
@@ -103,7 +105,7 @@
 
 <p>
     @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "Index") |
 </p>
 
 <style>

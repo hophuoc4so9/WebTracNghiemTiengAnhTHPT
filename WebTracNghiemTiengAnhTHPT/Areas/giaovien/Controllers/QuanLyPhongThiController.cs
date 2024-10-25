@@ -1,6 +1,8 @@
 ﻿using iText.Forms.Xfdf;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -216,6 +218,55 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
 
                 // Trả về JSON cho Ajax
                 return Json(new { success = true });
+            }
+        }
+        public ActionResult ExportToExcel(int phongThiId)
+        {
+            TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
+            var phongThi = db.PhongThis.Find(phongThiId); // Fetch the exam room details from the database
+            if (phongThi == null)
+            {
+                return HttpNotFound();
+            }
+
+            var kyThis = phongThi.KyThis.ToList(); // Fetch the exams associated with the room
+
+            // Step 1: Create Excel file and insert data
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Results");
+
+                // Add headers
+                worksheet.Cells[1, 1].Value = "Username";
+                worksheet.Cells[1, 2].Value = "Họ và tên";
+                int j = 3;
+                for (j = 3; j < kyThis.Count + 3; j++)
+                {
+                    worksheet.Cells[1, j].Value = kyThis[j - 3].TenKyThi;
+                }
+                var hocSinhs = phongThi.TaiKhoans.ToList();
+                for (int i = 0; i < hocSinhs.Count; i++)
+                {
+                    worksheet.Cells[i + 2, 1].Value = hocSinhs[i].Username;
+                    worksheet.Cells[i + 2, 2].Value = hocSinhs[i].HoTen;
+                    for (j = 3; j < kyThis.Count + 3; j++)
+                    {
+                        var diem = kyThis[j - 3].KetQuas.FirstOrDefault(kq => kq.Username == hocSinhs[i].Username)?.Diem;
+                        if (diem != null)
+                        {
+                            worksheet.Cells[i + 2, j].Value = diem;
+                        }
+                    }
+                }
+
+                // Save the file to a memory stream
+                var stream = new MemoryStream();
+                package.SaveAs(stream);
+                stream.Position = 0;
+
+                // Return the file as a download
+                string fileName = $"PhongThi_{phongThi.MaPhong}_Results.xlsx";
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
             }
         }
 

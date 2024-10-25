@@ -7,27 +7,40 @@
     <h2>Thông tin cá nhân</h2>
     @if (Model != null) // Kiểm tra nếu Model không null
     {
-        <div>
-            <p><strong>Họ tên:</strong> @Model.HoTen</p>
-            <p><strong>Email:</strong> @Model.Gmail</p>
-            <p><strong>Số điện thoại:</strong> @Model.SoDienThoai</p>
-            <p>
-                <strong>Ngày sinh:</strong>
-                @(Model.NgaySinh.HasValue ? Model.NgaySinh.Value.ToString("dd/MM/yyyy") : "Chưa xác định")
-            </p>
-            <p><strong>Địa chỉ:</strong> @Model.DiaChi</p>
-        </div>
-        <a href="@Url.Action("Edit", "User")" class="btn btn-primary">Chỉnh sửa thông tin</a>
+        using (Html.BeginForm("Save", "ThongTinCaNhan", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken() <!-- Add this line to include the anti-forgery token -->
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="HoTen"><strong>Họ tên:</strong></label>
+                    @Html.TextBoxFor(m => m.HoTen, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label for="Gmail"><strong>Email:</strong></label>
+                    @Html.TextBoxFor(m => m.Gmail, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label for="SoDienThoai"><strong>Số điện thoại:</strong></label>
+                    @Html.TextBoxFor(m => m.SoDienThoai, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label for="NgaySinh"><strong>Ngày sinh:</strong></label>
+                    @Html.TextBoxFor(m => m.NgaySinh, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                </div>
+                <div class="form-group">
+                    <label for="DiaChi"><strong>Địa chỉ:</strong></label>
+                    @Html.TextBoxFor(m => m.DiaChi, new { @class = "form-control" })
+                </div>
+                <button type="submit" class="btn btn-primary">Lưu</button>
+            </div>
+        }
+      
         @Html.Action("PartialLichSuLamBaiAlL", "Contests", new { area = "" })
-
     }
     else
     {
-
         <p>Không tìm thấy thông tin cá nhân.</p>
     }
-
-
 </div>
 
 <style>

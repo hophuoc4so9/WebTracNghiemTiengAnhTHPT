@@ -111,7 +111,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
 
         // POST: Lưu thay đổi
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        
         public ActionResult Edit(CauHoi cauHoi)
         {
             using (var db = new TracNghiemTiengAnhTHPTEntities1())

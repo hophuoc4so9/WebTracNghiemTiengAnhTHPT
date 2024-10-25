@@ -10,6 +10,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.hocsinh.Controllers
     public class ThongTinCaNhanController : Controller
     {
         TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
+
         // GET: hocsinh/ThongTinCaNhan
         public ActionResult Index()
         {
@@ -24,16 +25,17 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.hocsinh.Controllers
 
             if (userInfo == null)
             {
-                // Thêm log để kiểm tra
+                // Log to check
                 System.Diagnostics.Debug.WriteLine("Không tìm thấy người dùng.");
                 return HttpNotFound();
             }
 
-            // Thêm log để kiểm tra mô hình
+            // Log to check model
             System.Diagnostics.Debug.WriteLine($"Thông tin người dùng: {userInfo.HoTen}");
 
             return View(userInfo);
         }
+
         public ActionResult ThongTinCaNhan()
         {
             var userName = Session["UserName"] as string;
@@ -47,19 +49,46 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.hocsinh.Controllers
 
             if (userInfo == null)
             {
-                // Thêm log để kiểm tra
+                // Log to check
                 System.Diagnostics.Debug.WriteLine("Không tìm thấy người dùng.");
                 return HttpNotFound();
             }
 
-            // Thêm log để kiểm tra mô hình
+            // Log to check model
             System.Diagnostics.Debug.WriteLine($"Thông tin người dùng: {userInfo.HoTen}");
 
             return View(userInfo);
         }
+
         private TaiKhoan GetUserInfoByUserName(string userName)
         {
-                return db.TaiKhoans.FirstOrDefault(u => u.Username == userName); // Thay đổi tên bảng và cột theo cơ sở dữ liệu của bạn
+            return db.TaiKhoans.FirstOrDefault(u => u.Username == userName); // Adjust table and column names according to your database
         }
-    } 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Save(TaiKhoan model)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var context = new TracNghiemTiengAnhTHPTEntities1())
+                {
+                    var username = Session["UserName"].ToString() ?? "";
+                    var user = context.TaiKhoans.FirstOrDefault(u => u.Username == username);   
+                    if (user != null)
+                    {
+                        user.HoTen = model.HoTen;
+                        user.Gmail = model.Gmail;
+                        user.SoDienThoai = model.SoDienThoai;
+                        user.NgaySinh = model.NgaySinh;
+                        user.DiaChi = model.DiaChi;
+
+                        context.SaveChanges();
+                    }
+                }
+                return RedirectToAction("Index");
+            }
+            return View("Index", model);
+        }
+    }
 }
