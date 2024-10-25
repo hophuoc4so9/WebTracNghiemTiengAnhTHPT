@@ -8,7 +8,7 @@
 <h2>Danh sách phòng thi</h2>
 
 <p>
-    @Html.ActionLink("Tạo phòng thi mới", "Create")
+    <a href="@Url.Action("Create", "QuanLyPhongThi")" class="btn-custom">Tạo phòng thi mới</a>
 </p>
 
 <table class="table">
@@ -30,10 +30,11 @@
                 <td>@Html.DisplayFor(modelItem => item.PhongThi.MatKhau)</td>
                 <td>@(item.PhongThi.LopHoc != null ? item.PhongThi.LopHoc.TenLop : "Không có lớp")</td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.PhongThi.MaPhong }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.PhongThi.MaPhong }) |
-                    <a href="#" class="btn btn-danger" data-id="@item.PhongThi.MaPhong" data-toggle="modal" data-target="#deleteModal">Xóa</a>
+                    <a href="@Url.Action("Edit", new { id = item.PhongThi.MaPhong })" class="btn-custom btn-warning">Sửa</a>
+                    <a href="@Url.Action("Details", new { id = item.PhongThi.MaPhong })" class="btn-custom btn-info">Chi Tiết</a>
+                    <a href="#" class="btn-custom btn-danger" data-id="@item.PhongThi.MaPhong" data-toggle="modal" data-target="#deleteModal">Xóa</a>
                 </td>
+
             </tr>
         }
     </tbody>
@@ -95,3 +96,19 @@
         });
     </script>
 }
+<style>
+    .btn-custom {
+        display: inline-block; /* Đảm bảo liên kết trông như một nút */
+        padding: 10px 15px; /* Tạo kích thước cho nút */
+        color: white; /* Màu chữ trắng */
+        text-decoration: none; /* Bỏ gạch chân của liên kết */
+        border-radius: 5px; /* Bo tròn các góc */
+        font-size: 14px; /* Kích thước chữ */
+        transition: background-color 0.3s ease, opacity 0.3s ease; /* Hiệu ứng chuyển màu và mờ */
+        cursor: pointer; /* Thêm con trỏ dạng pointer */
+    }
+        .btn-custom:hover {
+            background-color: #12ddd5; /* Đổi màu khi hover */
+            opacity: 0.9; /* Hiệu ứng mờ khi hover */
+        }
+</style>
