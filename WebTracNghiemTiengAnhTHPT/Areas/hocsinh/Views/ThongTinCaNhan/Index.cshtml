@@ -14,16 +14,20 @@
             <p>
                 <strong>Ngày sinh:</strong>
                 @(Model.NgaySinh.HasValue ? Model.NgaySinh.Value.ToString("dd/MM/yyyy") : "Chưa xác định")
-            </p>            
+            </p>
             <p><strong>Địa chỉ:</strong> @Model.DiaChi</p>
         </div>
+        <a href="@Url.Action("Edit", "User")" class="btn btn-primary">Chỉnh sửa thông tin</a>
+        @Html.Action("PartialLichSuLamBaiAlL", "Contests", new { area = "" })
+
     }
     else
     {
+
         <p>Không tìm thấy thông tin cá nhân.</p>
     }
 
-    <a href="@Url.Action("Edit", "User")" class="btn btn-primary">Chỉnh sửa thông tin</a>
+
 </div>
 
 <style>

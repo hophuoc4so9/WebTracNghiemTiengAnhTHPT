@@ -327,3 +327,14 @@ BEGIN
     WHERE KyThi.MaDe = inserted.MaDe
       AND (KyThi.socauhoi <= 0 OR KyThi.socauhoi IS NULL);
 END
+CREATE TRIGGER trg_InsertCauHoi
+ON CauHoi
+AFTER INSERT
+AS
+BEGIN
+    UPDATE CauHoi
+    SET MucDo = 1
+    FROM CauHoi ch
+    INNER JOIN inserted i ON ch.MaCauHoi = i.MaCauHoi 
+    WHERE ch.MucDo IS NULL; -- Update only if MucDo is not set during the insert
+END;

@@ -353,7 +353,6 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                 db.SaveChanges();
             }
         }
-        [HttpPost]
         public JsonResult UploadAudio(HttpPostedFileBase audioFile)
         {
             if (audioFile != null && audioFile.ContentLength > 0)
@@ -370,17 +369,17 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                 string filePath = Path.Combine(folderPath, fileName);
                 audioFile.SaveAs(filePath);  // Save the file to the server
 
-                // Return the file path and type in the JSON response
+                // Return the file URL in the JSON response
                 return Json(new
                 {
-                    success = true,
-                    filePath = Url.Content("~/UploadedAudios/" + fileName),  // Return the URL for the audio file
-                    fileType = audioFile.ContentType  // Return the MIME type of the audio file
+                    location = Url.Content("~/UploadedAudios/" + fileName)  // Return the URL for the audio file
                 });
             }
 
-            return Json(new { success = false, message = "No file uploaded or file is empty." });
+            return Json(new { error = "No file uploaded or file is empty." });
         }
+
+
 
 
 
@@ -492,7 +491,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                     isDeleted = false,
                     UsernameTacGia = Session["UserName"]?.ToString()
                 };
-
+                newExam.SoCauHoi=SoCauHoiDe + SoCauHoiKho;
                 db.KyThis.Add(newExam);
                 db.SaveChanges();
 
@@ -504,7 +503,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                 {
                     newExam.CauHois.Add(question);
                 }
-
+                
                 db.SaveChanges(); 
 
                 TempData["Success"] = "Đề thi đã được tạo thành công!";

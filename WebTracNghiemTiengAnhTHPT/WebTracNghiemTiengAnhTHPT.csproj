@@ -231,6 +231,7 @@
     <Compile Include="Areas\hocsinh\hocsinhAreaRegistration.cs" />
     <Compile Include="Controllers\ContestsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OnTapController.cs" />
     <Compile Include="Controllers\PhongThiController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -612,6 +613,7 @@
     <Content Include="Scripts\tinymce\license.md" />
     <Content Include="Scripts\tinymce\langs\README.md" />
     <Content Include="Views\PhongThi\Index.cshtml" />
+    <Content Include="Views\OnTap\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\admin\Data\" />

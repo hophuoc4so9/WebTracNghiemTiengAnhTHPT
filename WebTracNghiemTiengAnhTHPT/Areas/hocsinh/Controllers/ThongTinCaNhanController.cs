@@ -13,7 +13,26 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.hocsinh.Controllers
         // GET: hocsinh/ThongTinCaNhan
         public ActionResult Index()
         {
-            return View();
+            var userName = Session["UserName"] as string;
+
+            if (string.IsNullOrEmpty(userName))
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+
+            TaiKhoan userInfo = GetUserInfoByUserName(userName);
+
+            if (userInfo == null)
+            {
+                // Thêm log để kiểm tra
+                System.Diagnostics.Debug.WriteLine("Không tìm thấy người dùng.");
+                return HttpNotFound();
+            }
+
+            // Thêm log để kiểm tra mô hình
+            System.Diagnostics.Debug.WriteLine($"Thông tin người dùng: {userInfo.HoTen}");
+
+            return View(userInfo);
         }
         public ActionResult ThongTinCaNhan()
         {

@@ -212,5 +212,19 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             var model = _db.KetQuas.AsNoTracking().Where(c => c.MaDe == made && c.Username == username && c.status == true).ToList();
             return View(model);
         }
+        public ActionResult PartialLichSuLamBaiOnTap()
+        {
+            string username = Session["UserName"]?.ToString() ?? string.Empty;
+            var model = _db.KetQuas.AsNoTracking().Where(c =>c.Username == username && c.status == true && c.KyThi.UsernameTacGia==username).ToList();
+            return View("PartialLichSuLamBai", model);
+
+        }
+        public ActionResult PartialLichSuLamBaiAlL()
+        {
+            string username = Session["UserName"]?.ToString() ?? string.Empty;
+            var model = _db.KetQuas.AsNoTracking().Where(c => c.Username == username && c.status == true).ToList();
+            return View("PartialLichSuLamBai", model);
+
+        }
     }
 }

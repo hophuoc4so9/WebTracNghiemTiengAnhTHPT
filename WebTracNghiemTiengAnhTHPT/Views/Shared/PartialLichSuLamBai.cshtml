@@ -23,7 +23,7 @@ else
                     @Html.ActionLink(item.Maketqua.ToString(), "Result", "Contests", new { maketqua = item.Maketqua }, new { @class = "btn btn-outline-success " })
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Diem)
+                    @((item.Diem ?? 0).ToString("F2"))
                 </td>
             </tr>
         }
