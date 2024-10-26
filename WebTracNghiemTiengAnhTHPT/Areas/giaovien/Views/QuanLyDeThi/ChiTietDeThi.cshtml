@@ -54,46 +54,70 @@
 
 
 
-
-
 <div>
     <h3>
         Danh sách câu hỏi khác
         <button type="button" class="btn btn-secondary" onclick="toggleTable()">Ẩn/Hiện</button>
     </h3>
-    <table id="otherQuestionsTable" class="table table-bordered" style="display: none;">
-        <thead>
-            <tr>
-                <th>Mã Câu Hỏi</th>
-                <th>Câu Hỏi</th>
-                <th>Thao Tác</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in ViewBag.OtherQuestions as List<WebTracNghiemTiengAnhTHPT.Models.CauHoi>)
-            {
+    <div>
+        <table id="otherQuestionsTable" class="table table-bordered" style="display: none; width: 100%; overflow-x: auto;">
+            <thead>
                 <tr>
-                    <td>@item.MaCauHoi</td>
-                    <td>@item.NoiDung</td>
-                    <td>
-                        @using (Html.BeginForm("AddQuestionToExam", "QuanLyDeThi", FormMethod.Post))
-                        {
-                            @Html.Hidden("made", (int)ViewBag.made)
-                            @Html.Hidden("maCauHoi", item.MaCauHoi)
-                            <button type="submit" class="btn btn-primary">Thêm</button>
-                        }
-                    </td>
+                    <th>Thao Tác</th>
+                    <th>Mã Câu Hỏi</th>
+                    <th>Câu Hỏi</th>
+
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.OtherQuestions as List<WebTracNghiemTiengAnhTHPT.Models.CauHoi>)
+                {
+                    <tr>
+                        <td>
+                            @using (Html.BeginForm("AddQuestionToExam", "QuanLyDeThi", FormMethod.Post))
+                            {
+                                @Html.Hidden("made", (int)ViewBag.made)
+                                @Html.Hidden("maCauHoi", item.MaCauHoi)
+                                <button type="submit" class="btn btn-primary">Thêm</button>
+                            }
+                        </td>
+                        <td>@item.MaCauHoi</td>
+                        <td>@item.NoiDung</td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>
     function toggleTable() {
         var table = document.getElementById('otherQuestionsTable');
         if (table.style.display === 'none' || table.style.display === '') {
-            table.style.display = 'table';
+            table.style.display = 'inline-block';
+        } else {
+            table.style.display = 'none';
+        }
+    }
+</script>
+
+<style>
+    #otherQuestionsTable {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+        #otherQuestionsTable th, #otherQuestionsTable td {
+            word-wrap: break-word;
+        }
+</style>
+
+<script>
+    function toggleTable() {
+        var table = document.getElementById('otherQuestionsTable');
+        if (table.style.display === 'none' || table.style.display === '') {
+            table.style.display = 'inline-block';
         } else {
             table.style.display = 'none';
         }

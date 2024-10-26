@@ -8,6 +8,16 @@
     var isFirst = true;
     int made = ViewBag.MaDe;
     DateTime endTime = (DateTime)ViewBag.endTime;
+    var myDictionary = new Dictionary<int, int>();
+    int couter = 1;
+
+    foreach (var item in Model.ChiTietKetQuas)
+    {
+        myDictionary[item.CauHoi.MaCauHoi] = couter;
+        couter++;
+
+    }
+
 }
 <style>
     .selected-button {
@@ -62,7 +72,7 @@
                             {
                                 // Create a list of answer choices
                                 var choices = new List<(string Value, string Text)>
-                                                        {
+                                                                                {
                                     ("A", item.CauHoi.DapAnA),
                                     ("B", item.CauHoi.DapAnB),
                                     ("C", item.CauHoi.DapAnC),
@@ -74,25 +84,25 @@
 
                                 <div class="item-container border p-3 mb-3">
                                     <div class="field mb-2">
-                                        @item.MaCauHoi : @Html.Raw(HttpUtility.HtmlDecode(item.CauHoi.NoiDung))
+                                        @myDictionary[item.MaCauHoi] : @Html.Raw(HttpUtility.HtmlDecode(item.CauHoi.NoiDung))
                                     </div>
 
                                     <!-- Render shuffled answer choices with radio buttons -->
                                     @foreach (var choice in choices)
                                     {
-                                        <label class="form-check-label bg-info w-100 my-1 border-danger border-2" for=@($"dapAn{choice.Value}_{item.MaCauHoi}")>
+                                        <label class="form-check-label bg-info w-100 my-1 border-danger border-2"
+                                               for=@($"dapAn{choice.Value}_{item.MaCauHoi}")>
                                             <span class="form-check mb-2">
                                                 <input class="form-check-input"
                                                        type="radio" name="answer_@item.MaCauHoi" id=@($"dapAn{choice.Value}_{item.MaCauHoi}") value="@choice.Value"
                                                        @(item.DapAnChon == choice.Value ? "checked" : "") onchange="updateButtonColor('@item.MaCauHoi')">
+                                                <span class="custom-radio"></span>
                                                 @choice.Text
                                             </span>
                                         </label>
                                     }
 
-                                    <div class="field">
-                                        <strong>DapAnChinhXac:</strong> @Html.DisplayFor(modelItem => item.CauHoi.DapAnChinhXac)
-                                    </div>
+
                                 </div>
                             }
                         </div>
@@ -108,7 +118,9 @@
                             <div class="bg-light ">Phần thi @group.Key.MaNhom</div>
                             @foreach (var item in group)
                             {
-                                <button class="m-1" id="button-@item.MaCauHoi" onclick="showQuestion('@item.MaCauHoi')">@item.MaCauHoi</button>
+                                <button class="m-1" id="button-@item.MaCauHoi"  onclick="showQuestion('@item.MaCauHoi')">
+                                    @myDictionary[item.MaCauHoi]
+                                </button>
                             }
                         </div>
                     }
@@ -238,3 +250,4 @@
     </script>
     ViewBag.Message = null;
 }
+

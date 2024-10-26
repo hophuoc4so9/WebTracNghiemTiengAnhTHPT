@@ -7,6 +7,16 @@
                             .GroupBy(item => new { item.CauHoi.MaNhom, item.CauHoi.NhomCauHoi.NoiDung });
     int sodapan = 0;
     int sodapandung = 0;
+    int maketqua = Model.Maketqua;
+
+    var myDictionary = new Dictionary<int, int>();
+    int couter = 1;
+    foreach (var item in Model.ChiTietKetQuas)
+    {
+        myDictionary[item.CauHoi.MaCauHoi] = couter;
+        couter++;
+
+    }
 }
 
 <h2>Chi tiết kết quả</h2>
@@ -27,7 +37,7 @@
                             {
                                 <div class="item-container border p-3 mb-3">
                                     <div class="field mb-2">
-                                        @item.MaCauHoi : @Html.Raw(HttpUtility.HtmlDecode(item.CauHoi.NoiDung))
+                                        @myDictionary[item.MaCauHoi] : @Html.Raw(HttpUtility.HtmlDecode(item.CauHoi.NoiDung))
                                     </div>
 
                                     <!-- Answer choices with radio buttons -->
@@ -40,8 +50,8 @@
                                         var cssClass = isCorrect ? "correct-answer" : (isChecked ? "incorrect-answer" : "");
 
                                         <label class="form-check-label bg-info w-100 my-1 border-danger border-2 @cssClass" for="dapAn@answer_@item.MaCauHoi">
-                                            <span class="form-check mb-2">
-                                                <input class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAn@answer_@item.MaCauHoi" value="@answer" @(isChecked ? "checked" : "") disabled>
+                                            <input class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAn@answer_@item.MaCauHoi" value="@answer" @(isChecked ? "checked" : "") disabled>
+                                            <span class="answer-text">
                                                 @answerText
                                             </span>
                                         </label>
@@ -69,7 +79,7 @@
 </div>
 <div>
     <div id="advice-container">
-        <!-- Advice will be loaded here -->
+
     </div>
 </div>
 <style>
@@ -83,22 +93,51 @@
         color: white;
     }
 </style>
-@section Scripts {
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            var maketqua = @Model.Maketqua;
-            $.ajax({
-                url: '@Url.Action("GiveAdvice", "Contests")',
-                type: 'GET',
-                data: { maketqua: maketqua },
-                success: function (data) {
-                    $('#advice-container').html(data);
-                },
-                error: function () {
-                    $('#advice-container').html('<p>Error loading advice.</p>');
-                }
-            });
+<style>
+    .correct-answer {
+        background-color: green !important;
+        color: white;
+    }
+
+    .incorrect-answer {
+        background-color: red !important;
+        color: white;
+    }
+
+    .form-check-input[type="radio"] {
+        display: none;
+    }
+
+    .form-check-label {
+        display: block;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .form-check-input[type="radio"]:checked + .form-check-label {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .form-check-label:hover {
+        background-color: #0056b3;
+        color: white;
+    }
+</style>
+<!-- Ensure jQuery is included before your script -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $.ajax({
+            url: '@Url.Action("GiveAdvice", "Contests", new { maketqua = maketqua })',
+            success: function(result) {
+                $('#advice-container').html(result);
+            },
+            error: function() {
+                $('#advice-container').html("Failed to load advice.");
+            }
         });
-    </script>
-}
+    });
+</script>

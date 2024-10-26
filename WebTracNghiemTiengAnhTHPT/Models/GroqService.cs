@@ -37,7 +37,7 @@ namespace WebTracNghiemTiengAnhTHPT.Services
             }
 
             var responseContent = await response.Content.ReadAsStringAsync();
-            return JsonNode.Parse(responseContent).AsObject();
+            return JsonNode.Parse(responseContent)?.AsObject() ?? new JsonObject();
         }
     }
 }

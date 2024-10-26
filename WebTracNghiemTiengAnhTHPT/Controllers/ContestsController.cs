@@ -234,7 +234,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             return View("PartialLichSuLamBai", model);
 
         }
-        public async Task<ActionResult> GiveAdvice(int maketqua)
+        public async Task< ActionResult> GiveAdvice(int maketqua)
         {
             var kq = _db.KetQuas.AsNoTracking().SingleOrDefault(k => k.Maketqua == maketqua);
             if (kq == null)
@@ -243,10 +243,10 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             }
             string apiKey = Environment.GetEnvironmentVariable("API_KEY_GROQ");
 
-            var _groqService = new GroqService("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");
+            var _groqService = new GroqService("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");
 
             StringBuilder promptBuilder = new StringBuilder();
-            promptBuilder.AppendLine("Đưa ra 1 lời khuyên chung để cái thiện cách học tiếng Anh của những câu trắc nghiệm tiếng anh bị sai sau:");
+            promptBuilder.AppendLine("Give advice:");
 
             bool hasIncorrectAnswers = false;
 
@@ -298,10 +298,20 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
         }
             };
 
-            var response = await _groqService.CreateChatCompletionAsync(request);
-            string advice = response?["choices"]?[0]?["message"]?["content"]?.ToString();
+            try
+            {
+                var response = await _groqService.CreateChatCompletionAsync(request);
+                string advice = response?["choices"]?[0]?["message"]?["content"]?.ToString();
+                return PartialView("GiveAdvice", advice);
+            }
+            catch (Exception ex)
+            {
+                // Log or handle error as needed
+                return PartialView("GiveAdvice", $"An error occurred: {ex.Message}");
+               
+            }
 
-            return PartialView("GiveAdvice", advice);
+         
         }
 
 

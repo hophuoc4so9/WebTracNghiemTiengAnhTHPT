@@ -11,16 +11,23 @@ else
     <table class="table">
         <tr>
             <th>
-               Lịch sử làm bài
+                Lịch sử làm bài
             </th>
         </tr>
-
+        <tr>
+            <th>
+                Tên đề thi
+            </th>
+            <th>
+                Số điểm
+            </th>
+        </tr>
         @foreach (var item in Model)
         {
             <tr>
                 <td>
-               
-                    @Html.ActionLink(item.Maketqua.ToString(), "Result", "Contests", new { maketqua = item.Maketqua }, new { @class = "btn btn-outline-success " })
+
+                    @Html.ActionLink(item.KyThi.TenKyThi, "Result", "Contests", new { maketqua = item.Maketqua }, new { @class = "btn btn-outline-success " })
                 </td>
                 <td>
                     @((item.Diem ?? 0).ToString("F2"))
