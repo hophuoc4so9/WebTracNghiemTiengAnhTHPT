@@ -21,12 +21,11 @@
 }
 <style>
     .selected-button {
-        background-color: gray;
+        background-color: grey;
         color: white;
     }
 </style>
 
-<h2>ChiTietKyThi</h2>
 
 <div class="container">
     <div class="row">
@@ -118,7 +117,7 @@
                             <div class="bg-light ">Phần thi @group.Key.MaNhom</div>
                             @foreach (var item in group)
                             {
-                                <button class="m-1" id="button-@item.MaCauHoi"  onclick="showQuestion('@item.MaCauHoi')">
+                                <button name="@item.MaCauHoi" class="m-1" id="button-@item.MaCauHoi"  onclick="showQuestion('@item.MaCauHoi')">
                                     @myDictionary[item.MaCauHoi]
                                 </button>
                             }
@@ -166,8 +165,10 @@
 
     function updateButtonColor(maCauHoi) {
         var buttons = document.querySelectorAll('.group-container-right button');
+        console.log(maCauHoi);
         buttons.forEach(function (button) {
-            if (button.textContent.trim() == maCauHoi) {
+            // Kiểm tra nếu id của button trùng với maCauHoi
+            if (button.id === `button-${maCauHoi}`) {
                 button.classList.add('selected-button');
             }
         });

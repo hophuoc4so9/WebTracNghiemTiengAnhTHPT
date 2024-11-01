@@ -4,7 +4,7 @@
     var otherPhongThis = ViewBag.OtherPhongThis as List<WebTracNghiemTiengAnhTHPT.Models.PhongThi>;
 }
 
-<h2 class="section-title">My PhongThi</h2>
+<h2 class="section-title">Các phòng thi</h2>
 @if (myPhongThis != null && myPhongThis.Count > 0)
 {
     <div class="container phongthi-container">
@@ -44,7 +44,7 @@ else
     <p>No PhongThi found.</p>
 }
 
-<h2 class="section-title">Other PhongThi</h2>
+<h2 class="section-title">Phòng thi khác</h2>
 @if (otherPhongThis != null && otherPhongThis.Count > 0)
 {
     <div class="container phongthi-container">

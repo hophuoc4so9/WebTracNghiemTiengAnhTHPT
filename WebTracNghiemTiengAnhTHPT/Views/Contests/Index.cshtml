@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Cuộc thi";
     Layout = "~/Views/Shared/LayoutWeb.cshtml";
-    string rq = Request["PhongThiId"]?.ToString()?? "";
+    string rq = Request["PhongThiId"]?.ToString() ?? "";
 }
 
 <h2>Danh sách kỳ thi</h2>
@@ -12,57 +12,45 @@
         <div class="row">
             @foreach (var item in Model)
             {
-                if (item.CongKhai == true || string.IsNullOrEmpty(rq)!=true)
+                if (item.CongKhai == true || !string.IsNullOrEmpty(rq))
                 {
-                    <div class="col-6 col-md-3 ">
-                        <div class="bg-light border border-primary rounded-3 p-4 m-3 w-auto">
-                            <h2>  @Html.DisplayFor(modelItem => item.TenKyThi)</h2>
-                            <div>
-                                <p> @item.Soluot  Số lượt <img src="~/Content/img/mdi--account-check-outline.svg" /> </p>
-                                <p>  @item.ThoiGian phút <img src="~/Content/img/mingcute--time-line.svg" /> </p>
-                                <p>   @item.DiemTrungBinh Đánh giá <img src="~/Content/img/material-symbols--star-rate.svg" /> </p>
-                                <p>  @item.SoCauHoi  câu hỏi <img src="~/Content/img/ph--question.svg" /></p>
+                    <div class="col-12">
+                        <div class="contest-card bg-light border border-primary rounded-3 p-4 my-3 w-100">
+                            <h2>@Html.DisplayFor(modelItem => item.TenKyThi)</h2>
+                            <div class="d-flex justify-content-between align-items-center gap-3">
+                                <span>@item.Soluot Số lượt <img src="~/Content/img/mdi--account-check-outline.svg" /></span>
+                                <span>@item.ThoiGian phút <img src="~/Content/img/mingcute--time-line.svg" /></span>
+                                <span>@item.DiemTrungBinh Đánh giá <img src="~/Content/img/material-symbols--star-rate.svg" /></span>
+                                <span>@item.SoCauHoi câu hỏi <img src="~/Content/img/ph--question.svg" /></span>
                             </div>
 
-                            <center>
+                            @if (!string.IsNullOrEmpty(rq))
+                            {
+                                <p>Bắt đầu: @item.ThoiGianBatDau</p>
+                                <p>Kết thúc: @item.ThoiGianKetThuc</p>
+                            }
 
-                                @Html.ActionLink("Tham gia", "ChiTiet", "Contests", new { made = item.MaDe }, new { @class = "btn btn-outline-success " })
+                            <center>
+                                @Html.ActionLink("Tham gia", "ChiTiet", "Contests", new { made = item.MaDe }, new { @class = "btn btn-outline-success" })
                             </center>
                         </div>
-
-
                     </div>
                 }
-
             }
         </div>
     </div>
 }
-else 
-    {
+else
+{
     <p>Không có kỳ thi nào</p>
 }
 
 <style>
-    .row.d-flex {
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    .col-6, .col-md-3 {
-        padding: 0;
-    }
-
     .contest-card {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        height: 100%;
-    }
-
-    .contest-card {
-        min-height: 350px;
-        flex-grow: 1;
+     
     }
 
         .contest-card h2 {

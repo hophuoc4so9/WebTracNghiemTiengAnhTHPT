@@ -338,3 +338,143 @@ BEGIN
     INNER JOIN inserted i ON ch.MaCauHoi = i.MaCauHoi 
     WHERE ch.MucDo IS NULL; -- Update only if MucDo is not set during the insert
 END;
+CREATE FUNCTION dbo.RemoveRepeatedPatterns (@input NVARCHAR(MAX))
+RETURNS NVARCHAR(MAX)
+AS
+BEGIN
+    DECLARE @pattern NVARCHAR(MAX), @patternLen INT, @result NVARCHAR(MAX)
+    SET @result = @input
+    
+    -- L?p qua các ?o?n ký t? dài h?n 20 và tìm các chu?i l?p
+    SET @patternLen = 20
+    
+    WHILE @patternLen <= LEN(@input) / 2
+    BEGIN
+        SET @pattern = SUBSTRING(@result, 1, @patternLen)
+
+        -- Ki?m tra và lo?i b? chu?i l?p
+        WHILE CHARINDEX(@pattern + @pattern, @result) > 0
+        BEGIN
+            SET @result = REPLACE(@result, @pattern + @pattern, @pattern)
+        END
+
+        SET @patternLen = @patternLen + 1
+    END
+    
+    RETURN @result
+END;
+GO
+
+-- C?p nh?t b?ng CauHoi v?i hàm trên
+UPDATE CauHoi
+SET NoiDung = dbo.RemoveRepeatedPatterns(NoiDung)
+WHERE LEN(NoiDung) > 20; -- C?p nh?t các b?n ghi có ?? dài NoiDung > 20
+
+
+
+CREATE FUNCTION CalculateDifficulty(@MaCauHoi INT)
+RETURNS INT
+AS
+BEGIN
+    DECLARE @SoNguoiTraLoi INT = 0;
+    DECLARE @SoNguoiTraLoiDung INT = 0;
+    DECLARE @ThoiGianTrungBinh FLOAT = 0.0;
+    DECLARE @DifficultyLevel INT = 1;
+
+    -- Tính s? ng??i tr? l?i và s? ng??i tr? l?i ?úng
+    SELECT 
+        @SoNguoiTraLoi = COUNT(*),
+        @SoNguoiTraLoiDung = COUNT(CASE WHEN CTKQ.DapAnChon = CH.DapAnChinhXac THEN 1 END)
+    FROM 
+        ChiTietKetQua AS CTKQ
+        JOIN KetQua AS KQ ON CTKQ.Maketqua = KQ.Maketqua
+        JOIN CauHoi AS CH ON CTKQ.MaCauHoi = CH.MaCauHoi
+    WHERE 
+        CTKQ.MaCauHoi = @MaCauHoi;
+
+    -- Tính th?i gian trung bình
+    SELECT @ThoiGianTrungBinh = AVG(DATEDIFF(SECOND, KQ.thoigian_batdau, KQ.thoigian_ketthuc))
+    FROM 
+        KetQua AS KQ
+    WHERE 
+        KQ.Maketqua IN (
+            SELECT DISTINCT CTKQ.Maketqua 
+            FROM ChiTietKetQua AS CTKQ 
+            WHERE CTKQ.MaCauHoi = @MaCauHoi
+        );
+
+    -- Ki?m tra d? li?u và tính ?? khó
+    IF @SoNguoiTraLoi > 0
+    BEGIN
+        DECLARE @TiLeTraLoiDung FLOAT = CAST(@SoNguoiTraLoiDung AS FLOAT) / @SoNguoiTraLoi;
+        
+        -- Thi?t l?p ?? khó d?a trên t? l? tr? l?i ?úng và th?i gian
+        IF @TiLeTraLoiDung > 0.7 AND @ThoiGianTrungBinh < 30
+            SET @DifficultyLevel = 1; -- D?
+        ELSE IF @TiLeTraLoiDung > 0.3 AND @ThoiGianTrungBinh BETWEEN 30 AND 90
+            SET @DifficultyLevel = 2; -- Trung bình
+        ELSE
+            SET @DifficultyLevel = 3; -- Khó
+    END
+
+    RETURN @DifficultyLevel;
+END;
+
+CREATE TRIGGER UpdateDifficultyAndStatus
+ON KetQua
+AFTER UPDATE
+AS
+BEGIN
+    DECLARE @Maketqua INT;
+
+    -- L?y mã k?t qu? t? b?n ghi v?a ???c c?p nh?t
+    SELECT @Maketqua = inserted.Maketqua
+    FROM inserted;
+
+    -- Ki?m tra xem c?t status có chuy?n t? 0 sang 1 không
+    IF EXISTS (
+        SELECT 1 
+        FROM inserted AS i
+        JOIN deleted AS d ON i.Maketqua = d.Maketqua
+        WHERE i.status = 1 AND d.status = 0
+    )
+    BEGIN
+        -- C?p nh?t ?? khó cho t?t c? các câu h?i liên quan ??n Maketqua
+        UPDATE CauHoi
+        SET mucdo = dbo.CalculateDifficulty(CauHoi.MaCauHoi)
+        WHERE MaCauHoi IN (
+            SELECT CTKQ.MaCauHoi 
+            FROM ChiTietKetQua AS CTKQ 
+            WHERE CTKQ.Maketqua = @Maketqua
+        );
+    END;
+END;
+
+
+-- C?p nh?t ?? khó cho t?t c? các câu h?i
+UPDATE CauHoi
+SET mucdo = 
+(
+    SELECT CASE 
+        WHEN CAST(CAST(SoNguoiTraLoiDung AS FLOAT) / SoNguoiTraLoi AS FLOAT) > 0.7 AND ThoiGianTrungBinh < 30 THEN 1  -- D?
+        WHEN CAST(CAST(SoNguoiTraLoiDung AS FLOAT) / SoNguoiTraLoi AS FLOAT) > 0.3 AND ThoiGianTrungBinh BETWEEN 30 AND 90 THEN 2  -- Trung bình
+        ELSE 3  -- Khó
+    END
+    FROM 
+    (
+        SELECT 
+            CH.MaCauHoi,
+            COUNT(DISTINCT CTKQ.Maketqua) AS SoNguoiTraLoi,
+            COUNT(CASE WHEN CTKQ.DapAnChon = CH.DapAnChinhXac THEN 1 END) AS SoNguoiTraLoiDung,
+            AVG(DATEDIFF(SECOND, KQ.thoigian_batdau, KQ.thoigian_ketthuc)) AS ThoiGianTrungBinh
+        FROM 
+            ChiTietKetQua AS CTKQ
+            JOIN KetQua AS KQ ON CTKQ.Maketqua = KQ.Maketqua
+            JOIN CauHoi AS CH ON CTKQ.MaCauHoi = CH.MaCauHoi
+        GROUP BY 
+            CH.MaCauHoi
+    ) AS T
+    WHERE T.MaCauHoi = CauHoi.MaCauHoi
+    AND T.SoNguoiTraLoi > 0  -- Ch? tính các câu h?i có ng??i tr? l?i
+)
+WHERE mucdo IS NULL;  -- C?p nh?t ch? nh?ng câu h?i ch?a có ?? khó
