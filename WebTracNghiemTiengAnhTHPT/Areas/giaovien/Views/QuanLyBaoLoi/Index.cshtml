@@ -1,0 +1,148 @@
+﻿@{
+    ViewBag.Title = "Reported Errors";
+    Layout = "~/Areas/admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model IEnumerable<WebTracNghiemTiengAnhTHPT.Models.BaoLoi>
+
+<h2>Quản lý báo lỗi</h2>
+<script src="https://cdn.tiny.cloud/1/4inckogq00f5sh986duadaulucd1rekxhug1kgjjozr5abyu/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+
+<script>
+    tinymce.init({
+        selector: 'textarea.tinymce',
+        plugins: [
+            'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
+            'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'ai', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown',
+            'importword', 'exportword', 'exportpdf'
+        ],
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+        tinycomments_mode: 'embedded',
+        tinycomments_author: 'Author name',
+        mergetags_list: [
+            { value: 'First.Name', title: 'First Name' },
+            { value: 'Email', title: 'Email' },
+        ],
+        ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
+        exportpdf_converter_options: { 'format': 'Letter', 'margin_top': '1in', 'margin_right': '1in', 'margin_bottom': '1in', 'margin_left': '1in' },
+        exportword_converter_options: { 'document': { 'size': 'Letter' } },
+        importword_converter_options: { 'formatting': { 'styles': 'inline', 'resets': 'inline', 'defaults': 'inline', } },
+    });
+</script>
+
+<table class="table table-striped" id="errorTable">
+    <thead>
+        <tr>
+            <th>Mã câu hỏi</th>
+            <th>Đề thi</th>
+            <th>Nội dung</th>
+            <th>Người gửi</th>
+            <th>Phản hồi</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var error in Model)
+            {
+                <tr data-id="@error.MaCauHoi">
+                    <td>@error.MaCauHoi</td>
+                    <td>
+                        <a href="@Url.Action("ChiTietDeThi", "QuanLyDeThi", new { made = error.MaDe })">
+                            @error.KyThi.TenKyThi
+                        </a>
+                    </td>
+                    <td>@Html.Raw(error.NoiDung)</td>
+                    <td>@error.Username</td>
+                    <td>@error.Response</td>
+                    <td>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#responseModal" data-id="@error.MaCauHoi" data-username="@error.Username">Respond</button>
+                    </td>
+                </tr>
+
+                <!-- Modal for responding to error reports -->
+                <div class="modal fade" id="responseModal" tabindex="-1" role="dialog" aria-labelledby="responseModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="responseModalLabel">Respond to Error Report</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="responseForm">
+                                    <div class="form-group">
+                                        <label for="responseText">Your Response</label>
+                                        <textarea class="tinymce form-control" id="responseText" rows="3"></textarea>
+                                        <input type="hidden" id="errorId" value=@error.MaCauHoi/>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit Response</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" class="text-center">Chưa có báo lỗi nào</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<script>
+$(document).ready(function () {
+    $('#responseModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var id = button.data('id');
+        $('#errorId').val(id);
+        tinymce.get('responseText').setContent('');
+    });
+
+    $('#responseForm').on('submit', function (e) {
+        e.preventDefault();
+        tinymce.triggerSave(); // Sync TinyMCE content back to textarea
+
+        var responseHtml = tinymce.get('responseText').getContent();
+        var tempElement = document.createElement('div');
+        tempElement.innerHTML = responseHtml;
+        var responseText = tempElement.textContent || tempElement.innerText || '';
+        var errorId = $('#errorId').val();
+        errorId = parseInt(errorId);
+
+        // Validate response text
+        if (!responseText.trim()) {
+            alert("Response text cannot be empty.");
+            return;
+        }
+        console.log(errorId, responseText); 
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("RespondToError", "QuanLyBaoLoi")',
+            data: {
+                MaCauHoi: errorId,
+                ResponseText: responseText
+            },
+            success: function (response) {
+                if (response.success) {
+                    alert(response.message);
+                    $('#responseModal').modal('hide');
+                    location.reload();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function (xhr) {
+                console.error("Error occurred:", xhr.responseText);
+                alert("An error occurred while submitting your response: " + xhr.statusText);
+            }
+        });
+    });
+});
+</script>

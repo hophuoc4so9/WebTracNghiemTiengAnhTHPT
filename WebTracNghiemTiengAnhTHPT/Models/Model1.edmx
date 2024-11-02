@@ -15,6 +15,7 @@
           <Property Name="Username" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="MaCauHoi" Type="int" Nullable="false" />
           <Property Name="MaDe" Type="int" Nullable="false" />
+          <Property Name="Response" Type="varchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="CauHoi">
           <Key>
@@ -58,7 +59,7 @@
             <PropertyRef Name="MaLoai" />
           </Key>
           <Property Name="MaLoai" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TenLoai" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="TenLoai" Type="nvarchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="DanhGia">
           <Key>
@@ -169,9 +170,9 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.LienHe' does not have a
           <Property Name="isDeleted" Type="bit" />
           <Property Name="status" Type="bit" Nullable="false" />
           <Property Name="MaLop" Type="int" />
-          <Property Name="HoTen" Type="nvarchar" MaxLength="100" />
+          <Property Name="HoTen" Type="nvarchar" MaxLength="50" />
           <Property Name="SoDienThoai" Type="varchar" MaxLength="15" />
-          <Property Name="DiaChi" Type="nvarchar" MaxLength="255" />
+          <Property Name="DiaChi" Type="nvarchar" MaxLength="200" />
           <Property Name="NgaySinh" Type="date" />
         </EntityType>
         <!--Errors Found During Generation:
@@ -667,6 +668,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.ViewChitietKyThi_2' doe
           <NavigationProperty Name="CauHoi" Relationship="TracNghiemTiengAnhTHPTModel.FK_BaoLoi_CauHoi" FromRole="BaoLoi" ToRole="CauHoi" />
           <NavigationProperty Name="TaiKhoan" Relationship="TracNghiemTiengAnhTHPTModel.FK_BaoLoi_TaiKhoan" FromRole="BaoLoi" ToRole="TaiKhoan" />
           <NavigationProperty Name="KyThi" Relationship="TracNghiemTiengAnhTHPTModel.FK_KyThi_BaoLoi" FromRole="BaoLoi" ToRole="KyThi" />
+          <Property Name="Response" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="CauHoi">
           <Key>
@@ -710,7 +712,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.ViewChitietKyThi_2' doe
             <PropertyRef Name="MaLoai" />
           </Key>
           <Property Name="MaLoai" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TenLoai" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="TenLoai" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="CauHois" Relationship="TracNghiemTiengAnhTHPTModel.ChiTietCauHoiDangBai" FromRole="DangBai" ToRole="CauHoi" />
         </EntityType>
         <EntityType Name="DanhGia">
@@ -797,9 +799,9 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.ViewChitietKyThi_2' doe
           <NavigationProperty Name="PhongThis" Relationship="TracNghiemTiengAnhTHPTModel.PhongThiNguoiDung" FromRole="TaiKhoan" ToRole="PhongThi" />
           <Property Name="MaLop" Type="Int32" />
           <NavigationProperty Name="LopHoc" Relationship="TracNghiemTiengAnhTHPTModel.FK_MaPhong" FromRole="TaiKhoan" ToRole="LopHoc" />
-          <Property Name="HoTen" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="HoTen" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SoDienThoai" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="DiaChi" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DiaChi" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="NgaySinh" Type="DateTime" Precision="0" />
         </EntityType>
         <EntityType Name="LienHe">
@@ -1021,6 +1023,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.ViewChitietKyThi_2' doe
           <EntitySetMapping Name="BaoLois">
             <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.BaoLoi">
               <MappingFragment StoreEntitySet="BaoLoi">
+                <ScalarProperty Name="Response" ColumnName="Response" />
                 <ScalarProperty Name="MaDe" ColumnName="MaDe" />
                 <ScalarProperty Name="MaCauHoi" ColumnName="MaCauHoi" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
