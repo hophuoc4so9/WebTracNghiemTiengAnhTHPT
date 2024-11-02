@@ -9,23 +9,135 @@
     int made = ViewBag.MaDe;
     DateTime endTime = (DateTime)ViewBag.endTime;
     var myDictionary = new Dictionary<int, int>();
-    int couter = 1;
+    int counter = 1;
 
     foreach (var item in Model.ChiTietKetQuas)
     {
-        myDictionary[item.CauHoi.MaCauHoi] = couter;
-        couter++;
-
+        myDictionary[item.CauHoi.MaCauHoi] = counter;
+        counter++;
     }
-
 }
+@*Reference the TinyMCE script*@
+<!-- Place the first <script> tag in your HTML's <head> -->
+<script src="https://cdn.tiny.cloud/1/4inckogq00f5sh986duadaulucd1rekxhug1kgjjozr5abyu/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+
+<!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+<script>
+    tinymce.init({
+        selector: 'textarea',
+        plugins: [
+            // Core editing features
+            'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
+            // Your account includes a free trial of TinyMCE premium features
+            // Try the most popular premium features until Nov 16, 2024:
+            'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'ai', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown',
+            // Early access to document converters
+            'importword', 'exportword', 'exportpdf'
+        ],
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+        tinycomments_mode: 'embedded',
+        tinycomments_author: 'Author name',
+        mergetags_list: [
+            { value: 'First.Name', title: 'First Name' },
+            { value: 'Email', title: 'Email' },
+        ],
+        ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
+        exportpdf_converter_options: { 'format': 'Letter', 'margin_top': '1in', 'margin_right': '1in', 'margin_bottom': '1in', 'margin_left': '1in' },
+        exportword_converter_options: { 'document': { 'size': 'Letter' } },
+        importword_converter_options: { 'formatting': { 'styles': 'inline', 'resets': 'inline', 'defaults': 'inline', } },
+    });
+</script>
 <style>
     .selected-button {
         background-color: grey;
         color: white;
     }
-</style>
+    /* General modal styling */
+    .modal-content {
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        border: none;
+    }
 
+    .modal-header {
+        background-color: #f5f5f5;
+        border-bottom: 1px solid #ddd;
+        padding: 1rem;
+    }
+
+        .modal-header h5 {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .modal-header .close {
+            font-size: 1.5rem;
+            color: #aaa;
+        }
+
+            .modal-header .close:hover {
+                color: #555;
+            }
+
+    .modal-body {
+        padding: 1.5rem;
+        background-color: #fff;
+    }
+
+    .modal-footer {
+        background-color: #f9f9f9;
+        padding: 1rem;
+        border-top: 1px solid #ddd;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    /* Textarea styling */
+    .modal-body textarea {
+        width: 100%;
+        min-height: 120px;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+        padding: 0.5rem;
+        resize: vertical;
+        transition: border-color 0.3s;
+    }
+
+        .modal-body textarea:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+    /* Button styling */
+    .modal-footer .btn {
+        border-radius: 6px;
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .modal-footer .btn-secondary {
+        background-color: #f1f1f1;
+        color: #333;
+        border: none;
+    }
+
+        .modal-footer .btn-secondary:hover {
+            background-color: #ddd;
+        }
+
+    .modal-footer .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+    }
+
+        .modal-footer .btn-primary:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+</style>
 
 <div class="container">
     <div class="row">
@@ -38,6 +150,7 @@
 
             <div class="col-12 d-lg-flex flex-lg-row flex-column">
                 <div class="col-lg-9 col-12 ">
+                    <!-- Group Buttons -->
                     <div>
                         @foreach (var group in groupedItems)
                         {
@@ -46,6 +159,7 @@
                             </button>
                         }
                     </div>
+
                     @functions {
                         // Helper method to shuffle a list
                         public static List<T> ShuffleList<T>(List<T> list)
@@ -63,6 +177,8 @@
                             return list;
                         }
                     }
+
+                    <!-- Grouped Questions -->
                     @foreach (var group in groupedItems)
                     {
                         <div class="group-container" id="group-container-@group.Key.MaNhom" style="display: @(isFirst ? "block" : "none");">
@@ -71,7 +187,7 @@
                             {
                                 // Create a list of answer choices
                                 var choices = new List<(string Value, string Text)>
-                                                                                {
+                                                                                            {
                                     ("A", item.CauHoi.DapAnA),
                                     ("B", item.CauHoi.DapAnB),
                                     ("C", item.CauHoi.DapAnC),
@@ -101,6 +217,28 @@
                                         </label>
                                     }
 
+                                    <!-- Error reporting -->
+                                    <button class="btn btn-danger" onclick="openReportModal(@item.MaCauHoi); return false;">Report Error</button>
+
+
+                                    <!-- Error report modal -->
+                                    <div class="modal fade" id="reportModal-@item.MaCauHoi" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Report Error for Question @myDictionary[item.MaCauHoi]</h5>
+
+                                                </div>
+                                                <div class="modal-body">
+                                                    <textarea id="errorMessage-@item.MaCauHoi" class="tinymce  form-control" placeholder="Describe the error..."></textarea>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" onclick="closeReportModal(@item.MaCauHoi)">Close</button>
+                                                    <button type="button" class="btn btn-primary" onclick="submitErrorReport(@ViewBag.MaDeReal, @item.MaCauHoi)">Submit Report</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                 </div>
                             }
@@ -108,6 +246,8 @@
                         isFirst = false;
                     }
                 </div>
+
+                <!-- Timer and Submit Button -->
                 <div class="col-lg-3 col-12 bg-light border border-primary rounded-3 p-4 mx-1 ">
                     <input onclick="ketthuc()" type="submit" value="Nộp bài" />
                     <div id="timer">90:00</div>
@@ -117,7 +257,7 @@
                             <div class="bg-light ">Phần thi @group.Key.MaNhom</div>
                             @foreach (var item in group)
                             {
-                                <button name="@item.MaCauHoi" class="m-1" id="button-@item.MaCauHoi"  onclick="showQuestion('@item.MaCauHoi')">
+                                <button name="@item.MaCauHoi" class="m-1" id="button-@item.MaCauHoi" onclick="showQuestion('@item.MaCauHoi')">
                                     @myDictionary[item.MaCauHoi]
                                 </button>
                             }
@@ -165,9 +305,7 @@
 
     function updateButtonColor(maCauHoi) {
         var buttons = document.querySelectorAll('.group-container-right button');
-        console.log(maCauHoi);
         buttons.forEach(function (button) {
-            // Kiểm tra nếu id của button trùng với maCauHoi
             if (button.id === `button-${maCauHoi}`) {
                 button.classList.add('selected-button');
             }
@@ -206,49 +344,60 @@
     }
 
     function ketthuc() {
-        var t;
-        var s = "Bạn có chắc chắn muốn nộp bài";
-        if (endTime - new Date().getTime() > 0) t = confirm(s);
-
-        if (t == true || endTime - new Date().getTime() <= 0) {
-            clearInterval(interval);
-            document.getElementById('nopbai').disabled = true;
+        if (confirm("Bạn có chắc chắn muốn nộp bài?")) {
             document.getElementById("examForm").submit();
         }
     }
 
-    window.addEventListener('beforeunload', function (e) {
-        document.getElementById('flag').value = '1';
-        var currentUrl = window.location.href;
-        document.getElementById('url').value = currentUrl;
+    function openReportModal(maCauHoi) {
+        $(`#reportModal-${maCauHoi}`).modal('show');
+    }
 
-        var formData = new FormData(document.getElementById('examForm'));
-        navigator.sendBeacon('/Contests/Result?MaDe=' + document.getElementById('maDe').value, formData);
+    function submitErrorReport(MaDe, MaCauHoi) {
+        // Get the HTML content from TinyMCE
+        var errorMessageHtml = tinymce.get(`errorMessage-${MaCauHoi}`).getContent();
 
-        e.returnValue = '';
-    });
+        // Create a temporary element to parse the HTML and extract text
+        var tempElement = document.createElement('div');
+        tempElement.innerHTML = errorMessageHtml;
+        var errorMessageText = tempElement.textContent || tempElement.innerText || '';
 
-    window.addEventListener('unload', function (e) {
-        document.getElementById('flag').value = '1';
-        var currentUrl = window.location.href;
-        document.getElementById('url').value = currentUrl;
+        MaDe = parseInt(MaDe);
+        MaCauHoi = parseInt(MaCauHoi);
+        if (!errorMessageText) {
+            alert(`Vui lòng nhập nội dung báo lỗi.${errorMessageText}`);
+            return;
+        }
+        //console.log(errorMessageText)
+        console.log(MaDe, MaCauHoi, errorMessageText); 
+        $.ajax({
+            type: "POST",
+            url: "/Contests/ReportError",
+            data: {
+                MaDe: MaDe,
+                MaCauHoi: MaCauHoi,
+                ErrorMessage: errorMessageText // Use the plain text here
+            },
+            success: function (response) {
+                if (response.success) {
+                    alert(response.message);
+                    $(`#reportModal-${MaCauHoi}`).modal('hide');
+                } else {
+                    alert(response.message);
+                    console.log(response); 
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log("Status: " + textStatus);
+                console.log("Error: " + errorThrown);
+                console.log("Response: " + jqXHR.responseText);
+                alert("Đã xảy ra lỗi khi gửi báo lỗi.");
+            }
+        });
+    }
 
-        var formData = new FormData(document.getElementById('examForm'));
-        navigator.sendBeacon('/Contests/Result?MaDe=' + document.getElementById('maDe').value, formData);
-
-        e.returnValue = '';
-    });
-
-    document.getElementById('examForm').addEventListener('submit', function () {
-        document.getElementById('flag').value = '0';
-    });
+    function closeReportModal(maCauHoi) {
+        $(`#reportModal-${maCauHoi}`).modal('hide');
+    }
 
 </script>
-@if (!string.IsNullOrEmpty(ViewBag.Message))
-{
-    <script>
-        alert('@ViewBag.Message');
-    </script>
-    ViewBag.Message = null;
-}
-
