@@ -1,21 +1,21 @@
 ﻿<footer class="footer">
     <div class="container">
         <div class="row footer-content">
-            <section class="col-md-4" aria-labelledby="gettingStartedTitle">
+            <section class="col-md-4 col-12" aria-labelledby="gettingStartedTitle">
                 <h2>P2N</h2>
                 <ul>
                     <li>@Html.ActionLink("Về Chúng Tôi", "About", "Home")</li>
                     <li>@Html.ActionLink("Liên hệ", "Contact", "Home")</li>
                 </ul>
             </section>
-            <section class="col-md-4" aria-labelledby="librariesTitle">
+            <section class="col-md-4 col-12" aria-labelledby="resourcesTitle">
                 <h2>Tài Nguyên</h2>
                 <ul>
                     <li>@Html.ActionLink("Ôn tập", "Index", "OnTap")</li>
                     <li>@Html.ActionLink("Tham Gia Kỳ Thi", "Index", "Contests")</li>
                 </ul>
             </section>
-            <section class="col-md-4" aria-labelledby="librariesTitle">
+            <section class="col-md-4 col-12" aria-labelledby="contactInfoTitle">
                 <h2>Thông Tin Liên Hệ</h2>
                 <ul class="contact-info">
                     <li><i class="fa fa-phone" aria-hidden="true"></i> Số Điện Thoại: 0123456789</li>
@@ -27,25 +27,15 @@
     </div>
 </footer>
 
-
 <style>
     .footer {
-        background-color: #343a40;
-        color: #fff;
+        background-color: #2c3e50;
+        color: #f8f9fa;
         padding: 40px 0;
         text-align: center;
     }
 
-        .footer .row {
-            margin-left: 0px;
-        }
-
-        .footer p {
-            margin: 0;
-            font-size: 16px;
-            color: #ccc;
-        }
-
+    /* Main container and content layout */
     .footer-content {
         display: flex;
         justify-content: space-between;
@@ -55,7 +45,7 @@
 
     .footer h2 {
         font-size: 20px;
-        color: #f8f9fa;
+        color: #ffde59;
         margin-bottom: 15px;
     }
 
@@ -64,33 +54,45 @@
         padding: 0;
     }
 
-        .footer ul li {
-            margin-bottom: 10px;
-        }
-
-    .footer a {
-        color: #17a2b8;
-        text-decoration: none;
+    /* Links */
+    .footer ul li {
+        margin-bottom: 10px;
     }
 
-        .footer a:hover {
-            color: #f8f9fa;
-            text-decoration: underline;
-        }
+    .footer a {
+        color: #ffde59;
+        text-decoration: none;
+        font-size: 16px;
+    }
 
+    .footer a:hover {
+        color: #f8f9fa;
+        text-decoration: underline;
+    }
+
+    /* Contact information styling */
     .contact-info li {
         display: flex;
         align-items: center;
         font-size: 16px;
+        color: #f8f9fa;
     }
 
-    .contact-info {
-        margin-left: 100px;
+    .contact-info i {
+        margin-right: 8px;
+        color: #ffde59;
     }
 
-        .contact-info i {
-            margin-right: 10px;
-            color: #f8f9fa;
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        .footer-content {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
-</style>
 
+        .contact-info {
+            padding: 0;
+        }
+    }
+</style>

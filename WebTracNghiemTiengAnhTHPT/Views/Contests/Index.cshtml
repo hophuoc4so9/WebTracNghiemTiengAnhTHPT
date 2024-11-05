@@ -5,7 +5,7 @@
     string rq = Request["PhongThiId"]?.ToString() ?? "";
 }
 
-<h2>Danh sách kỳ thi</h2>
+<h2 class="text-center my-4">Danh sách kỳ thi</h2>
 @if (Model != null && Model.Count() > 0)
 {
     <div class="container">
@@ -14,20 +14,20 @@
             {
                 if (item.CongKhai == true || !string.IsNullOrEmpty(rq))
                 {
-                    <div class="col-12">
-                        <div class="contest-card bg-light border border-primary rounded-3 p-4 my-3 w-100">
-                            <h2>@Html.DisplayFor(modelItem => item.TenKyThi)</h2>
-                            <div class="d-flex justify-content-between align-items-center gap-3">
-                                <span>@item.Soluot Số lượt <img src="~/Content/img/mdi--account-check-outline.svg" /></span>
-                                <span>@item.ThoiGian phút <img src="~/Content/img/mingcute--time-line.svg" /></span>
-                                <span>@item.DiemTrungBinh Đánh giá <img src="~/Content/img/material-symbols--star-rate.svg" /></span>
-                                <span>@item.SoCauHoi câu hỏi <img src="~/Content/img/ph--question.svg" /></span>
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="contest-card bg-light border border-primary rounded-3 p-4 h-100 shadow-sm">
+                            <h2 class="contest-title">@Html.DisplayFor(modelItem => item.TenKyThi)</h2>
+                            <div class="d-flex justify-content-between align-items-center gap-3 mb-3">
+                                <span class="contest-detail"><img src="~/Content/img/mdi--account-check-outline.svg" alt="Users" /> @item.Soluot</span>
+                                <span class="contest-detail"><img src="~/Content/img/mingcute--time-line.svg" alt="Time" /> @item.ThoiGian phút</span>
+                                <span class="contest-detail"><img src="~/Content/img/material-symbols--star-rate.svg" alt="Rating" /> @item.DiemTrungBinh</span>
+                                <span class="contest-detail"><img src="~/Content/img/ph--question.svg" alt="Questions" /> @item.SoCauHoi</span>
                             </div>
 
                             @if (!string.IsNullOrEmpty(rq))
                             {
-                                <p>Bắt đầu: @item.ThoiGianBatDau</p>
-                                <p>Kết thúc: @item.ThoiGianKetThuc</p>
+                                <p class="text-muted">Bắt đầu: @item.ThoiGianBatDau</p>
+                                <p class="text-muted">Kết thúc: @item.ThoiGianKetThuc</p>
                             }
 
                             <center>
@@ -42,31 +42,65 @@
 }
 else
 {
-    <p>Không có kỳ thi nào</p>
+    <p class="text-center">Không có kỳ thi nào</p>
 }
 
 <style>
+    /* General Styles */
+    .contest-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #2c3e50;
+        margin-bottom: 1rem;
+        transition: color 0.3s ease;
+    }
+
+        .contest-title:hover {
+            color: #007bff;
+        }
+
     .contest-card {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-     
+        transition: transform 0.2s ease, box-shadow 0.3s ease;
     }
 
-        .contest-card h2 {
-            font-size: 1.25rem;
-        }
+    .contest-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
 
-        .contest-card p {
-            margin-bottom: 0.5rem;
-        }
+    .contest-detail {
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+        color: #34495e;
+    }
 
-        .contest-card img {
-            width: 20px;
-            height: 20px;
-        }
+    .contest-detail img {
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+    }
 
     .btn-outline-success {
         margin-top: auto;
+        border-color: #007bff;
+/*        color: #28a745;*/
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        .btn-outline-success:hover {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+        }
+
+    /* Responsive Adjustments */
+    @@media (max-width: 768px) {
+        .contest-card {
+            margin: 10px 0;
+        }
     }
 </style>

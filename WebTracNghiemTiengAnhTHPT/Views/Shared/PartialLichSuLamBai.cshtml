@@ -30,7 +30,7 @@ else
                     @Html.ActionLink(item.KyThi.TenKyThi, "Result", "Contests", new { maketqua = item.Maketqua }, new { @class = "btn btn-outline-success " })
                 </td>
                 <td>
-                    @((item.Diem ?? 0).ToString("F2"))
+                    @((item.Diem ?? 0).ToString("F2"))/10.00đ
                 </td>
             </tr>
         }
