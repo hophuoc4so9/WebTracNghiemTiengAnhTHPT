@@ -81,6 +81,8 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             using (var context = new TracNghiemTiengAnhTHPTEntities1())
             {
                 // Get the current exam's questions
+                
+
                 var model = context.CauHois
                     .Include(c => c.NhomCauHoi)
                     .Where(item => item.KyThis.Any(c => c.MaDe == made && c.isDeleted!=true))
@@ -94,6 +96,9 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                 ViewBag.KyThi = kythi;
                 ViewBag.made = made;
                 ViewBag.OtherQuestions = otherQuestions; // Pass other questions to the view
+                ViewBag.Currenclass = kythi.CauHois.FirstOrDefault().DangBais.Where(c=>c.TenLoai.Contains("Lớp")).FirstOrDefault().TenLoai;
+                ViewBag.CurrenBoSach = kythi.CauHois.FirstOrDefault().DangBais.Where(c => c.TenLoai=="Friends Global"|| c.TenLoai == "Global Success" || c.TenLoai == "Smart World").FirstOrDefault().TenLoai;
+                ViewBag.dangBais=context.DangBais.ToList();
                 return View(model);
             }
         }
@@ -423,19 +428,46 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                             }
                         }
                     }
-                    KyThi kythi=db.KyThis.FirstOrDefault(k => k.MaDe == made);
+
+                    KyThi kythi = db.KyThis.FirstOrDefault(k => k.MaDe == made);
                     if (kythi != null)
                     {
-                        kythi.ThoiGian =int.Parse( f["KyThi[" + made + "].ThoiGian"]);
+                        kythi.ThoiGian = int.Parse(f["KyThi[" + made + "].ThoiGian"]);
                         kythi.SoCauHoi = int.Parse(f["KyThi[" + made + "].SoCauHoi"]);
 
+                        // Retrieve the selected values from the dropdown lists
+                        string selectedClass = f["Class"];
+                        string selectedExamType = f["ExamType"];
+                        foreach (CauHoi cauhoi in kythi.CauHois)
+                        {
+                            cauhoi.DangBais.Clear();
+                            if (!string.IsNullOrEmpty(selectedClass))
+                            {
+                                var dangbai = db.DangBais.FirstOrDefault(d => d.TenLoai == selectedClass);
+                                if (dangbai != null)
+                                {
+                                    cauhoi.DangBais.Add(dangbai);
+                                }
+                            }
+                            if (!string.IsNullOrEmpty(selectedExamType))
+                            {
+                                var dangbai = db.DangBais.FirstOrDefault(d => d.TenLoai == selectedExamType);
+                                if (dangbai != null)
+                                {
+                                    cauhoi.DangBais.Add(dangbai);
+                                }
+                            }
+                        }
                     }
-                    db.SaveChanges();
 
-                    return RedirectToAction("ChiTietDeThi", new { made });
+                    db.SaveChanges();
                 }
+
+                return RedirectToAction("ChiTietDeThi", new { made });
             }
         }
+
+
         public ActionResult AutoGenerateExam()
         {
             using (var db = new TracNghiemTiengAnhTHPTEntities1())

@@ -48,6 +48,8 @@ create table DangBai
 	MaLoai int IDENTITY(1,1) PRIMARY KEY,
 	TenLoai varchar(30) NOT NULL,
 )
+ALTER TABLE DangBai
+ALTER COLUMN TenLoai nvarchar(30);
 create table ChiTietCauHoiDangBai
 (
 	MaCauHoi int CONSTRAINT FK_CauHoi_ChiTietCauHoiDangBai FOREIGN KEY (MaCauHoi)
@@ -478,3 +480,98 @@ SET mucdo =
     AND T.SoNguoiTraLoi > 0  -- Ch? tính các câu h?i có ng??i tr? l?i
 )
 WHERE mucdo IS NULL;  -- C?p nh?t ch? nh?ng câu h?i ch?a có ?? khó
+
+INSERT INTO DangBai (TenLoai) VALUES (N'Reading');
+INSERT INTO DangBai (TenLoai) VALUES (N'Listening');
+ALTER TABLE DangBai
+ADD CONSTRAINT UQ_TenLoai UNIQUE (TenLoai);
+INSERT INTO DangBai (TenLoai) VALUES (N'L?p 11');
+INSERT INTO DangBai (TenLoai) VALUES (N'L?p 12');
+INSERT INTO DangBai (TenLoai) VALUES (N'L?p 10');
+INSERT INTO ChiTietCauHoiDangBai (MaCauHoi, MaLoai)
+SELECT CauHoi.MaCauHoi, 
+       CASE 
+           WHEN NhomCauHoi.NoiDung LIKE '%<audio src=%' THEN 2 
+           ELSE 1 
+       END AS MaLoai
+FROM CauHoi
+JOIN NhomCauHoi ON CauHoi.MaNhom = NhomCauHoi.MaNhom;
+
+CREATE TRIGGER trg_UpdateDangBaiOnNoiDungChange
+ON NhomCauHoi
+AFTER UPDATE
+AS
+BEGIN
+    DECLARE @MaLoaiAudio INT = 2;  -- ID for "audio" type
+    DECLARE @MaLoaiNonAudio INT = 1;  -- ID for "non-audio" type
+
+    -- For questions that contain "<audio src="
+    MERGE INTO ChiTietCauHoiDangBai AS target
+    USING (
+        SELECT CauHoi.MaCauHoi, @MaLoaiAudio AS MaLoai
+        FROM CauHoi
+        JOIN inserted i ON i.MaNhom = CauHoi.MaNhom
+        WHERE i.NoiDung LIKE '%<audio src=%'
+    ) AS source
+    ON target.MaCauHoi = source.MaCauHoi AND target.MaLoai IN (1, 2)
+    WHEN MATCHED AND target.MaLoai = @MaLoaiNonAudio THEN
+        UPDATE SET target.MaLoai = @MaLoaiAudio  -- Update from 1 to 2 if "<audio src=" is found
+    WHEN NOT MATCHED BY TARGET THEN
+        INSERT (MaCauHoi, MaLoai) VALUES (source.MaCauHoi, @MaLoaiAudio);  -- Insert if no entry exists with MaLoai 2
+
+    -- For questions that do NOT contain "<audio src="
+    MERGE INTO ChiTietCauHoiDangBai AS target
+    USING (
+        SELECT CauHoi.MaCauHoi, @MaLoaiNonAudio AS MaLoai
+        FROM CauHoi
+        JOIN inserted i ON i.MaNhom = CauHoi.MaNhom
+        WHERE i.NoiDung NOT LIKE '%<audio src=%'
+    ) AS source
+    ON target.MaCauHoi = source.MaCauHoi AND target.MaLoai IN (1, 2)
+    WHEN MATCHED AND target.MaLoai = @MaLoaiAudio THEN
+        UPDATE SET target.MaLoai = @MaLoaiNonAudio  -- Update from 2 to 1 if "<audio src=" is not found
+    WHEN NOT MATCHED BY TARGET THEN
+        INSERT (MaCauHoi, MaLoai) VALUES (source.MaCauHoi, @MaLoaiNonAudio);  -- Insert if no entry exists with MaLoai 1
+END;
+
+CREATE TRIGGER trg_InsertCauHoiDangBaiOnInsertCauHoi
+ON CauHoi
+AFTER INSERT
+AS
+BEGIN
+    DECLARE @MaLoaiAudio INT = 2;  -- ID for "audio" type
+    DECLARE @MaLoaiNonAudio INT = 1;  -- ID for "non-audio" type
+
+    -- Insert MaLoai 2 if "<audio src=" is found in NhomCauHoi.NoiDung
+    INSERT INTO ChiTietCauHoiDangBai (MaCauHoi, MaLoai)
+    SELECT i.MaCauHoi, @MaLoaiAudio
+    FROM inserted i
+    JOIN NhomCauHoi nh ON nh.MaNhom = i.MaNhom
+    WHERE nh.NoiDung LIKE '%<audio src=%';
+
+    -- Insert MaLoai 1 if "<audio src=" is not found in NhomCauHoi.NoiDung
+    INSERT INTO ChiTietCauHoiDangBai (MaCauHoi, MaLoai)
+    SELECT i.MaCauHoi, @MaLoaiNonAudio
+    FROM inserted i
+    JOIN NhomCauHoi nh ON nh.MaNhom = i.MaNhom
+    WHERE nh.NoiDung NOT LIKE '%<audio src=%';
+END;
+
+INSERT INTO DangBai (TenLoai)
+VALUES 
+    (N'Unit 1'),
+    (N'Unit 2'),
+    (N'Unit 3'),
+    (N'Unit 4'),
+    (N'Unit 5'),
+    (N'Unit 6'),
+    (N'Unit 7'),
+    (N'Unit 8'),
+    (N'Unit 9'),
+    (N'Unit 10');
+
+INSERT INTO DangBai (TenLoai)
+VALUES 
+    (N'Pronunciation'),(N'primary stress');
+
+

@@ -1,0 +1,288 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    <button class="btn btn-success" id="btnAdd"><i class="fa fa-plus" aria-hidden="true"></i> Thêm Dạng bài</button>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th class="col-md-9">Tên Dạng bài</th>
+            <th class="col-md-3 text-right">Các chức năng</th>
+        </tr>
+    </thead>
+    <tbody id="tblDsChuDe">
+    </tbody>
+    <div id="pagination">
+
+    </div>
+    <div class="row" style="display: flex; align-items: center;">
+        <input type="text" id="txtSearch" class="form-control flex-1" placeholder="Tìm kiếm Dạng bài" style="flex: 1; margin-right: 10px;" />
+        <button class="btn btn-primary" id="btnSearch">Tìm kiếm</button>
+    </div>
+</table>
+<style>
+    .flex-1 {
+        flex: 1;
+    }
+
+    /* Custom Modal CSS */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0,0,0);
+        background-color: rgba(0,0,0,0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 500px;
+    }
+
+    .modal-header, .modal-footer {
+        padding: 10px;
+        text-align: right;
+    }
+
+   
+
+    .modal-footer {
+        border-top: 1px solid #ddd;
+    }
+
+    .modal-header {
+        border-bottom: 1px solid #ddd;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .close {
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>
+
+<div id="modalChuDe" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalTitle"></h2>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <input type="text" id="maCD" value="" hidden />
+                <label for="txtTenChuDe">Tên Dạng bài</label>
+                <input type="text" class="form-control" id="txtTenChuDe" placeholder="Tên Dạng bài" />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="btnSubmit">Lưu</button>
+            <button type="button" class="btn btn-secondary" id="btnClose">Đóng</button>
+        </div>
+    </div>
+</div>
+
+@section script {
+    <script>
+        $(document).ready(function () {
+            LoadDsChuDe();
+        });
+
+        function LoadDsChuDe(page = 1, pageSize = 10, search = "") {
+            $.ajax({
+                url: '/Admin/QuanLyDangBai/DsChuDe',
+                type: 'get',
+                data: { page: page, pageSize: pageSize, search: search },
+                success: function (data) {
+                    if (data.code == 200) {
+                        $('#tblDsChuDe').empty();
+                        $.each(data.dsCD, function (k, v) {
+                            let s = '<tr id="' + v.MaCD + '">';
+                            s += '<td class="col-md-9">' + v.TenCD + '</td>';
+                            s += '<td class="col-md-3 text-right">';
+                            s += '<button class="btn btn-sm btn-info" name="view"><i class="fa fa-info-circle" aria-hidden="true"></i></button>&nbsp;';
+                            s += '<button class="btn btn-sm btn-warning" name="update"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>&nbsp;';
+                            s += '<button class="btn btn-sm btn-danger" name="delete"><i class="fa fa-trash" aria-hidden="true"></i></button>';
+                            s += '</td>';
+                            s += '</tr>';
+                            $('#tblDsChuDe').append(s);
+                        });
+
+                        // Update pagination controls
+                        $('#pagination').empty();
+                        let totalPages = data.totalPages;
+                        let currentPage = data.currentPage;
+                        let maxPagesToShow = 5;
+                        let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+                        let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+
+                        if (currentPage > 1) {
+                            $('#pagination').append($('<button>').text('«').addClass('btn btn-default').click(function () {
+                                LoadDsChuDe(currentPage - 1, pageSize, search);
+                            }));
+                        }
+
+                        for (let i = startPage; i <= endPage; i++) {
+                            let pageButton = $('<button>')
+                                .text(i)
+                                .addClass('btn btn-default')
+                                .click(function () {
+                                    LoadDsChuDe(i, pageSize, search);
+                                });
+                            if (i === currentPage) {
+                                pageButton.addClass('btn-primary');
+                            }
+                            $('#pagination').append(pageButton);
+                        }
+
+                        if (currentPage < totalPages) {
+                            $('#pagination').append($('<button>').text('»').addClass('btn btn-default').click(function () {
+                                LoadDsChuDe(currentPage + 1, pageSize, search);
+                            }));
+                        }
+                    }
+                }
+            });
+        }
+
+
+        $(document).ready(function () {
+            LoadDsChuDe();
+
+            $('#btnSearch').click(function () {
+                let search = $('#txtSearch').val().trim();
+                LoadDsChuDe(1, 5, search);
+            });
+        });
+
+        // Open modal to add a new topic
+        $('#btnAdd').click(function () {
+            $('#modalTitle').text('Thêm mới Dạng bài');
+            $('#maCD').val('');
+            $('#txtTenChuDe').val('');
+            $('#txtTenChuDe').prop('readonly', false);
+            $('#btnSubmit').show();
+            $('#modalChuDe').show();
+        });
+
+        // Open modal to view topic details
+        $(document).on('click', "button[name='view']", function () {
+            let idCD = $(this).closest('tr').attr('id');
+            $.ajax({
+                url: '/Admin/QuanLyDangBai/Detail',
+                type: 'get',
+                data: { maCD: idCD },
+                success: function (data) {
+                    if (data.code == 200) {
+                        $('#txtTenChuDe').val(data.cd.TenChuDe);
+                        $('#txtTenChuDe').prop('readonly', true);
+                        $('#btnSubmit').hide();
+                        $('#modalTitle').text('Xem chi tiết Dạng bài');
+                        $('#modalChuDe').show();
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
+        // Open modal to update a topic
+        $(document).on('click', "button[name='update']", function () {
+            let idCD = $(this).closest('tr').attr('id');
+            $.ajax({
+                url: '/Admin/QuanLyDangBai/Detail',
+                type: 'get',
+                data: { maCD: idCD },
+                success: function (data) {
+                    if (data.code == 200) {
+                        $('#txtTenChuDe').val(data.cd.TenChuDe);
+                        $('#txtTenChuDe').prop('readonly', false);
+                        $('#btnSubmit').show();
+                        $('#modalTitle').text('Cập nhật Dạng bài');
+                        $('#maCD').val(idCD);
+                        $('#modalChuDe').show();
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
+        // Delete a topic
+        $(document).on('click', "button[name='delete']", function () {
+            let idCD = $(this).closest('tr').attr('id');
+            if (confirm('Bạn thực sự muốn xóa Dạng bài này?')) {
+                $.ajax({
+                    url: '/Admin/QuanLyDangBai/Delete',
+                    type: 'post',
+                    data: { maCD: idCD },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            alert(data.msg);
+                            LoadDsChuDe();
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                });
+            }
+        });
+
+        // Submit form to add or update a topic
+        $('#btnSubmit').click(function () {
+            let strTenChuDe = $('#txtTenChuDe').val().trim();
+            if (strTenChuDe.length == 0) {
+                alert('Vui lòng nhập tên Dạng bài');
+                return;
+            }
+            let maCD = $('#maCD').val().trim();
+            let url = maCD ? '/Admin/QuanLyDangBai/Update' : '/Admin/QuanLyDangBai/AddChuDe';
+            let requestData = maCD ? { maCD: maCD, strTenCD: strTenChuDe } : { strTenCD: strTenChuDe };
+            console.log(requestData);
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: requestData,
+                success: function (data) {
+                    if (data.code == 200) {
+                        alert(data.msg);
+                        $('#modalChuDe').hide();
+                        LoadDsChuDe();
+                        $('#txtTenChuDe').val('');
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
+        // Close modal
+        $('.close, #btnClose').click(function () {
+
+            $('#modalChuDe').hide();
+        });
+    </script>
+}
