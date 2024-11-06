@@ -47,6 +47,8 @@
         importword_converter_options: { 'formatting': { 'styles': 'inline', 'resets': 'inline', 'defaults': 'inline', } },
     });
 </script>
+
+
 <style>
     .selected-button {
         background-color: grey;
@@ -137,6 +139,68 @@
             background-color: #0056b3;
             color: #fff;
         }
+    .col-lg-3 {
+        background-color: #f8f9fa;
+        border: 1px solid #007bff;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin: 0.25rem;
+    }
+
+    #timer {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+
+    .group-container-right {
+        margin-bottom: 1rem;
+    }
+
+        .group-container-right .bg-light {
+            background-color: #f8f9fa;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            font-weight: bold;
+        }
+
+        .group-container-right button {
+            margin: 0.25rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid #007bff;
+            border-radius: 0.25rem;
+            background-color: #ffffff;
+            color: #007bff;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+            .group-container-right button:hover {
+                background-color: #007bff;
+                color: #ffffff;
+            }
+
+            .group-container-right button.selected-button {
+                background-color: grey;
+                color: white;
+            }
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border-radius: 0.2rem;
+    }
+
+    .btn-success {
+        color: #fff;
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+        .btn-success:hover {
+            color: #fff;
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
 </style>
 
 <div class="container">
@@ -149,7 +213,7 @@
             <input type="hidden" id="maDe" value="@ViewBag.MaDe" />
 
             <div class="col-12 d-lg-flex flex-lg-row flex-column">
-                <div class="col-lg-9 col-12 ">
+                <div class="col-lg-9 col-12">
                     <!-- Group Buttons -->
                     <div>
                         @foreach (var group in groupedItems)
@@ -182,12 +246,12 @@
                     @foreach (var group in groupedItems)
                     {
                         <div class="group-container" id="group-container-@group.Key.MaNhom" style="display: @(isFirst ? "block" : "none");">
-                            <div class="bg-light "> @Html.Raw(HttpUtility.HtmlDecode(@group.Key.NoiDung)) </div>
+                            <div class="bg-light"> @Html.Raw(HttpUtility.HtmlDecode(@group.Key.NoiDung)) </div>
                             @foreach (var item in group)
                             {
                                 // Create a list of answer choices
                                 var choices = new List<(string Value, string Text)>
-                                                                                            {
+                                            {
                                     ("A", item.CauHoi.DapAnA),
                                     ("B", item.CauHoi.DapAnB),
                                     ("C", item.CauHoi.DapAnC),
@@ -220,17 +284,15 @@
                                     <!-- Error reporting -->
                                     <button class="btn btn-danger" onclick="openReportModal(@item.MaCauHoi); return false;">Report Error</button>
 
-
                                     <!-- Error report modal -->
                                     <div class="modal fade" id="reportModal-@item.MaCauHoi" tabindex="-1" role="dialog">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h5 class="modal-title">Report Error for Question @myDictionary[item.MaCauHoi]</h5>
-
                                                 </div>
                                                 <div class="modal-body">
-                                                    <textarea id="errorMessage-@item.MaCauHoi" class="tinymce  form-control" placeholder="Describe the error..."></textarea>
+                                                    <textarea id="errorMessage-@item.MaCauHoi" class="tinymce form-control" placeholder="Describe the error..."></textarea>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" onclick="closeReportModal(@item.MaCauHoi)">Close</button>
@@ -248,16 +310,17 @@
                 </div>
 
                 <!-- Timer and Submit Button -->
-                <div class="col-lg-3 col-12 bg-light border border-primary rounded-3 p-4 mx-1 ">
-                    <input onclick="ketthuc()" type="submit" value="Nộp bài" />
+                <div class="col-lg-3 col-12 bg-light border border-primary rounded-3 p-4 mx-1">
+                    <input onclick="ketthuc()" type="submit" value="Nộp bài" 
+                           class="btn-sm btn-success" />
                     <div id="timer">90:00</div>
                     @foreach (var group in groupedItems)
                     {
-                        <div class="group-container-right ">
-                            <div class="bg-light ">Phần thi @group.Key.MaNhom</div>
+                        <div class="group-container-right">
+                            <div class="bg-light">Phần thi @group.Key.MaNhom</div>
                             @foreach (var item in group)
                             {
-                                <button name="@item.MaCauHoi" class="m-1" id="button-@item.MaCauHoi" onclick="showQuestion('@item.MaCauHoi')">
+                                <button name="@item.MaCauHoi" class="m-1 btn-success" id="button-@item.MaCauHoi" onclick="showQuestion('@item.MaCauHoi')">
                                     @myDictionary[item.MaCauHoi]
                                 </button>
                             }
@@ -369,7 +432,7 @@
             return;
         }
         //console.log(errorMessageText)
-        console.log(MaDe, MaCauHoi, errorMessageText); 
+        console.log(MaDe, MaCauHoi, errorMessageText);
         $.ajax({
             type: "POST",
             url: "/Contests/ReportError",
@@ -384,7 +447,7 @@
                     $(`#reportModal-${MaCauHoi}`).modal('hide');
                 } else {
                     alert(response.message);
-                    console.log(response); 
+                    console.log(response);
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {

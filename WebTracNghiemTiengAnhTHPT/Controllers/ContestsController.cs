@@ -278,7 +278,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
         {
             string username = Session["UserName"]?.ToString() ?? string.Empty;
             var model = _db.KetQuas.AsNoTracking().Where(c => c.Username == username && c.status == true).ToList();
-            return View("PartialLichSuLamBai", model);
+            return View("PartialBieuDoLichSuLamBai", model);
 
         }
         public async Task< ActionResult> GiveAdvice(int maketqua)
@@ -400,6 +400,20 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
 
 
 
+        public JsonResult GetKetQuaData()
+        {
+            TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
+            var ketQuaData = db.KetQuas.OrderBy(k => k.thoigian_batdau)
+                .Select(k => new
+                {
+                    ThoiGianBatDau = k.thoigian_batdau.HasValue ? k.thoigian_batdau.Value.ToString("yyyy-MM-dd") : string.Empty,
+                    Diem = k.Diem ?? 0,
+                    TenKyThi = k.KyThi.TenKyThi
+                })
+                .ToList();
+
+            return Json(ketQuaData, JsonRequestBehavior.AllowGet);
+        }
 
 
     }

@@ -794,6 +794,7 @@
     <Content Include="Views\OnTap\Index.cshtml" />
     <Content Include="Views\Shared\GiveAdvice.cshtml" />
     <Content Include="Views\Shared\PartialDangBai.cshtml" />
+    <Content Include="Views\Shared\PartialBieuDoLichSuLamBai.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\admin\Data\" />

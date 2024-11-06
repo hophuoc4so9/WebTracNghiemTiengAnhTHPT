@@ -6,6 +6,8 @@
     <title>@ViewBag.Title - Trắc nghiệm tiếng Anh cho học sinh THPT</title>
     <link rel="stylesheet" href="~/Content/Site.css" />
     <link rel="stylesheet" href="~/Content/font-awesome.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <style>
@@ -17,10 +19,10 @@
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .navbar:hover {
-            background-color: #34495e; /* Slightly darker on hover */
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-        }
+            .navbar:hover {
+                background-color: #34495e; /* Slightly darker on hover */
+                box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            }
 
         /* Logo */
         .navbar-brand img {
@@ -29,9 +31,9 @@
             transition: transform 0.3s ease;
         }
 
-        .navbar-brand img:hover {
-            transform: scale(1.1); /* Slight zoom effect on hover */
-        }
+            .navbar-brand img:hover {
+                transform: scale(1.1); /* Slight zoom effect on hover */
+            }
 
         /* Navbar Links */
         .navbar-nav .nav-link {
@@ -43,11 +45,11 @@
             border-radius: 20px;
         }
 
-        .navbar-nav .nav-link:hover {
-            color: #3498db !important;
-            background-color: rgba(255, 255, 255, 0.1); /* Subtle background on hover */
-            transform: scale(1.05); /* Slight zoom effect on hover */
-        }
+            .navbar-nav .nav-link:hover {
+                color: #3498db !important;
+                background-color: rgba(255, 255, 255, 0.1); /* Subtle background on hover */
+                transform: scale(1.05); /* Slight zoom effect on hover */
+            }
 
         /* Navbar Toggle Button */
         .navbar-toggler {
@@ -65,27 +67,27 @@
             transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
         }
 
-        .nav-pills .nav-link.text-danger {
-            background-color: #e74c3c;
-            color: #fff !important;
-        }
+            .nav-pills .nav-link.text-danger {
+                background-color: #e74c3c;
+                color: #fff !important;
+            }
 
-        .nav-pills .nav-link.text-danger:hover {
-            background-color: #c0392b;
-            color: #fff !important;
-            transform: scale(1.05);
-        }
+                .nav-pills .nav-link.text-danger:hover {
+                    background-color: #c0392b;
+                    color: #fff !important;
+                    transform: scale(1.05);
+                }
 
-        .nav-pills .nav-link.bg-primary {
-            background-color: #3498db;
-            color: #fff !important;
-        }
+            .nav-pills .nav-link.bg-primary {
+                background-color: #3498db;
+                color: #fff !important;
+            }
 
-        .nav-pills .nav-link.bg-primary:hover {
-            background-color: #2980b9;
-            color: #fff !important;
-            transform: scale(1.05);
-        }
+                .nav-pills .nav-link.bg-primary:hover {
+                    background-color: #2980b9;
+                    color: #fff !important;
+                    transform: scale(1.05);
+                }
 
         /* User Profile and Log Out Links */
         .navbar-nav .nav-item .nav-link {
@@ -96,14 +98,14 @@
             transition: color 0.3s ease, transform 0.2s ease;
         }
 
-        .navbar-nav .nav-item .nav-link:hover {
-            color: #0056b3;
-            transform: scale(1.05);
-        }
+            .navbar-nav .nav-item .nav-link:hover {
+                color: #0056b3;
+                transform: scale(1.05);
+            }
 
-        .navbar-nav .nav-item .nav-link .fas {
-            margin-right: 5px;
-        }
+            .navbar-nav .nav-item .nav-link .fas {
+                margin-right: 5px;
+            }
 
         /* General Button Styling */
         .navbar-nav .nav-link, .nav-pills .nav-link {
@@ -117,13 +119,15 @@
                 text-align: center;
                 margin: 5px 0;
             }
+
             .form-inline {
                 flex-direction: column;
                 align-items: stretch;
             }
-            .form-inline .search-bar {
-                margin-bottom: 10px;
-            }
+
+                .form-inline .search-bar {
+                    margin-bottom: 10px;
+                }
         }
 
         /* Footer Styling */
@@ -135,10 +139,10 @@
             transition: box-shadow 0.3s ease;
         }
 
-        /* Hover Effects */
-        .table-ranking:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
+            /* Hover Effects */
+            .table-ranking:hover {
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            }
 
         /* Footer Links */
         .footer-link {
@@ -148,11 +152,11 @@
             transition: color 0.3s ease, text-shadow 0.3s ease;
         }
 
-        .footer-link:hover {
-            color: #3498db;
-            text-decoration: underline;
-            text-shadow: 0 0 5px rgba(52, 152, 219, 0.5); /* Glowing effect on hover */
-        }
+            .footer-link:hover {
+                color: #3498db;
+                text-decoration: underline;
+                text-shadow: 0 0 5px rgba(52, 152, 219, 0.5); /* Glowing effect on hover */
+            }
     </style>
 </head>
 <body>
