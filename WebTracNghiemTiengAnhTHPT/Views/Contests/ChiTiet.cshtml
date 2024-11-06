@@ -6,40 +6,31 @@
     int made = int.Parse(Request["made"].ToString());
 }
 
-<h2>Thông tin kỳ thi kỳ thi</h2>
+<h2>Chi tiết kỳ thi</h2>
 
 <div class="container">
     <div class="row">
         <div class="col-lg-9 col-12">
-            <dl class="dl-vertical">
-                <dt>
-                    Tên kỳ thi
-                </dt>
-                <dd>
+            <div class="test-info-card">
+                <h3 class="test-title">
                     @Html.DisplayFor(model => model.TenKyThi)
-                </dd>
-                <dt>
-                    Số câu hỏi
-                </dt>
-                <dd>
-                    <img src="~/Content/img/ph--question.svg" alt="Questions" />
-                    @Html.DisplayFor(model => model.SoCauHoi) câu hỏi
-                </dd>
-                <dt>
-                    Số người đã làm bài
-                </dt>
-                <dd>
-                    <img src="~/Content/img/mdi--account-check-outline.svg" alt="Users" />
-                    @Html.DisplayFor(model => model.SoCauHoi) người đã làm bài
-                </dd>
-                <dt>
-                    Thời gian
-                </dt>
-                <dd>
-                    <img src="~/Content/img/mingcute--time-line.svg" alt="Time" />   @Html.DisplayFor(model => model.ThoiGian) phút
-                </dd>
-            </dl>
-            @Html.ActionLink("Tham gia", "ChiTietKyThi", "Contests", new { made = made }, new { @class = "btn btn-outline-success " })
+                </h3>
+                <p class="test-meta">
+                    <span><img src="~/Content/img/ph--question.svg" alt="Questions" /> @Html.DisplayFor(model => model.SoCauHoi) câu hỏi</span> |
+                    <span><img src="~/Content/img/mdi--account-check-outline.svg" alt="Users" /> @Html.DisplayFor(model => model.SoCauHoi) người đã làm bài</span> |
+                    <span><img src="~/Content/img/mingcute--time-line.svg" alt="Time" /> @Html.DisplayFor(model => model.ThoiGian) phút</span>
+                </p>
+                <p class="test-note">
+                    <strong>Chú ý:</strong> Để được quy đổi sang scaled score, vui lòng chọn chế độ làm FULL TEST.
+                </p>
+                @Html.ActionLink("Tham gia", "ChiTietKyThi", "Contests", new { made = made }, new { @class = "btn btn-primary" })
+            </div>
+            <div class="practice-options">
+                <h4>Luyện tập</h4>
+                <div class="option-list">
+                    <!-- Add options for different recordings here -->
+                </div>
+            </div>
         </div>
         <div class="col-lg-3 col-12" id="partiview">
             @Html.Action("PartialLichSuLamBai", "Contests", new { made = made })
@@ -55,26 +46,74 @@
         margin-top: 20px;
     }
 
-    .dl-vertical dt {
-        font-size: 1.2em;
+    .test-info-card {
+        background-color: #f8f9fa;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .test-title {
+        font-size: 1.6em;
         font-weight: bold;
-        margin-top: 10px;
+        color: #007bff;
     }
 
-    .dl-vertical dd {
-        font-size: 1.2em;
-        margin-bottom: 10px;
+    .test-meta span {
+        font-size: 1.1em;
+        color: #666;
     }
 
-    .dl-vertical img {
+    .test-meta img {
         vertical-align: middle;
         margin-right: 5px;
     }
 
-    .btn-outline-success {
+    .test-note {
+        margin-top: 15px;
+        padding: 10px;
+        background-color: #e0f7fa;
+        border-radius: 5px;
+        font-size: 1em;
+        color: #333;
+    }
+
+    .btn-primary {
         margin-top: 20px;
         font-size: 1.2em;
+        background-color: #007bff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        color: #fff;
     }
+
+    .practice-options h4 {
+        font-size: 1.4em;
+        font-weight: bold;
+        color: #333;
+        margin-top: 20px;
+    }
+
+    .option-list {
+        margin-top: 10px;
+    }
+
+        .option-list div {
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            cursor: pointer;
+        }
+
+            .option-list div:hover {
+                background-color: #e0f7fa;
+                transform: scale(1.02);
+            }
 
     #partiview {
         margin-top: 20px;
@@ -83,40 +122,4 @@
     #partialDangBaiContainer {
         margin-top: 20px;
     }
-
-    .dangbai-list {
-        list-style-type: none;
-        padding: 0;
-    }
-
-        .dangbai-list li, .dangbai-list div {
-            padding: 10px;
-            border: 1px solid #ddd;
-            margin-bottom: 5px;
-            border-radius: 4px;
-            background-color: #f9f9f9;
-            display: inline-flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-
-            .dangbai-list li:hover, .dangbai-list div:hover {
-                background-color: #e0f7fa;
-                transform: scale(1.05);
-            }
-
-            .dangbai-list li button, .dangbai-list div button {
-                margin-left: 10px;
-                background: none;
-                border: none;
-                color: red;
-                font-size: 1.2em;
-                cursor: pointer;
-            }
-
-                .dangbai-list li button:hover, .dangbai-list div button:hover {
-                    color: darkred;
-                }
 </style>
-

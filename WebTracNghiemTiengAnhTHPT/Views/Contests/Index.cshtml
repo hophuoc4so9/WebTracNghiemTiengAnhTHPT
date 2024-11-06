@@ -11,7 +11,7 @@
 {
     <div class="container">
         <div class="row">
-            <div class="row ">
+            <div class="row">
                 <h3>Danh sách kỳ thi sắp tới</h3>
                 @foreach (var item in Model.Where(i => i.ThoiGianBatDau > now))
                 {
@@ -62,7 +62,6 @@
                                 </center>
                             </div>
                         </div>
-
                     }
                 }
             </div>
@@ -87,8 +86,6 @@
                                     <p class="text-muted">Kết thúc: @item.ThoiGianKetThuc</p>
                                 }
 
-
-
                                 <center>
                                     @Html.ActionLink("Tham gia ảo", "ChiTiet", "Contests", new { made = item.MaDe }, new { @class = "btn btn-outline-success" })
                                 </center>
@@ -104,10 +101,28 @@ else
 {
     <p class="text-center">Không có kỳ thi nào</p>
 }
+
 <style>
-    /* General Styles */
+/* General Styles */
+h2.text-center {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 1.5rem;
+}
+
+h3 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #333;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding-left: 10px;
+    border-left: 5px solid #007bff;
+}
+
 .contest-title {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: bold;
     color: #2c3e50;
     margin-bottom: 1rem;
@@ -145,6 +160,8 @@ else
 
 .btn-outline-success {
     margin-top: auto;
+    font-size: 1rem;
+    padding: 10px 20px;
     border-color: #007bff;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -156,10 +173,21 @@ else
 }
 
 /* Responsive Adjustments */
-.media (max-width: 768px) {
+@@media (max-width: 768px) {
     .contest-card {
         margin: 10px 0;
     }
-}
 
+    h2.text-center {
+        font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1.4rem;
+    }
+
+    .contest-title {
+        font-size: 1.4rem;
+    }
+}
 </style>
