@@ -5,9 +5,10 @@
 }
 <div class="container">
     <div class="row">
+        <h2 class="text-center mb-4">Thông tin cá nhân</h2>
+
         <div class="col-lg-6 col-12">
             <div class="personal-info-page">
-                <h2 class="text-center mb-4">Thông tin cá nhân</h2>
                 @if (Model != null) // Kiểm tra nếu Model không null
                 {
                     using (Html.BeginForm("Save", "ThongTinCaNhan", FormMethod.Post))
@@ -46,12 +47,34 @@
         </div>
 
         <div class="col-lg-6 col-12">
-            @Html.Action("PartialLichSuLamBaiAlL", "Contests", new { area = "" })
+            <div class="form-group">
+                <label for="timePeriod">Chọn thời gian:</label>
+                <select id="timePeriod" class="form-control">
+                    <option value="day">Ngày</option>
+                    <option value="week">Tuần</option>
+                    <option value="month">Tháng</option>
+                    <option value="year">Năm</option>
+                </select>
+            </div>
+            <h2 class="test-count" id="testsCount">Số bài làm: </h2>
+            <h2 class="test-count" id="averageScore">Điểm trung bình: </h2>
+            <h2 class="test-count" id="highestScore">Điểm cao nhất: </h2>
         </div>
+
+    </div>
+    <div>
+
+        <canvas id="ketQuaChart" width="400" height="200"></canvas>
     </div>
 </div>
 
 <style>
+    .test-count {
+        display: block; /* Ensure each count is on a new line */
+        font-weight: bold; /* Make the text bold */
+        margin-bottom: 10px; /* Add some space between the lines */
+        color: #333; /* Darker color for better contrast */
+    }
     /* General Styles */
     body {
         background-color: #f0f2f5; /* Light background for better contrast */
@@ -70,9 +93,9 @@
         transition: box-shadow 0.3s ease; /* Smooth shadow transition */
     }
 
-    .form-container:hover {
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
-    }
+        .form-container:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+        }
 
     .form-group {
         margin-bottom: 20px;
@@ -84,10 +107,10 @@
         transition: border-color 0.3s ease; /* Smooth border color transition */
     }
 
-    .form-control:focus {
-        border-color: #007bff; /* Primary color on focus */
-        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Box shadow on focus */
-    }
+        .form-control:focus {
+            border-color: #007bff; /* Primary color on focus */
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Box shadow on focus */
+        }
 
     .btn-primary {
         background-color: #007bff; /* Primary button color */
@@ -109,3 +132,116 @@
         }
     }
 </style>
+
+@section scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+$(document).ready(function () {
+    function updateStats(data, period) {
+        const now = new Date();
+        let filteredData = [];
+        let testsCount = 0;
+        let totalScore = 0;
+        let highestScore = 0;
+
+        data.forEach(item => {
+            const date = new Date(item.ThoiGianBatDau);
+            let include = false;
+
+            if (period === 'year' && date.getFullYear() === now.getFullYear()) {
+                include = true;
+            } else if (period === 'month' && date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth()) {
+                include = true;
+            } else if (period === 'week') {
+                const oneWeekAgo = new Date(now);
+                oneWeekAgo.setDate(now.getDate() - 7);
+                if (date >= oneWeekAgo && date <= now) {
+                    include = true;
+                }
+            } else if (period === 'day' && date.toDateString() === now.toDateString()) {
+                include = true;
+            }
+
+            if (include) {
+                filteredData.push(item);
+                testsCount++;
+                totalScore += item.Diem;
+                if (item.Diem > highestScore) {
+                    highestScore = item.Diem;
+                }
+            }
+        });
+
+        const averageScore = testsCount > 0 ? (totalScore / testsCount).toFixed(2) : 0;
+
+        document.getElementById('testsCount').innerText = `Số bài làm: ${testsCount}`;
+        document.getElementById('averageScore').innerText = `Điểm trung bình: ${averageScore}`;
+        document.getElementById('highestScore').innerText = `Điểm cao nhất: ${highestScore}`;
+    }
+
+    // Fetch data via AJAX
+    $.ajax({
+        url: '@Url.Action("GetKetQuaData", "ThongTinCaNhan")',
+        method: 'GET',
+        success: function (data) {
+            // Initial update for the default period (day)
+            updateStats(data, 'day');
+
+            // Update stats when the time period changes
+            $('#timePeriod').change(function () {
+                const selectedPeriod = $(this).val();
+                updateStats(data, selectedPeriod);
+            });
+
+            // Render the chart with the fetched data
+            const ctx = document.getElementById('ketQuaChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(item => new Date(item.ThoiGianBatDau).toLocaleDateString()),
+                    datasets: [{
+                        label: 'Điểm',
+                        data: data.map(item => item.Diem),
+                        fill: false,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Thời gian'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Điểm'
+                            },
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    const index = context[0].dataIndex;
+                                    return `${data[index].TenKyThi} - ${new Date(data[index].ThoiGianBatDau).toLocaleString()}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching data:', error);
+            alert('Error fetching data: ' + error);
+        }
+    });
+});
+    </script>
+}
