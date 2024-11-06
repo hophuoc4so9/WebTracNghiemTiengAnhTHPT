@@ -30,26 +30,14 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                 return Json(new { success = false, message = "Mã câu hỏi và nội dung phản hồi không được để trống." });
             }
 
-            // Find the BaoLoi record to update
+     
             var errorReport = _db.BaoLois.SingleOrDefault(k=>k.MaCauHoi==MaCauHoi);
             if (errorReport != null)
             {
-                if (string.IsNullOrEmpty(errorReport.Response))
-                {
-                    errorReport.Response = ResponseText; // Update the Response field
-                    _db.SaveChanges(); // Save changes to the database
-                }
-                else
-                {
-                    BaoLoi newBaoloi = new BaoLoi();
-                    newBaoloi.NoiDung = errorReport.NoiDung;
-                    newBaoloi.MaCauHoi = errorReport.MaCauHoi;
-                    newBaoloi.MaDe = errorReport.MaDe;
-                    newBaoloi.Username = errorReport.Username;
-                    newBaoloi.Response = ResponseText;
-                    _db.BaoLois.Add(newBaoloi);
+                    errorReport.Response = ResponseText;
                     _db.SaveChanges(); 
-                }
+                
+        
 
                 return Json(new { success = true, message = "Phản hồi đã được gửi thành công!" });
             }

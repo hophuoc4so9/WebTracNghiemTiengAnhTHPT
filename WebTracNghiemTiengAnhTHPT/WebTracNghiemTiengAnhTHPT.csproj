@@ -487,6 +487,9 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\img\englishBanner.jpg" />
+    <Content Include="Content\img\englishLogo.jpeg" />
+    <Content Include="Content\img\englishLogo2.jpg" />
     <Content Include="Content\img\Frame 7.png" />
     <Content Include="Content\img\material-symbols--star-rate.svg" />
     <Content Include="Content\img\mingcute--time-line.svg" />
