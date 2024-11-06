@@ -1,0 +1,85 @@
+﻿@model WebTracNghiemTiengAnhTHPT.Models.CauHoi
+@{
+    var allDangBais = ViewBag.AllDangBais as List<WebTracNghiemTiengAnhTHPT.Models.DangBai>;
+}
+
+<style>
+    .dangbai-list {
+        list-style-type: none;
+        padding: 0;
+    }
+
+        .dangbai-list li, .dangbai-list div {
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            display: inline-flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .dangbai-list li button, .dangbai-list div button {
+                margin-left: 10px;
+                background: none;
+                border: none;
+                color: red;
+                font-size: 1.2em;
+                cursor: pointer;
+            }
+
+                .dangbai-list li button:hover, .dangbai-list div button:hover {
+                    color: darkred;
+                }
+</style>
+
+<div>
+    <h4>Dạng câu hỏi</h4>
+    <ul class="dangbai-list">
+        @if (Model != null && Model.DangBais != null)
+        {
+            foreach (var dangBai in Model.DangBais)
+            {
+                <li>
+                    @dangBai.TenLoai
+                    <button type="button" onclick="removeDangBai(@Model.MaCauHoi, @dangBai.MaLoai)">×</button>
+                </li>
+            }
+        }
+
+    </ul>
+
+    <h4>Thêm dạng câu hỏi</h4>
+
+    @if (allDangBais != null && allDangBais.Any())
+    {
+        <select id="dangBaiList" class="form-control">
+            @foreach (var dangBai in allDangBais)
+            {
+                <option value="@dangBai.MaLoai">@dangBai.TenLoai</option>
+            }
+        </select>
+    }
+    else
+    {
+        <p>No DangBais available to add.</p>
+    }
+
+    <button type="button" class="btn btn-primary mt-2" onclick="addDangBai(@Model.MaCauHoi)">Add</button>
+</div>
+
+<script>
+    function addDangBai(cauHoiId) {
+        var dangBaiId = document.getElementById('dangBaiList').value;
+        $.post('@Url.Action("AddDangBai", "QuanLyDeThi")', { cauHoiId: cauHoiId, dangBaiId: dangBaiId }, function (data) {
+            $('#partialDangBaiContainer').html(data);
+        });
+    }
+
+    function removeDangBai(cauHoiId, dangBaiId) {
+        $.post('@Url.Action("RemoveDangBai", "QuanLyDeThi")', { cauHoiId: cauHoiId, dangBaiId: dangBaiId }, function (data) {
+            $('#partialDangBaiContainer').html(data);
+        });
+    }
+</script>
