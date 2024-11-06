@@ -21,21 +21,26 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
                 ViewBag.TotalQuestions = totalQuestions;
                 ViewBag.EasyQuestions = easyQuestions;
                 ViewBag.HardQuestions = hardQuestions;
+                Session["AllDangBais"] = db.DangBais.ToList();
             }
 
             return View();
         }
-      
+
         [HttpPost]
-        public ActionResult AutoGenerateExam(int SoCauHoiDe, int SoCauHoiKho, int ThoiGian)
+        public ActionResult AutoGenerateExam(int SoCauHoiDe, int SoCauHoiKho, int ThoiGian, string Seleted)
         {
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {
+                // Parse selected DangBai IDs from the hidden input
+                var selectedDangBaiIds = Seleted?.Split(',').Select(int.Parse).ToList();
+                var allDangBais = db.DangBais.Where(d => selectedDangBaiIds.Contains(d.MaLoai)).ToList();
+
                 var easyQuestions = db.CauHois
-                    .Where(q => q.MucDo == 1 && !q.isDeleted)
+                    .Where(q => q.MucDo == 1 && !q.isDeleted && q.DangBais.Any(d => selectedDangBaiIds.Contains(d.MaLoai)))
                     .ToList();
                 var hardQuestions = db.CauHois
-                    .Where(q => q.MucDo == 2 && !q.isDeleted)
+                    .Where(q => q.MucDo == 2 && !q.isDeleted && q.DangBais.Any(d => selectedDangBaiIds.Contains(d.MaLoai)))
                     .ToList();
 
                 if (SoCauHoiDe > easyQuestions.Count || SoCauHoiKho > hardQuestions.Count)
@@ -64,7 +69,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
                     ThoiGian = ThoiGian,
                     ThoiGianBatDau = DateTime.Now,
                     isDeleted = false,
-                    CongKhai=false,
+                    CongKhai = false,
                     UsernameTacGia = Session["UserName"]?.ToString()
                 };
                 newExam.SoCauHoi = SoCauHoiDe + SoCauHoiKho;

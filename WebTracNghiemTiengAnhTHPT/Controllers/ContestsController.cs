@@ -134,7 +134,10 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             {
                 return HttpNotFound();
             }
-
+            if(kq.status==true)
+            {
+                return RedirectToAction("Result", new { maketqua = kq.Maketqua });
+            }    
             ViewBag.MaDe = kq.Maketqua;
             ViewBag.MaDeReal = Session["made"]; 
             ViewBag.endTime = kq.thoigian_ketthuc;
