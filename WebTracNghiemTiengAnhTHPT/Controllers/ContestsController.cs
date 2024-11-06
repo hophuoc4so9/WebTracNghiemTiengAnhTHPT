@@ -358,6 +358,42 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
          
         }
 
+        public ActionResult PartialDangBai(int id)
+        {
+            using (var context = new TracNghiemTiengAnhTHPTEntities1())
+            {
+                KyThi kyThi = context.KyThis.Find(id);
+                if (kyThi == null)
+                {
+                    return HttpNotFound();
+                }
+
+                var allDangBai = new List<DangBai>();
+                var cauHois = kyThi.CauHois.ToList();
+
+                foreach (var cauHoi in cauHois)
+                {
+                    foreach (var dangBai in cauHoi.DangBais)
+                    {
+                        allDangBai.Add(dangBai);
+                    }
+                }
+
+                // Group by DangBai and calculate the percentage
+                var groupedDangBai = allDangBai
+                    .GroupBy(db => db.MaLoai)
+                    .Select(g => new
+                    {
+                        DangBai = g.First(),
+                        Percentage = (double)g.Count() / allDangBai.Count * 100
+                    })
+                    .Where(g => g.Percentage > 50)
+                    .Select(g => g.DangBai)
+                    .ToList();
+
+                return PartialView(groupedDangBai);
+            }
+        }
 
 
 

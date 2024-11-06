@@ -793,6 +793,7 @@
     <Content Include="Views\PhongThi\Index.cshtml" />
     <Content Include="Views\OnTap\Index.cshtml" />
     <Content Include="Views\Shared\GiveAdvice.cshtml" />
+    <Content Include="Views\Shared\PartialDangBai.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\admin\Data\" />

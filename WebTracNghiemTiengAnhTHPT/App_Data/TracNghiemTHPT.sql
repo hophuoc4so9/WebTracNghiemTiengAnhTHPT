@@ -374,16 +374,15 @@ WHERE LEN(NoiDung) > 20; -- C?p nh?t các b?n ghi có ?? dài NoiDung > 20
 
 
 
-CREATE FUNCTION CalculateDifficulty(@MaCauHoi INT)
+ALTER FUNCTION CalculateDifficulty(@MaCauHoi INT)
 RETURNS INT
 AS
 BEGIN
     DECLARE @SoNguoiTraLoi INT = 0;
     DECLARE @SoNguoiTraLoiDung INT = 0;
-    DECLARE @ThoiGianTrungBinh FLOAT = 0.0;
     DECLARE @DifficultyLevel INT = 1;
 
-    -- Tính s? ng??i tr? l?i và s? ng??i tr? l?i ?úng
+    -- Calculate the number of respondents and the number of correct responses
     SELECT 
         @SoNguoiTraLoi = COUNT(*),
         @SoNguoiTraLoiDung = COUNT(CASE WHEN CTKQ.DapAnChon = CH.DapAnChinhXac THEN 1 END)
@@ -394,46 +393,37 @@ BEGIN
     WHERE 
         CTKQ.MaCauHoi = @MaCauHoi;
 
-    -- Tính th?i gian trung bình
-    SELECT @ThoiGianTrungBinh = AVG(DATEDIFF(SECOND, KQ.thoigian_batdau, KQ.thoigian_ketthuc))
-    FROM 
-        KetQua AS KQ
-    WHERE 
-        KQ.Maketqua IN (
-            SELECT DISTINCT CTKQ.Maketqua 
-            FROM ChiTietKetQua AS CTKQ 
-            WHERE CTKQ.MaCauHoi = @MaCauHoi
-        );
-
-    -- Ki?m tra d? li?u và tính ?? khó
-    IF @SoNguoiTraLoi > 0
+    -- Default to easy if there are no respondents
+    IF @SoNguoiTraLoi = 0
+    BEGIN
+        SET @DifficultyLevel = 1; -- Easy
+    END
+    ELSE
     BEGIN
         DECLARE @TiLeTraLoiDung FLOAT = CAST(@SoNguoiTraLoiDung AS FLOAT) / @SoNguoiTraLoi;
-        
-        -- Thi?t l?p ?? khó d?a trên t? l? tr? l?i ?úng và th?i gian
-        IF @TiLeTraLoiDung > 0.7 AND @ThoiGianTrungBinh < 30
-            SET @DifficultyLevel = 1; -- D?
-        ELSE IF @TiLeTraLoiDung > 0.3 AND @ThoiGianTrungBinh BETWEEN 30 AND 90
-            SET @DifficultyLevel = 2; -- Trung bình
+
+        -- Set difficulty level based on the correct answer rate
+        IF @TiLeTraLoiDung <= 0.3
+            SET @DifficultyLevel = 2; -- Medium
         ELSE
-            SET @DifficultyLevel = 3; -- Khó
+            SET @DifficultyLevel = 1; -- Easy
     END
 
     RETURN @DifficultyLevel;
 END;
 
-CREATE TRIGGER UpdateDifficultyAndStatus
+ALTER TRIGGER UpdateDifficultyAndStatus
 ON KetQua
 AFTER UPDATE
 AS
 BEGIN
     DECLARE @Maketqua INT;
 
-    -- L?y mã k?t qu? t? b?n ghi v?a ???c c?p nh?t
-    SELECT @Maketqua = inserted.Maketqua
-    FROM inserted;
+    -- Get the result ID from the updated record
+    SELECT @Maketqua = i.Maketqua
+    FROM inserted i;
 
-    -- Ki?m tra xem c?t status có chuy?n t? 0 sang 1 không
+    -- Check if the status column has changed from 0 to 1
     IF EXISTS (
         SELECT 1 
         FROM inserted AS i
@@ -441,7 +431,7 @@ BEGIN
         WHERE i.status = 1 AND d.status = 0
     )
     BEGIN
-        -- C?p nh?t ?? khó cho t?t c? các câu h?i liên quan ??n Maketqua
+        -- Update difficulty for all questions related to the updated result
         UPDATE CauHoi
         SET mucdo = dbo.CalculateDifficulty(CauHoi.MaCauHoi)
         WHERE MaCauHoi IN (
@@ -452,23 +442,20 @@ BEGIN
     END;
 END;
 
-
--- C?p nh?t ?? khó cho t?t c? các câu h?i
+-- Update difficulty for all questions that do not yet have a difficulty level
 UPDATE CauHoi
 SET mucdo = 
 (
     SELECT CASE 
-        WHEN CAST(CAST(SoNguoiTraLoiDung AS FLOAT) / SoNguoiTraLoi AS FLOAT) > 0.7 AND ThoiGianTrungBinh < 30 THEN 1  -- D?
-        WHEN CAST(CAST(SoNguoiTraLoiDung AS FLOAT) / SoNguoiTraLoi AS FLOAT) > 0.3 AND ThoiGianTrungBinh BETWEEN 30 AND 90 THEN 2  -- Trung bình
-        ELSE 3  -- Khó
+        WHEN CAST(CAST(SoNguoiTraLoiDung AS FLOAT) / SoNguoiTraLoi AS FLOAT) <= 0.3 THEN 2  -- Medium
+        ELSE 1  -- Easy
     END
     FROM 
     (
         SELECT 
             CH.MaCauHoi,
             COUNT(DISTINCT CTKQ.Maketqua) AS SoNguoiTraLoi,
-            COUNT(CASE WHEN CTKQ.DapAnChon = CH.DapAnChinhXac THEN 1 END) AS SoNguoiTraLoiDung,
-            AVG(DATEDIFF(SECOND, KQ.thoigian_batdau, KQ.thoigian_ketthuc)) AS ThoiGianTrungBinh
+            COUNT(CASE WHEN CTKQ.DapAnChon = CH.DapAnChinhXac THEN 1 END) AS SoNguoiTraLoiDung
         FROM 
             ChiTietKetQua AS CTKQ
             JOIN KetQua AS KQ ON CTKQ.Maketqua = KQ.Maketqua
@@ -477,9 +464,8 @@ SET mucdo =
             CH.MaCauHoi
     ) AS T
     WHERE T.MaCauHoi = CauHoi.MaCauHoi
-    AND T.SoNguoiTraLoi > 0  -- Ch? tính các câu h?i có ng??i tr? l?i
 )
-WHERE mucdo IS NULL;  -- C?p nh?t ch? nh?ng câu h?i ch?a có ?? khó
+WHERE mucdo IS NULL;  -- Update only questions that do not have a difficulty level
 
 INSERT INTO DangBai (TenLoai) VALUES (N'Reading');
 INSERT INTO DangBai (TenLoai) VALUES (N'Listening');
