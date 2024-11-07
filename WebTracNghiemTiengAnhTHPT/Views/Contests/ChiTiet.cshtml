@@ -25,101 +25,161 @@
                 </p>
                 @Html.ActionLink("Tham gia", "ChiTietKyThi", "Contests", new { made = made }, new { @class = "btn btn-primary" })
             </div>
-            <div class="practice-options">
-                <h4>Luyện tập</h4>
-                <div class="option-list">
-                    <!-- Add options for different recordings here -->
-                </div>
+            <!-- Hiển thị các đánh giá -->
+            <ul id="ratings-list">
+                @if (ViewBag.DanhGia != null && ViewBag.DanhGia.Count > 0)
+                {
+                    foreach (var dg in ViewBag.DanhGia)
+                    {
+                        <li>
+                            <strong>@dg.Username</strong> - @dg.Rate sao
+                            <p>@dg.NoiDung</p>
+                        </li>
+                    }
+                }
+                else
+                {
+                    <p>Chưa có đánh giá nào.</p>
+                }
+            </ul>
+
+            <h4>Đánh giá kỳ thi</h4>
+            <div class="rating-form">
+                <form id="ratingForm" method="post">
+                    <div class="form-group">
+                        <label for="rate">Chọn đánh giá (1 đến 5 sao):</label>
+                        <select id="rate" name="rate" class="form-control" required>
+                            <option value="1">1 sao</option>
+                            <option value="2">2 sao</option>
+                            <option value="3">3 sao</option>
+                            <option value="4">4 sao</option>
+                            <option value="5">5 sao</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="comment">Nhận xét:</label>
+                        <textarea id="comment" name="comment" class="form-control" rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                </form>
+            </div>
+
+            <div class="col-lg-3 col-12" id="partiview">
+                @Html.Action("PartialLichSuLamBai", "Contests", new { made = made })
             </div>
         </div>
-        <div class="col-lg-3 col-12" id="partiview">
-            @Html.Action("PartialLichSuLamBai", "Contests", new { made = made })
+        <div id="partialDangBaiContainer">
+            @Html.Action("PartialDangBai", new { id = made })
         </div>
     </div>
-    <div id="partialDangBaiContainer">
-        @Html.Action("PartialDangBai", new { id = made })
-    </div>
-</div>
 
-<style>
-    .container {
-        margin-top: 20px;
-    }
-
-    .test-info-card {
-        background-color: #f8f9fa;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-
-    .test-title {
-        font-size: 1.6em;
-        font-weight: bold;
-        color: #007bff;
-    }
-
-    .test-meta span {
-        font-size: 1.1em;
-        color: #666;
-    }
-
-    .test-meta img {
-        vertical-align: middle;
-        margin-right: 5px;
-    }
-
-    .test-note {
-        margin-top: 15px;
-        padding: 10px;
-        background-color: #e0f7fa;
-        border-radius: 5px;
-        font-size: 1em;
-        color: #333;
-    }
-
-    .btn-primary {
-        margin-top: 20px;
-        font-size: 1.2em;
-        background-color: #007bff;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        color: #fff;
-    }
-
-    .practice-options h4 {
-        font-size: 1.4em;
-        font-weight: bold;
-        color: #333;
-        margin-top: 20px;
-    }
-
-    .option-list {
-        margin-top: 10px;
-    }
-
-        .option-list div {
-            padding: 10px;
-            border: 1px solid #ddd;
-            margin-bottom: 5px;
-            border-radius: 4px;
-            background-color: #f9f9f9;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            cursor: pointer;
+    <style>
+        .container {
+            margin-top: 20px;
         }
 
-            .option-list div:hover {
-                background-color: #e0f7fa;
-                transform: scale(1.02);
+        .test-info-card {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .test-title {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .test-meta span {
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .test-meta img {
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+
+        .test-note {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #e0f7fa;
+            border-radius: 5px;
+            font-size: 1em;
+            color: #333;
+        }
+
+        .btn-primary {
+            margin-top: 20px;
+            font-size: 1.2em;
+            background-color: #007bff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: #fff;
+        }
+
+        .practice-options h4 {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .option-list {
+            margin-top: 10px;
+        }
+
+            .option-list div {
+                padding: 10px;
+                border: 1px solid #ddd;
+                margin-bottom: 5px;
+                border-radius: 4px;
+                background-color: #f9f9f9;
+                transition: background-color 0.3s ease, transform 0.3s ease;
+                cursor: pointer;
             }
 
-    #partiview {
-        margin-top: 20px;
-    }
+                .option-list div:hover {
+                    background-color: #e0f7fa;
+                    transform: scale(1.02);
+                }
 
-    #partialDangBaiContainer {
-        margin-top: 20px;
-    }
-</style>
+        #partiview {
+            margin-top: 20px;
+        }
+
+        #partialDangBaiContainer {
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+    $(document).ready(function () {
+        $("#ratingForm").submit(function (e) {
+            e.preventDefault();
+
+            var rate = $("#rate").val();
+            var comment = $("#comment").val();
+            var made = @made;
+
+            $.ajax({
+                url: '@Url.Action("DanhGia", "Contests")',
+                type: 'POST',
+                data: {
+                    made: made,
+                    rate: rate,
+                    comment: comment
+                },
+                success: function (response) {
+                    alert("Đánh giá thành công!");
+                    location.reload(); // Reload the page to update the list of ratings
+                },
+                error: function (error) {
+                    alert("Đã xảy ra lỗi, vui lòng thử lại.");
+                }
+            });
+        });
+    });
+    </script>

@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Drawing.Charts;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Nodes;
@@ -63,11 +64,14 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
 
         public ActionResult ChiTietKyThi(int made)
         {
+            Debug.WriteLine($"Made: {made}");
+
             if (Session["UserName"] == null)
             {
                 return RedirectToAction("Login", "Login", new { area = "admin" });
             }
-
+            var danhGia = _db.DanhGias.Where(d => d.MaDe == made).ToList();
+            ViewBag.DanhGia = danhGia;
             string username = Session["UserName"].ToString();
             Session["made"] = made; 
             var ketQua = _db.KetQuas
@@ -125,6 +129,45 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             _db.SaveChanges();
 
             return RedirectToAction("BaiLam", new { id = ketQua.Maketqua });
+        }
+        [HttpPost]
+        public ActionResult DanhGia(int made, int rate, string comment)
+        {
+            if (Session["UserName"] == null)
+            {
+                return RedirectToAction("Login", "Login", new { area = "admin" });
+            }
+
+            string username = Session["UserName"].ToString();
+
+            // Check if the user has already rated this exam
+            var existingRating = _db.DanhGias
+                .FirstOrDefault(d => d.MaDe == made && d.Username == username);
+
+            if (existingRating != null)
+            {
+                // If already rated, update the existing rating
+                existingRating.Rate = rate;
+                existingRating.NoiDung = comment;
+               
+            }
+            else
+            {
+                // If not rated before, create a new rating
+                var newRating = new DanhGia
+                {
+                    MaDe = made,
+                    Username = username,
+                    Rate = rate,
+                    NoiDung = comment,
+
+                };
+                _db.DanhGias.Add(newRating);
+            }
+
+            _db.SaveChanges();
+
+            return RedirectToAction("ChiTietKyThi", new { made = made });
         }
 
         public ActionResult BaiLam(int id)
