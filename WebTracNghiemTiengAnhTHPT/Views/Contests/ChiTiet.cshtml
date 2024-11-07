@@ -4,6 +4,7 @@
     ViewBag.Title = "ChiTiet";
     Layout = "~/Views/Shared/LayoutWeb.cshtml";
     int made = int.Parse(Request["made"].ToString());
+    List<WebTracNghiemTiengAnhTHPT.Models.DanhGia> danhgialist = ViewBag.DanhGia as List<WebTracNghiemTiengAnhTHPT.Models.DanhGia>;
 }
 
 <h2>Chi tiết kỳ thi</h2>
@@ -24,15 +25,32 @@
                     <strong>Chú ý:</strong> Để được quy đổi sang scaled score, vui lòng chọn chế độ làm FULL TEST.
                 </p>
                 @Html.ActionLink("Tham gia", "ChiTietKyThi", "Contests", new { made = made }, new { @class = "btn btn-primary" })
+
+                <div id="partialDangBaiContainer">
+                    @Html.Action("PartialDangBai", new { id = made })
+                </div>
             </div>
             <!-- Hiển thị các đánh giá -->
-            <ul id="ratings-list">
-                @if (ViewBag.DanhGia != null && ViewBag.DanhGia.Count > 0)
+            <ul id="ratings-list" style="list-style-type: none">
+                @if (danhgialist != null && danhgialist.Count() > 0)
                 {
-                    foreach (var dg in ViewBag.DanhGia)
+                    foreach (WebTracNghiemTiengAnhTHPT.Models.DanhGia dg in danhgialist)
                     {
                         <li>
-                            <strong>@dg.Username</strong> - @dg.Rate sao
+                            <strong>@dg.Username</strong> -
+                            <span class="star-rating">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= dg.Rate)
+                                    {
+                                        <span class="star filled">&#9733;</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="star">&#9733;</span>
+                                    }
+                                }
+                            </span>
                             <p>@dg.NoiDung</p>
                         </li>
                     }
@@ -48,13 +66,15 @@
                 <form id="ratingForm" method="post">
                     <div class="form-group">
                         <label for="rate">Chọn đánh giá (1 đến 5 sao):</label>
-                        <select id="rate" name="rate" class="form-control" required>
-                            <option value="1">1 sao</option>
-                            <option value="2">2 sao</option>
-                            <option value="3">3 sao</option>
-                            <option value="4">4 sao</option>
-                            <option value="5">5 sao</option>
-                        </select>
+                        <br>
+                        <div id="starRating" class="star-rating">
+                            <span class="star" data-value="1" onclick="showRating(1)">&#9733;</span>
+                            <span class="star" data-value="2" onclick="showRating(2)">&#9733;</span>
+                            <span class="star" data-value="3" onclick="showRating(3)">&#9733;</span>
+                            <span class="star" data-value="4" onclick="showRating(4)">&#9733;</span>
+                            <span class="star" data-value="5" onclick="showRating(5)">&#9733;</span>
+                        </div>
+                        <input type="hidden" id="rate" name="rate" required>
                     </div>
                     <div class="form-group">
                         <label for="comment">Nhận xét:</label>
@@ -64,13 +84,120 @@
                 </form>
             </div>
 
+            <style>
+                .star-rating {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-start;
+                }
+
+                .star {
+                    font-size: 1em;
+                    color: #ddd;
+                    cursor: pointer;
+                    transition: color 0.2s;
+                }
+
+                    .star.hovered,
+                    .star.selected {
+                        color: #ffca08;
+                    }
+
+                .star-rating {
+                    display: inline-flex;
+                    align-items: center;
+                    font-size: 1.5em;
+                    color: #ddd;
+                }
+
+                .star {
+                    color: #ddd;
+                }
+
+                    .star.filled {
+                        color: #ffca08; /* Màu vàng cho các ngôi sao đã đánh giá */
+                    }
+
+            </style>
+
+
+
+            <script>
+               let clickedRating = 0; // Biến lưu trữ giá trị đã chọn
+
+function showRating(value) {
+    clickedRating = value; // Cập nhật giá trị đã chọn
+    $("#rate").val(value);
+
+    $(".star").removeClass("selected");
+    $(".star").each(function () {
+        if ($(this).data("value") <= value) {
+            $(this).addClass("selected");
+        }
+    });
+}
+
+// Thêm sự kiện hover để tô màu từ trái sang phải
+$(".star").on("mouseenter", function () {
+    let hoverValue = $(this).data("value");
+
+    $(".star").removeClass("hovered");
+    $(".star").each(function () {
+        if ($(this).data("value") <= hoverValue) {
+            $(this).addClass("hovered");
+        }
+    });
+});
+
+// Khi rời khỏi ngôi sao, trả lại màu theo giá trị đã chọn trước đó
+$(".star-rating").on("mouseleave", function () {
+    $(".star").removeClass("hovered");
+    $(".star").each(function () {
+        if ($(this).data("value") <= clickedRating) {
+            $(this).addClass("selected");
+        } else {
+            $(this).removeClass("selected");
+        }
+    });
+});
+
+$(document).ready(function () {
+    $("#ratingForm").submit(function (e) {
+        e.preventDefault();
+
+        var rate = $("#rate").val();
+        var comment = $("#comment").val();
+        var made = @made;
+
+        $.ajax({
+            url: '@Url.Action("DanhGia", "Contests")',
+            type: 'POST',
+            data: {
+                made: made,
+                rate: rate,
+                comment: comment
+            },
+            success: function (response) {
+                alert("Đánh giá thành công!");
+                location.reload(); // Tải lại trang để cập nhật danh sách đánh giá
+            },
+            error: function (error) {
+                alert("Đã xảy ra lỗi, vui lòng thử lại.");
+            }
+        });
+    });
+});
+
+            </script>
+
+
+
+
             <div class="col-lg-3 col-12" id="partiview">
                 @Html.Action("PartialLichSuLamBai", "Contests", new { made = made })
             </div>
         </div>
-        <div id="partialDangBaiContainer">
-            @Html.Action("PartialDangBai", new { id = made })
-        </div>
+      
     </div>
 
     <style>

@@ -293,7 +293,8 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             {
                 return HttpNotFound();
             }
-
+            var danhGia = _db.DanhGias.Where(d => d.MaDe == made).ToList();
+            ViewBag.DanhGia = danhGia;
             ViewBag.MaDe = made;
             return View(ky);
         }
