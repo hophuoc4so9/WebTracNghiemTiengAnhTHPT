@@ -1,27 +1,122 @@
 ﻿@{
     Layout = "~/Views/Shared/LayoutWeb.cshtml";
-}
-
-
-@{
     ViewBag.Title = "Contact";
 }
+
 <main aria-labelledby="title">
     <div class="d-flex flex-row">
-        <div class="d-flex flex-fill bg-primary flex-column align-items-center justify-content-center col-6">
-            <p> WELCOME TO <span><img class="img-fluid" src="~/Content/img/P2N 1.svg" /> </span>  </p>
-            <p>  Hành trình rèn luyện tiếng Anh THPT </p>
+        <div class="d-flex flex-fill bg-primary flex-column align-items-center justify-content-center col-6 text-white py-5">
+            <p class="welcome-text">WELCOME TO <span><img class="img-fluid logo" src="~/Content/img/P2N 1.svg" /></span></p>
+            <p class="tagline">Hành trình rèn luyện tiếng Anh THPT</p>
         </div>
-        <img class="col-6" src="~/Content/img/phan-mem-thi-truc-tuyen-lino 1.png" />
+        <img class="col-6 img-fluid" src="~/Content/img/phan-mem-thi-truc-tuyen-lino 1.png" />
     </div>
 
-    <h1>Liên Hệ</h1>
-    <p>
-        Xin vui lòng gửi email cho chúng tôi tại p2n.team@gmail.com, inbox Facebook page, hoặc nhắn tin cho chúng tôi qua Zalo. Chúng tôi sẽ trả lời bạn trong thời gian sớm nhất :)
-    </p>
+    <div class="contact-wrapper">
+        <h1 class="contact-title">Liên Hệ</h1>
+        <p class="contact-description">
+            Xin vui lòng gửi email cho chúng tôi tại <a href="mailto:p2n.team@gmail.com" class="email-link">p2n.team@gmail.com</a>, inbox Facebook page, hoặc nhắn tin cho chúng tôi qua Zalo. Chúng tôi sẽ trả lời bạn trong thời gian sớm nhất :)
+        </p>
 
-    <address>
-        <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-        <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-    </address>
+        <address class="contact-address">
+            <strong>Support:</strong> <a href="mailto:Support@example.com" class="email-link">Support@example.com</a><br />
+            <strong>Marketing:</strong> <a href="mailto:Marketing@example.com" class="email-link">Marketing@example.com</a>
+        </address>
+    </div>
 </main>
+
+<style>
+    /* Main Styles */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa; /* Light background for the entire page */
+    }
+
+    .welcome-text {
+        font-size: 2.5rem;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 0.5rem;
+        letter-spacing: 1px;
+    }
+
+    .tagline {
+        font-size: 1.5rem;
+        text-align: center;
+        margin-top: 0.5rem;
+    }
+
+    .logo {
+        width: 60px;
+        height: auto;
+        transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+        transform: scale(1.1);
+    }
+
+    .contact-wrapper {
+        background-color: #ffffff; /* White background for contact section */
+        padding: 30px;
+        margin: 20px;
+        border-radius: 15px; /* Rounded corners */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Shadow effect */
+        max-width: 800px; /* Limit the width for better readability */
+        margin-left: auto;
+        margin-right: auto; /* Center the contact wrapper */
+    }
+
+    .contact-title {
+        text-align: center;
+        font-size: 2rem;
+        color: #007bff; /* Primary color */
+        margin-bottom: 1rem;
+    }
+
+    .contact-description {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: #333; /* Darker text for better contrast */
+        margin-bottom: 1.5rem; /* Space below description */
+        text-align: center; /* Center-align text */
+    }
+
+    .contact-address {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #333;
+        text-align: center; /* Center-align address text */
+    }
+
+    .email-link {
+        color: #007bff; /* Primary color for email links */
+        text-decoration: none;
+        transition: color 0.3s ease, text-shadow 0.3s ease; /* Transition effect */
+    }
+
+    .email-link:hover {
+        color: #0056b3; /* Darker shade for hover */
+        text-decoration: underline;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Adds depth effect */
+    }
+
+    /* Responsive Styles */
+    @@media (max-width: 768px) {
+        .welcome-text {
+            font-size: 2rem; /* Adjusted font size for smaller screens */
+        }
+
+        .tagline {
+            font-size: 1.2rem; /* Adjusted tagline size for smaller screens */
+        }
+
+        .contact-title {
+            font-size: 1.5rem; /* Adjusted contact title size */
+        }
+
+        .contact-description, .contact-address {
+            font-size: 1rem; /* Adjusted description and address size */
+        }
+    }
+</style>

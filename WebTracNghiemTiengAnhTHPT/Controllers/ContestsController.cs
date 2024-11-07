@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Drawing.Charts;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Nodes;
@@ -63,12 +64,16 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
 
         public ActionResult ChiTietKyThi(int made)
         {
+            Debug.WriteLine($"Made: {made}");
+
             if (Session["UserName"] == null)
             {
                 return RedirectToAction("Login", "Login", new { area = "admin" });
             }
-
+            var danhGia = _db.DanhGias.Where(d => d.MaDe == made).ToList();
+            ViewBag.DanhGia = danhGia;
             string username = Session["UserName"].ToString();
+            Session["made"] = made; 
             var ketQua = _db.KetQuas
             .AsNoTracking()
             .FirstOrDefault(k => k.Username == username && k.status == false && k.thoigian_ketthuc > DateTime.Now);
@@ -125,6 +130,45 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
 
             return RedirectToAction("BaiLam", new { id = ketQua.Maketqua });
         }
+        [HttpPost]
+        public ActionResult DanhGia(int made, int rate, string comment)
+        {
+            if (Session["UserName"] == null)
+            {
+                return RedirectToAction("Login", "Login", new { area = "admin" });
+            }
+
+            string username = Session["UserName"].ToString();
+
+            // Check if the user has already rated this exam
+            var existingRating = _db.DanhGias
+                .FirstOrDefault(d => d.MaDe == made && d.Username == username);
+
+            if (existingRating != null)
+            {
+                // If already rated, update the existing rating
+                existingRating.Rate = rate;
+                existingRating.NoiDung = comment;
+               
+            }
+            else
+            {
+                // If not rated before, create a new rating
+                var newRating = new DanhGia
+                {
+                    MaDe = made,
+                    Username = username,
+                    Rate = rate,
+                    NoiDung = comment,
+
+                };
+                _db.DanhGias.Add(newRating);
+            }
+
+            _db.SaveChanges();
+
+            return RedirectToAction("ChiTietKyThi", new { made = made });
+        }
 
         public ActionResult BaiLam(int id)
         {
@@ -133,11 +177,57 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             {
                 return HttpNotFound();
             }
-
+            if(kq.status==true)
+            {
+                return RedirectToAction("Result", new { maketqua = kq.Maketqua });
+            }    
             ViewBag.MaDe = kq.Maketqua;
+            ViewBag.MaDeReal = Session["made"]; 
             ViewBag.endTime = kq.thoigian_ketthuc;
             return View(kq);
         }
+        [HttpPost]
+ 
+        public ActionResult ReportError(int MaDe, int MaCauHoi, string ErrorMessage)
+        {
+            // Validate input parameters
+            if (MaDe <= 0 || MaCauHoi <= 0 || string.IsNullOrWhiteSpace(ErrorMessage))
+            {
+                return Json(new { success = false, message = "Invalid data provided." });
+            }
+
+            // Retrieve the username from the authenticated user
+            string username = Session["UserName"]?.ToString();
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                return Json(new { success = false, message = "User is not authenticated." });
+            }
+
+            // Check if the MaDe exists in KyThi table
+            var kyThiExists = _db.KyThis.Any(k => k.MaDe == MaDe);
+            if (!kyThiExists)
+            {
+                return Json(new { success = false, message = kyThiExists});
+            }
+
+      
+
+            // Create a new BaoLoi entry
+            BaoLoi errorReport = new BaoLoi(); 
+            errorReport.NoiDung = ErrorMessage;
+            errorReport.Username = username;
+            errorReport.MaCauHoi = MaCauHoi;
+            errorReport.MaDe = MaDe; 
+
+                _db.BaoLois.Add(errorReport);
+                _db.SaveChanges();
+
+                // Return a success response
+                return Json(new { success = true, message = "Error report submitted successfully!" });
+            
+  
+        }
+
 
         [HttpPost]
         public ActionResult Result(FormCollection form, int made)
@@ -203,7 +293,8 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             {
                 return HttpNotFound();
             }
-
+            var danhGia = _db.DanhGias.Where(d => d.MaDe == made).ToList();
+            ViewBag.DanhGia = danhGia;
             ViewBag.MaDe = made;
             return View(ky);
         }
@@ -231,7 +322,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
         {
             string username = Session["UserName"]?.ToString() ?? string.Empty;
             var model = _db.KetQuas.AsNoTracking().Where(c => c.Username == username && c.status == true).ToList();
-            return View("PartialLichSuLamBai", model);
+            return View("PartialBieuDoLichSuLamBai", model);
 
         }
         public async Task< ActionResult> GiveAdvice(int maketqua)
@@ -314,9 +405,46 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
          
         }
 
+        public ActionResult PartialDangBai(int id)
+        {
+            using (var context = new TracNghiemTiengAnhTHPTEntities1())
+            {
+                KyThi kyThi = context.KyThis.Find(id);
+                if (kyThi == null)
+                {
+                    return HttpNotFound();
+                }
+
+                var allDangBai = new List<DangBai>();
+                var cauHois = kyThi.CauHois.ToList();
+
+                foreach (var cauHoi in cauHois)
+                {
+                    foreach (var dangBai in cauHoi.DangBais)
+                    {
+                        allDangBai.Add(dangBai);
+                    }
+                }
+
+                // Group by DangBai and calculate the percentage
+                var groupedDangBai = allDangBai
+                    .GroupBy(db => db.MaLoai)
+                    .Select(g => new
+                    {
+                        DangBai = g.First(),
+                        Percentage = (double)g.Count() / allDangBai.Count * 100
+                    })
+                    .Where(g => g.Percentage > 50)
+                    .Select(g => g.DangBai)
+                    .ToList();
+
+                return PartialView(groupedDangBai);
+            }
+        }
 
 
 
+       
 
 
     }

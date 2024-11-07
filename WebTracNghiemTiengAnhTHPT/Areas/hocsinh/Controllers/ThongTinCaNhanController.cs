@@ -90,5 +90,22 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.hocsinh.Controllers
             }
             return View("Index", model);
         }
+        public JsonResult GetKetQuaData()
+        {
+            TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
+            var ketQuaData = db.KetQuas
+                .OrderBy(k => k.thoigian_batdau)
+                .ToList() // Execute the query and bring data into memory
+                .Select(k => new
+                {
+                    ThoiGianBatDau = k.thoigian_batdau.HasValue ? k.thoigian_batdau.Value.ToString("yyyy-MM-dd") : string.Empty,
+                    Diem = k.Diem ?? 0,
+                    TenKyThi = k.KyThi.TenKyThi
+                })
+                .ToList();
+
+            return Json(ketQuaData, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

@@ -82,21 +82,95 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             {
                 // Get the current exam's questions
                 var model = context.CauHois
-                    .Include(c => c.NhomCauHoi)
-                    .Where(item => item.KyThis.Any(c => c.MaDe == made && c.isDeleted!=true))
+                    .Include(c => c.NhomCauHoi).Include(c => c.DangBais)
+                    .Where(item => item.KyThis.Any(c => c.MaDe == made && c.isDeleted != true))
                     .ToList();
 
                 // Get questions that are not part of the current exam
                 var otherQuestions = context.CauHois
                     .Where(item => !item.KyThis.Any(c => c.MaDe == made && c.isDeleted != true))
                     .ToList();
-                var kythi=context.KyThis.FirstOrDefault(k => k.MaDe == made);   
+
+                var kythi = context.KyThis.FirstOrDefault(k => k.MaDe == made);
                 ViewBag.KyThi = kythi;
                 ViewBag.made = made;
                 ViewBag.OtherQuestions = otherQuestions; // Pass other questions to the view
+
+                var firstCauHoi = kythi.CauHois.FirstOrDefault();
+                if (firstCauHoi != null)
+                {
+                    ViewBag.Currenclass = firstCauHoi.DangBais.Where(c => c.TenLoai.Contains("Lớp")).FirstOrDefault()?.TenLoai ?? "No Class";
+                    ViewBag.CurrenBoSach = firstCauHoi.DangBais.Where(c => c.TenLoai == "Friends Global" || c.TenLoai == "Global Success" || c.TenLoai == "Smart World").FirstOrDefault()?.TenLoai ?? "No Book Type";
+                }
+                else
+                {
+                    ViewBag.Currenclass = "No Class";
+                    ViewBag.CurrenBoSach = "No Book Type";
+                }
+
+                ViewBag.dangBais = context.DangBais.ToList();
                 return View(model);
             }
         }
+        public ActionResult PartialDangBai(int id)
+        {
+            using (var context = new TracNghiemTiengAnhTHPTEntities1())
+            {
+                var excludedCategories = new List<string>
+        {
+            "Lớp 10", "Lớp 11", "Lớp 12", "Listening",
+            "Friends Global", "Global Success", "Reading", "Smart World"
+        };
+
+                var cauHoi = context.CauHois
+                    .Include(c => c.DangBais)
+                    .FirstOrDefault(n => n.MaCauHoi == id );
+
+                var allDangBais = context.DangBais
+                    .Where(db => !excludedCategories.Contains(db.TenLoai))
+                    .ToList();
+
+                ViewBag.AllDangBais = allDangBais;
+                return PartialView(cauHoi);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult AddDangBai(int cauHoiId, int dangBaiId)
+        {
+            using (var context = new TracNghiemTiengAnhTHPTEntities1())
+            {
+                var cauHoi = context.CauHois.Include(c => c.DangBais).FirstOrDefault(c => c.MaCauHoi == cauHoiId);
+                var dangBai = context.DangBais.FirstOrDefault(d => d.MaLoai == dangBaiId);
+
+                if (cauHoi != null && dangBai != null)
+                {
+                    cauHoi.DangBais.Add(dangBai);
+                    context.SaveChanges();
+                }
+            }
+
+            return RedirectToAction("PartialDangBai", new { id = cauHoiId });
+        }
+
+        [HttpPost]
+        public ActionResult RemoveDangBai(int cauHoiId, int dangBaiId)
+        {
+            using (var context = new TracNghiemTiengAnhTHPTEntities1())
+            {
+                var cauHoi = context.CauHois.Include(c => c.DangBais).FirstOrDefault(c => c.MaCauHoi == cauHoiId);
+                var dangBai = cauHoi?.DangBais.FirstOrDefault(d => d.MaLoai == dangBaiId);
+
+                if (cauHoi != null && dangBai != null)
+                {
+                    cauHoi.DangBais.Remove(dangBai);
+                    context.SaveChanges();
+                }
+            }
+
+            return RedirectToAction("PartialDangBai", new { id = cauHoiId });
+        }
+
         [HttpPost]
         public ActionResult AddQuestionToExam(int made, int maCauHoi)
         {
@@ -423,19 +497,56 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                             }
                         }
                     }
-                    KyThi kythi=db.KyThis.FirstOrDefault(k => k.MaDe == made);
+
+                    KyThi kythi = db.KyThis.FirstOrDefault(k => k.MaDe == made);
                     if (kythi != null)
                     {
-                        kythi.ThoiGian =int.Parse( f["KyThi[" + made + "].ThoiGian"]);
+                        kythi.ThoiGian = int.Parse(f["KyThi[" + made + "].ThoiGian"]);
                         kythi.SoCauHoi = int.Parse(f["KyThi[" + made + "].SoCauHoi"]);
 
-                    }
-                    db.SaveChanges();
+                        // Retrieve the selected values from the dropdown lists
+                        string selectedClass = f["Class"];
+                        string selectedExamType = f["ExamType"];
+                        foreach (CauHoi cauhoi in kythi.CauHois)
+                        {
+                            if (!string.IsNullOrEmpty(selectedClass))
+                            {
 
-                    return RedirectToAction("ChiTietDeThi", new { made });
+                                var dangbai = db.DangBais.FirstOrDefault(d => d.TenLoai == selectedClass);
+                                if (dangbai != null)
+                                {
+                                    var itemsToRemove = cauhoi.DangBais.Where(n => n.TenLoai.Contains("Lớp")).ToList();
+                                    foreach (var item in itemsToRemove)
+                                    {
+                                        cauhoi.DangBais.Remove(item);
+                                    }
+                                    cauhoi.DangBais.Add(dangbai);
+                                }
+                            }
+                            if (!string.IsNullOrEmpty(selectedExamType))
+                            {
+                                var dangbai = db.DangBais.FirstOrDefault(d => d.TenLoai == selectedExamType);
+                                if (dangbai != null)
+                                {
+                                    var itemsToRemove = cauhoi.DangBais.Where(c => c.TenLoai == "Friends Global" || c.TenLoai == "Global Success" || c.TenLoai == "Smart World").ToList();
+                                    foreach (var item in itemsToRemove)
+                                    {
+                                        cauhoi.DangBais.Remove(item);
+                                    }
+                                    cauhoi.DangBais.Add(dangbai);
+                                }
+                            }
+                        }
+                    }
+
+                    db.SaveChanges();
                 }
+
+                return RedirectToAction("ChiTietDeThi", new { made });
             }
         }
+
+
         public ActionResult AutoGenerateExam()
         {
             using (var db = new TracNghiemTiengAnhTHPTEntities1())

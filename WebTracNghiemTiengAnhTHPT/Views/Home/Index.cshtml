@@ -5,8 +5,8 @@
 @{
     ViewBag.Title = "P2N";
 }
-
 <main>
+<<<<<<< HEAD
     <div class="container my-5">
         <!-- Header Section -->
         <div class="d-flex flex-row">
@@ -348,5 +348,106 @@
         }
     .container.text-center.py-5 {
         background-color: #e3e7fe;
+=======
+    <div class="welcome-container">
+        <div class="d-flex flex-row welcome-content">
+            <div class="welcome-text col-6">
+                <p class="welcome-heading">
+                    <span class="animated-text">WELCOME TO PEN</span>
+                </p>
+                <p class="welcome-subheading">Hành trình rèn luyện tiếng Anh THPT</p>
+            </div>
+            <div class="welcome-image col-6">
+                <img class="img-fluid" src="~/Content/img/englishBanner.jpg" alt="Online Exam Software" />
+            </div>
+        </div>
+    </div>
+</main>
+
+<style>
+    /* Container styling */
+    .welcome-container {
+        width: 100%;
+        padding: 20px;
+        background: linear-gradient(to bottom right, #f0f8ff, #dceffe);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Main content styling */
+    .welcome-content {
+        max-width: 1200px;
+        width: 100%;
+        display: flex;
+        gap: 20px;
+        overflow: hidden;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Text section styling */
+    .welcome-text {
+        background: #007bff;
+        color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .welcome-heading {
+        font-size: 2.8rem;
+        font-weight: bold;
+        text-align: center;
+        position: relative;
+    }
+
+    /* Continuous animated effect for "WELCOME TO PEN" */
+    .animated-text {
+        display: inline-block;
+        font-weight: bold;
+        animation: colorShift 3s ease-in-out infinite, scalePulse 3s ease-in-out infinite;
+    }
+
+    @@keyframes colorShift {
+        0% {
+            color: #ffffff;
+        }
+
+        50% {
+            color: #ffde59;
+        }
+
+        100% {
+            color: #ffffff;
+        }
+    }
+
+    @@keyframes scalePulse {
+        0%, 100% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.1);
+        }
+    }
+
+    /* Subtitle styling */
+    .welcome-subheading {
+        font-size: 1.2rem;
+        font-weight: 300;
+        text-align: center;
+        margin-top: 0;
+    }
+
+    /* Image section styling */
+    .welcome-image img {
+        width: 100%;
+        height: auto;
+>>>>>>> 1a05bc59cada444b9e0a72dce0890e5dafa4b61e
     }
 </style>

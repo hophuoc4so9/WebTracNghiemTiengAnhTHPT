@@ -4,15 +4,15 @@
 
 <main>
     <div class="d-flex flex-row">
-        <div class="d-flex flex-fill bg-primary flex-column align-items-center justify-content-center col-6">
-            <p> WELCOME TO <span><img class="img-fluid" src="~/Content/img/P2N 1.svg" /> </span>  </p>
-            <p>  Hành trình rèn luyện tiếng Anh THPT </p>
+        <div class="d-flex flex-fill bg-primary flex-column align-items-center justify-content-center col-6 text-white py-5">
+            <p class="welcome-text">WELCOME TO PEN</span></p>
+            <p class="tagline">Hành trình rèn luyện tiếng Anh THPT</p>
         </div>
-        <img class="col-6" src="~/Content/img/phan-mem-thi-truc-tuyen-lino 1.png" />
+        <img class="col-6 img-fluid" src="~/Content/img/phan-mem-thi-truc-tuyen-lino 1.png" />
     </div>
     <div class="content-wrapper">
         <div class="sm-container">
-            <h1 id="vechungtoi">Về Chúng Tôi</h1>
+            <h1 id="vechungtoi" class="text-center my-4">Về Chúng Tôi</h1>
             <div class="content">
                 <p>
                     P2N là một trong những phần mềm tự học tiếng Anh trực tuyến hiệu quả. Chúng tôi cung cấp cho người dùng phần mềm tự học tiếng Anh với giao diện thân thiện,
@@ -20,18 +20,100 @@
                     Nhờ đó người dùng có thể tự ôn tập, luyện thi cấp tốc để chuẩn bị cho các kỳ thi tiếng Anh quan trọng như IELTS, TOEIC,…
                     đồng thời rèn luyện các kỹ năng ngôn ngữ một cách toàn diện nhất.
                 </p>
-                <br />
-                <h2>Thông Tin</h2>
+                <h2 class="info-title">Thông Tin</h2>
                 <p>
                     Người thành lập: P2N
                     <br />
                     Địa Chỉ: Đại Học Thủ Dầu Một
                 </p>
-                <br />
                 <p>
-                    Xin vui lòng <a style="text-decoration: none" href="~/Views/Home/Contact.cshtml">Liên hệ</a> với chúng tôi nếu bạn có bất cứ thắc mắc góp ý nào.
+                    Xin vui lòng <a class="contact-link" href="~/Home/Contact.cshtml">Liên hệ</a> với chúng tôi nếu bạn có bất cứ thắc mắc góp ý nào.
                 </p>
             </div>
         </div>
     </div>
 </main>
+
+<style>
+
+    /* Main Styles */
+    body {
+        font-family: Arial, sans-serif; /* Add a clean font */
+        background-color: #eef2f3; /* Light background for the whole page */
+    }
+
+    .welcome-text {
+        font-size: 2.5rem; /* Increased font size for emphasis */
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 0.5rem;
+        letter-spacing: 1px; /* Adds some space between letters */
+    }
+
+    .tagline {
+        font-size: 1.5rem; /* Increased tagline size */
+        text-align: center;
+        margin-top: 0.5rem; /* Added margin for spacing */
+    }
+
+    .logo {
+        width: 60px; /* Slightly larger logo */
+        height: auto;
+        transition: transform 0.3s ease; /* Add a hover effect on the logo */
+    }
+
+    .logo:hover {
+        transform: scale(1.1); /* Logo grows slightly on hover */
+    }
+
+    .content-wrapper {
+        background-color: #ffffff; /* White background for the content */
+        padding: 30px; /* Increased padding for better spacing */
+        border-radius: 15px; /* More rounded corners */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Enhanced shadow for depth */
+        margin: 20px; /* Margin around the content */
+    }
+
+    .content {
+        font-size: 1.1rem; /* Slightly larger font size for readability */
+        line-height: 1.7; /* Increased line height for better readability */
+        color: #444; /* Darker color for better contrast */
+    }
+
+    .info-title {
+        margin-top: 2rem;
+        font-size: 2rem; /* Increased font size */
+        color: #007bff; /* Primary color */
+        text-align: center;
+        text-transform: uppercase; /* Uppercase for emphasis */
+        letter-spacing: 1px; /* Space between letters */
+    }
+
+    .contact-link {
+        color: #007bff; /* Primary color */
+        text-decoration: none;
+        transition: color 0.3s ease, text-shadow 0.3s ease; /* Added text shadow effect */
+    }
+
+    .contact-link:hover {
+        color: #0056b3; /* Darker shade for hover */
+        text-decoration: underline;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Adds depth effect */
+    }
+
+    /* Responsive Styles */
+    @@media (max-width: 768px) {
+        .welcome-text {
+            font-size: 2rem; /* Adjusted font size for smaller screens */
+        }
+
+        .tagline {
+            font-size: 1.2rem; /* Adjusted tagline size for smaller screens */
+        }
+
+        .info-title {
+            font-size: 1.75rem; /* Adjusted info title size */
+        }
+    }
+
+</style>

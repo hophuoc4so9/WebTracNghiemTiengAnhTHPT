@@ -1,0 +1,56 @@
+﻿@model List<WebTracNghiemTiengAnhTHPT.Models.DangBai>
+@{
+}
+
+<style>
+    .dangbai-list {
+        list-style-type: none;
+        padding: 0;
+    }
+
+        .dangbai-list li, .dangbai-list div {
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            display: inline-flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+            .dangbai-list li:hover, .dangbai-list div:hover {
+                background-color: #e0f7fa;
+                transform: scale(1.05);
+            }
+
+            .dangbai-list li button, .dangbai-list div button {
+                margin-left: 10px;
+                background: none;
+                border: none;
+                color: red;
+                font-size: 1.2em;
+                cursor: pointer;
+            }
+
+                .dangbai-list li button:hover, .dangbai-list div button:hover {
+                    color: darkred;
+                }
+</style>
+
+<div>
+    <h4>Dạng câu hỏi của bài thi</h4>
+    <ul class="dangbai-list">
+        @if (Model != null)
+        {
+            foreach (var dangBai in Model)
+            {
+                <li>
+                    @dangBai.TenLoai
+                </li>
+            }
+        }
+    </ul>
+</div>
+

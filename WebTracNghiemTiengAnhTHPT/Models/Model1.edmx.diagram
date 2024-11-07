@@ -5,7 +5,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="f795aba24d40497f82c0fc3e4fd36919" Name="Diagram1" ZoomLevel="50">
-        <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.BaoLoi" Width="1.5" PointX="15.625" PointY="4.5" />
+        <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.BaoLoi" Width="1.5" PointX="15.625" PointY="4.5" IsExpanded="true" />
         <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.CauHoi" Width="1.5" PointX="3.625" PointY="1.875" />
         <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.ChiTietKetQua" Width="1.5" PointX="14.875" PointY="8" />
         <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.DangBai" Width="1.5" PointX="5.875" PointY="11.5" />

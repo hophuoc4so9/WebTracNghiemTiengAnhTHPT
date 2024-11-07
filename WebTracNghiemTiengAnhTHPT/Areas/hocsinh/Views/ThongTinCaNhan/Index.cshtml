@@ -1,58 +1,329 @@
 ﻿@model WebTracNghiemTiengAnhTHPT.Models.TaiKhoan
+
 @{
     ViewBag.Title = "Thông tin cá nhân";
     Layout = "~/Views/Shared/LayoutWeb.cshtml";
 }
-<div class="personal-info-page">
-    <h2>Thông tin cá nhân</h2>
-    @if (Model != null) // Kiểm tra nếu Model không null
-    {
-        using (Html.BeginForm("Save", "ThongTinCaNhan", FormMethod.Post))
-        {
-            @Html.AntiForgeryToken() <!-- Add this line to include the anti-forgery token -->
-            <div class="form-container">
-                <div class="form-group">
-                    <label for="HoTen"><strong>Họ tên:</strong></label>
-                    @Html.TextBoxFor(m => m.HoTen, new { @class = "form-control" })
-                </div>
-                <div class="form-group">
-                    <label for="Gmail"><strong>Email:</strong></label>
-                    @Html.TextBoxFor(m => m.Gmail, new { @class = "form-control" })
-                </div>
-                <div class="form-group">
-                    <label for="SoDienThoai"><strong>Số điện thoại:</strong></label>
-                    @Html.TextBoxFor(m => m.SoDienThoai, new { @class = "form-control" })
-                </div>
-                <div class="form-group">
-                    <label for="NgaySinh"><strong>Ngày sinh:</strong></label>
-                    @Html.TextBoxFor(m => m.NgaySinh, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
-                </div>
-                <div class="form-group">
-                    <label for="DiaChi"><strong>Địa chỉ:</strong></label>
-                    @Html.TextBoxFor(m => m.DiaChi, new { @class = "form-control" })
-                </div>
-                <button type="submit" class="btn btn-primary">Lưu</button>
+<div class="container">
+    <div class="row">
+        <h2 class="text-center mb-4">Thông tin cá nhân</h2>
+        <div class="col-lg-6 col-12">
+            <div class="personal-info-page">
+                @if (Model != null) // Kiểm tra nếu Model không null
+                {
+                    using (Html.BeginForm("Save", "ThongTinCaNhan", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken() <!-- Add this line to include the anti-forgery token -->
+                        <div class="form-container">
+                            <div class="form-group">
+                                <label for="HoTen"><strong>Họ tên:</strong></label>
+                                @Html.TextBoxFor(m => m.HoTen, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label for="Gmail"><strong>Email:</strong></label>
+                                @Html.TextBoxFor(m => m.Gmail, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label for="SoDienThoai"><strong>Số điện thoại:</strong></label>
+                                @Html.TextBoxFor(m => m.SoDienThoai, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label for="NgaySinh"><strong>Ngày sinh:</strong></label>
+                                @Html.TextBoxFor(m => m.NgaySinh, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                            </div>
+                            <div class="form-group">
+                                <label for="DiaChi"><strong>Địa chỉ:</strong></label>
+                                @Html.TextBoxFor(m => m.DiaChi, new { @class = "form-control" })
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Lưu</button>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="text-center">Không tìm thấy thông tin cá nhân.</p>
+                }
             </div>
-        }
-      
-        @Html.Action("PartialLichSuLamBaiAlL", "Contests", new { area = "" })
-    }
-    else
-    {
-        <p>Không tìm thấy thông tin cá nhân.</p>
-    }
+        </div>
+        <div class="col-lg-6 col-12">
+            <div class="form-group">
+                <label for="timePeriod">Chọn thời gian:</label>
+                <select id="timePeriod" class="form-control">
+                    <option value="day">Ngày</option>
+                    <option value="week">Tuần</option>
+                    <option value="month">Tháng</option>
+                    <option value="year">Năm</option>
+                </select>
+            </div>
+            <h2 class="test-count" id="testsCount">Số bài làm: </h2>
+            <h2 class="test-count" id="averageScore">Điểm trung bình: </h2>
+            <h2 class="test-count" id="highestScore">Điểm cao nhất: </h2>
+        </div>
+    </div>
+    <div>
+        <canvas id="ketQuaChart" width="400" height="200"></canvas>
+    </div>
+    <div class="form-group">
+        <label for="yearSelect">Chọn năm:</label>
+        <select id="yearSelect" class="form-control">
+            @for (int year = DateTime.Now.Year; year >= DateTime.Now.Year - 10; year--)
+            {
+                <option value="@year">@year</option>
+            }
+        </select>
+    </div>
+    <div id="yearGrid" class="year-grid"></div>
 </div>
-
 <style>
-    .form-container {
-        background-color: #f9f9f9;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        width: 30%;
+    .test-count {
+        display: block; /* Ensure each count is on a new line */
+        font-weight: bold; /* Make the text bold */
+        margin-bottom: 10px; /* Add some space between the lines */
+        color: #333; /* Darker color for better contrast */
     }
+    /* General Styles */
+    body {
+        background-color: #f0f2f5; /* Light background for better contrast */
+        font-family: Arial, sans-serif;
+    }
+
+    .personal-info-page {
+        margin-top: 20px;
+    }
+
+    .form-container {
+        background-color: #ffffff; /* White background for form */
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease; /* Smooth shadow transition */
+    }
+
+        .form-container:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+        }
 
     .form-group {
         margin-bottom: 20px;
     }
+
+    .form-control {
+        border: 1px solid #ced4da; /* Border color */
+        border-radius: 5px;
+        transition: border-color 0.3s ease; /* Smooth border color transition */
+    }
+
+        .form-control:focus {
+            border-color: #007bff; /* Primary color on focus */
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Box shadow on focus */
+        }
+
+    .btn-primary {
+        background-color: #007bff; /* Primary button color */
+        border: none;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 1rem;
+        transition: background-color 0.3s ease; /* Smooth background transition */
+    }
+
+        .btn-primary:hover {
+            background-color: #007bff; /* Darker shade for hover */
+        }
+    /* Responsive Styles */
+    @@media (max-width: 768px) {
+        .form-container {
+            width: 100%; /* Full width on smaller screens */
+        }
+    }
+
+    .year-grid {
+        display: grid;
+        grid-template-columns: repeat(52, 1fr); /* 52 columns for weeks */
+        gap: 1px; /* Small gap between cells */
+    }
+
+        .year-grid .day-cell {
+            width: 10px; /* Smaller width */
+            height: 10px; /* Smaller height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ccc;
+            position: relative; /* For positioning the tooltip */
+        }
+
+            .year-grid .day-cell:hover::after {
+                content: attr(data-date); /* Show the date on hover */
+                position: absolute;
+                top: -25px; /* Position above the cell */
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: #333;
+                color: #fff;
+                border-radius: 3px;
+                font-size: 10px;
+                white-space: nowrap;
+            }
+
+    .has-data {
+        background-color: green;
+        color: white;
+    }
+
+    .no-data {
+        background-color: gray;
+        color: white;
+    }
 </style>
+@section scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        $(document).ready(function () {
+            function updateStats(data, period) {
+                const now = new Date();
+                let filteredData = [];
+                let testsCount = 0;
+                let totalScore = 0;
+                let highestScore = 0;
+                data.forEach(item => {
+                    const date = new Date(item.ThoiGianBatDau);
+                    let include = false;
+                    if (period === 'year' && date.getFullYear() === now.getFullYear()) {
+                        include = true;
+                    } else if (period === 'month' && date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth()) {
+                        include = true;
+                    } else if (period === 'week') {
+                        const oneWeekAgo = new Date(now);
+                        oneWeekAgo.setDate(now.getDate() - 7);
+                        if (date >= oneWeekAgo && date <= now) {
+                            include = true;
+                        }
+                    } else if (period === 'day' && date.toDateString() === now.toDateString()) {
+                        include = true;
+                    }
+                    if (include) {
+                        filteredData.push(item);
+                        testsCount++;
+                        totalScore += item.Diem;
+                        if (item.Diem > highestScore) {
+                            highestScore = item.Diem;
+                        }
+                    }
+                });
+                const averageScore = testsCount > 0 ? (totalScore / testsCount).toFixed(2) : 0;
+                document.getElementById('testsCount').innerText = `Số bài làm: ${testsCount}`;
+                document.getElementById('averageScore').innerText = `Điểm trung bình: ${averageScore}`;
+                document.getElementById('highestScore').innerText = `Điểm cao nhất: ${highestScore}`;
+            }
+            function updateYearGrid(data, year) {
+                const yearGrid = document.getElementById('yearGrid');
+                yearGrid.innerHTML = ''; // Clear previous content
+                const daysInYear = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0) ? 366 : 365;
+                const startDate = new Date(year, 0, 1);
+                for (let i = 0; i < daysInYear; i++) {
+                    const currentDate = new Date(startDate);
+                    currentDate.setDate(startDate.getDate() + i);
+                    const hasData = data.some(item => {
+                        const itemDate = new Date(item.ThoiGianBatDau);
+                        return itemDate.toDateString() === currentDate.toDateString();
+                    });
+                    const div = document.createElement('div');
+                    div.className = `day-cell ${hasData ? 'has-data' : 'no-data'}`;
+                    div.setAttribute('data-date', currentDate.toLocaleDateString());
+                    yearGrid.appendChild(div);
+                }
+            }
+            // Fetch data via AJAX
+            $.ajax({
+                url: '@Url.Action("GetKetQuaData", "ThongTinCaNhan")',
+                method: 'GET',
+                success: function (data) {
+                    // Initial update for the default period (day)
+                    updateStats(data, 'day');
+                    // Update stats when the time period changes
+                    $('#timePeriod').change(function () {
+                        const selectedPeriod = $(this).val();
+                        updateStats(data, selectedPeriod);
+                    });
+                    // Update year grid when the year changes
+                    $('#yearSelect').change(function () {
+                        const selectedYear = $(this).val();
+                        updateYearGrid(data, selectedYear);
+                    });
+                    // Render the chart with the fetched data
+                    const ctx = document.getElementById('ketQuaChart').getContext('2d');
+                    let lastLabel = '';
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: data.map(item => new Date(item.ThoiGianBatDau).toLocaleDateString('en-US', { month: 'numeric', year: 'numeric' })),
+                            datasets: [{
+                                label: 'Điểm',
+                                data: data.map(item => item.Diem),
+                                fill: false,
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                tension: 0.1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Thời gian'
+                                    },
+                                    ticks: {
+                                        callback: function(value, index, values) {
+                                            const date = new Date(data[index].ThoiGianBatDau);
+                                            const label = date.toLocaleDateString('en-US', { month: 'numeric', year: 'numeric' });
+                                            if (label === lastLabel) {
+                                                return '';
+                                            } else {
+                                                lastLabel = label;
+                                                return label;
+                                            }
+                                        }
+                                    }
+                                },
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: 'Điểm'
+                                    },
+                                    beginAtZero: true
+                                }
+                            },
+                            plugins: {
+                                tooltip: {
+                                    callbacks: {
+                                        title: function(context) {
+                                            const index = context[0].dataIndex;
+                                            return `${data[index].TenKyThi} - ${new Date(data[index].ThoiGianBatDau).toLocaleString()}`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    // Populate year select with years present in data
+                    const years = [...new Set(data.map(item => new Date(item.ThoiGianBatDau).getFullYear()))];
+                    const yearSelect = $('#yearSelect');
+                    yearSelect.empty();
+                    years.forEach(year => {
+                        yearSelect.append(new Option(year, year));
+                    });
+                    // Initial update for the year grid
+                    const currentYear = new Date().getFullYear();
+                    $('#yearSelect').val(currentYear);
+                    updateYearGrid(data, currentYear);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching data:', error);
+                    alert('Error fetching data: ' + error);
+                }
+            });
+        });
+    </script>
+}

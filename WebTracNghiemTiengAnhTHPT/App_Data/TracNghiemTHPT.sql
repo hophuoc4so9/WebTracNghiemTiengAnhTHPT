@@ -48,6 +48,8 @@ create table DangBai
 	MaLoai int IDENTITY(1,1) PRIMARY KEY,
 	TenLoai varchar(30) NOT NULL,
 )
+ALTER TABLE DangBai
+ALTER COLUMN TenLoai nvarchar(30);
 create table ChiTietCauHoiDangBai
 (
 	MaCauHoi int CONSTRAINT FK_CauHoi_ChiTietCauHoiDangBai FOREIGN KEY (MaCauHoi)
@@ -338,3 +340,224 @@ BEGIN
     INNER JOIN inserted i ON ch.MaCauHoi = i.MaCauHoi 
     WHERE ch.MucDo IS NULL; -- Update only if MucDo is not set during the insert
 END;
+CREATE FUNCTION dbo.RemoveRepeatedPatterns (@input NVARCHAR(MAX))
+RETURNS NVARCHAR(MAX)
+AS
+BEGIN
+    DECLARE @pattern NVARCHAR(MAX), @patternLen INT, @result NVARCHAR(MAX)
+    SET @result = @input
+    
+    -- L?p qua các ?o?n ký t? dài h?n 20 và tìm các chu?i l?p
+    SET @patternLen = 20
+    
+    WHILE @patternLen <= LEN(@input) / 2
+    BEGIN
+        SET @pattern = SUBSTRING(@result, 1, @patternLen)
+
+        -- Ki?m tra và lo?i b? chu?i l?p
+        WHILE CHARINDEX(@pattern + @pattern, @result) > 0
+        BEGIN
+            SET @result = REPLACE(@result, @pattern + @pattern, @pattern)
+        END
+
+        SET @patternLen = @patternLen + 1
+    END
+    
+    RETURN @result
+END;
+GO
+
+-- C?p nh?t b?ng CauHoi v?i hàm trên
+UPDATE CauHoi
+SET NoiDung = dbo.RemoveRepeatedPatterns(NoiDung)
+WHERE LEN(NoiDung) > 20; -- C?p nh?t các b?n ghi có ?? dài NoiDung > 20
+
+
+
+ALTER FUNCTION CalculateDifficulty(@MaCauHoi INT)
+RETURNS INT
+AS
+BEGIN
+    DECLARE @SoNguoiTraLoi INT = 0;
+    DECLARE @SoNguoiTraLoiDung INT = 0;
+    DECLARE @DifficultyLevel INT = 1;
+
+    -- Calculate the number of respondents and the number of correct responses
+    SELECT 
+        @SoNguoiTraLoi = COUNT(*),
+        @SoNguoiTraLoiDung = COUNT(CASE WHEN CTKQ.DapAnChon = CH.DapAnChinhXac THEN 1 END)
+    FROM 
+        ChiTietKetQua AS CTKQ
+        JOIN KetQua AS KQ ON CTKQ.Maketqua = KQ.Maketqua
+        JOIN CauHoi AS CH ON CTKQ.MaCauHoi = CH.MaCauHoi
+    WHERE 
+        CTKQ.MaCauHoi = @MaCauHoi;
+
+    -- Default to easy if there are no respondents
+    IF @SoNguoiTraLoi = 0
+    BEGIN
+        SET @DifficultyLevel = 1; -- Easy
+    END
+    ELSE
+    BEGIN
+        DECLARE @TiLeTraLoiDung FLOAT = CAST(@SoNguoiTraLoiDung AS FLOAT) / @SoNguoiTraLoi;
+
+        -- Set difficulty level based on the correct answer rate
+        IF @TiLeTraLoiDung <= 0.3
+            SET @DifficultyLevel = 2; -- Medium
+        ELSE
+            SET @DifficultyLevel = 1; -- Easy
+    END
+
+    RETURN @DifficultyLevel;
+END;
+
+ALTER TRIGGER UpdateDifficultyAndStatus
+ON KetQua
+AFTER UPDATE
+AS
+BEGIN
+    DECLARE @Maketqua INT;
+
+    -- Get the result ID from the updated record
+    SELECT @Maketqua = i.Maketqua
+    FROM inserted i;
+
+    -- Check if the status column has changed from 0 to 1
+    IF EXISTS (
+        SELECT 1 
+        FROM inserted AS i
+        JOIN deleted AS d ON i.Maketqua = d.Maketqua
+        WHERE i.status = 1 AND d.status = 0
+    )
+    BEGIN
+        -- Update difficulty for all questions related to the updated result
+        UPDATE CauHoi
+        SET mucdo = dbo.CalculateDifficulty(CauHoi.MaCauHoi)
+        WHERE MaCauHoi IN (
+            SELECT CTKQ.MaCauHoi 
+            FROM ChiTietKetQua AS CTKQ 
+            WHERE CTKQ.Maketqua = @Maketqua
+        );
+    END;
+END;
+
+-- Update difficulty for all questions that do not yet have a difficulty level
+UPDATE CauHoi
+SET mucdo = 
+(
+    SELECT CASE 
+        WHEN CAST(CAST(SoNguoiTraLoiDung AS FLOAT) / SoNguoiTraLoi AS FLOAT) <= 0.3 THEN 2  -- Medium
+        ELSE 1  -- Easy
+    END
+    FROM 
+    (
+        SELECT 
+            CH.MaCauHoi,
+            COUNT(DISTINCT CTKQ.Maketqua) AS SoNguoiTraLoi,
+            COUNT(CASE WHEN CTKQ.DapAnChon = CH.DapAnChinhXac THEN 1 END) AS SoNguoiTraLoiDung
+        FROM 
+            ChiTietKetQua AS CTKQ
+            JOIN KetQua AS KQ ON CTKQ.Maketqua = KQ.Maketqua
+            JOIN CauHoi AS CH ON CTKQ.MaCauHoi = CH.MaCauHoi
+        GROUP BY 
+            CH.MaCauHoi
+    ) AS T
+    WHERE T.MaCauHoi = CauHoi.MaCauHoi
+)
+WHERE mucdo IS NULL;  -- Update only questions that do not have a difficulty level
+
+INSERT INTO DangBai (TenLoai) VALUES (N'Reading');
+INSERT INTO DangBai (TenLoai) VALUES (N'Listening');
+ALTER TABLE DangBai
+ADD CONSTRAINT UQ_TenLoai UNIQUE (TenLoai);
+INSERT INTO DangBai (TenLoai) VALUES (N'L?p 11');
+INSERT INTO DangBai (TenLoai) VALUES (N'L?p 12');
+INSERT INTO DangBai (TenLoai) VALUES (N'L?p 10');
+INSERT INTO ChiTietCauHoiDangBai (MaCauHoi, MaLoai)
+SELECT CauHoi.MaCauHoi, 
+       CASE 
+           WHEN NhomCauHoi.NoiDung LIKE '%<audio src=%' THEN 2 
+           ELSE 1 
+       END AS MaLoai
+FROM CauHoi
+JOIN NhomCauHoi ON CauHoi.MaNhom = NhomCauHoi.MaNhom;
+
+CREATE TRIGGER trg_UpdateDangBaiOnNoiDungChange
+ON NhomCauHoi
+AFTER UPDATE
+AS
+BEGIN
+    DECLARE @MaLoaiAudio INT = 2;  -- ID for "audio" type
+    DECLARE @MaLoaiNonAudio INT = 1;  -- ID for "non-audio" type
+
+    -- For questions that contain "<audio src="
+    MERGE INTO ChiTietCauHoiDangBai AS target
+    USING (
+        SELECT CauHoi.MaCauHoi, @MaLoaiAudio AS MaLoai
+        FROM CauHoi
+        JOIN inserted i ON i.MaNhom = CauHoi.MaNhom
+        WHERE i.NoiDung LIKE '%<audio src=%'
+    ) AS source
+    ON target.MaCauHoi = source.MaCauHoi AND target.MaLoai IN (1, 2)
+    WHEN MATCHED AND target.MaLoai = @MaLoaiNonAudio THEN
+        UPDATE SET target.MaLoai = @MaLoaiAudio  -- Update from 1 to 2 if "<audio src=" is found
+    WHEN NOT MATCHED BY TARGET THEN
+        INSERT (MaCauHoi, MaLoai) VALUES (source.MaCauHoi, @MaLoaiAudio);  -- Insert if no entry exists with MaLoai 2
+
+    -- For questions that do NOT contain "<audio src="
+    MERGE INTO ChiTietCauHoiDangBai AS target
+    USING (
+        SELECT CauHoi.MaCauHoi, @MaLoaiNonAudio AS MaLoai
+        FROM CauHoi
+        JOIN inserted i ON i.MaNhom = CauHoi.MaNhom
+        WHERE i.NoiDung NOT LIKE '%<audio src=%'
+    ) AS source
+    ON target.MaCauHoi = source.MaCauHoi AND target.MaLoai IN (1, 2)
+    WHEN MATCHED AND target.MaLoai = @MaLoaiAudio THEN
+        UPDATE SET target.MaLoai = @MaLoaiNonAudio  -- Update from 2 to 1 if "<audio src=" is not found
+    WHEN NOT MATCHED BY TARGET THEN
+        INSERT (MaCauHoi, MaLoai) VALUES (source.MaCauHoi, @MaLoaiNonAudio);  -- Insert if no entry exists with MaLoai 1
+END;
+
+CREATE TRIGGER trg_InsertCauHoiDangBaiOnInsertCauHoi
+ON CauHoi
+AFTER INSERT
+AS
+BEGIN
+    DECLARE @MaLoaiAudio INT = 2;  -- ID for "audio" type
+    DECLARE @MaLoaiNonAudio INT = 1;  -- ID for "non-audio" type
+
+    -- Insert MaLoai 2 if "<audio src=" is found in NhomCauHoi.NoiDung
+    INSERT INTO ChiTietCauHoiDangBai (MaCauHoi, MaLoai)
+    SELECT i.MaCauHoi, @MaLoaiAudio
+    FROM inserted i
+    JOIN NhomCauHoi nh ON nh.MaNhom = i.MaNhom
+    WHERE nh.NoiDung LIKE '%<audio src=%';
+
+    -- Insert MaLoai 1 if "<audio src=" is not found in NhomCauHoi.NoiDung
+    INSERT INTO ChiTietCauHoiDangBai (MaCauHoi, MaLoai)
+    SELECT i.MaCauHoi, @MaLoaiNonAudio
+    FROM inserted i
+    JOIN NhomCauHoi nh ON nh.MaNhom = i.MaNhom
+    WHERE nh.NoiDung NOT LIKE '%<audio src=%';
+END;
+
+INSERT INTO DangBai (TenLoai)
+VALUES 
+    (N'Unit 1'),
+    (N'Unit 2'),
+    (N'Unit 3'),
+    (N'Unit 4'),
+    (N'Unit 5'),
+    (N'Unit 6'),
+    (N'Unit 7'),
+    (N'Unit 8'),
+    (N'Unit 9'),
+    (N'Unit 10');
+
+INSERT INTO DangBai (TenLoai)
+VALUES 
+    (N'Pronunciation'),(N'primary stress');
+
+

@@ -6,6 +6,23 @@
     var groupedItems = Model.GroupBy(item => new { item.NhomCauHoi.MaNhom, item.NhomCauHoi.NoiDung });
     WebTracNghiemTiengAnhTHPT.Models.KyThi kyThi = (WebTracNghiemTiengAnhTHPT.Models.KyThi)ViewBag.KyThi;
     int totalQuestions = Model.Count();
+    List<WebTracNghiemTiengAnhTHPT.Models.DangBai> dangBais = ViewBag.dangBais;
+    var classList = new List<SelectListItem>
+{
+        new SelectListItem { Text = "Lớp 10", Value = "Lớp 10" },
+        new SelectListItem { Text = "Lớp 11", Value = "Lớp 11" },
+        new SelectListItem { Text = "Lớp 12", Value = "Lớp 12" }
+    };
+
+    var examTypeList = new List<SelectListItem>
+{
+        new SelectListItem { Text = "Friends Global", Value = "Friends Global" },
+        new SelectListItem { Text = "Global Success", Value = "Global Success" },
+        new SelectListItem { Text = "Smart World", Value = "Smart World" }
+    };
+
+    var selectedClass = ViewBag.Currenclass as string;
+    var selectedExamType = ViewBag.CurrenBoSach as string;
 }
 <script src="~/Scripts/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
 
@@ -140,6 +157,17 @@
             Thời gian làm bài:
             <input type="number" min="10" name="KyThi[@ViewBag.made].ThoiGian" class="form-control edit-input" value="@kyThi.ThoiGian" />
         </h3>
+
+
+
+        <h3>
+            Lớp:
+            @Html.DropDownList("Class", new SelectList(classList, "Value", "Text", selectedClass), "Chọn lớp", new { @class = "form-control" })
+        </h3>
+        <h3>
+            Bộ sách:
+            @Html.DropDownList("ExamType", new SelectList(examTypeList, "Value", "Text", selectedExamType), "Chọn bộ sách", new { @class = "form-control" })
+        </h3>
         foreach (var group in groupedItems)
         {
             @Html.TextArea("NoiDung_Nhom" + group.Key.MaNhom, HttpUtility.HtmlDecode(group.Key.NoiDung), new { @class = "form-control mytextarea", style = "width: 100%;" })
@@ -178,6 +206,9 @@
                             @Html.DisplayFor(modelItem => item.DapAnD)
                         </span>
                     </label>
+                    <div id="partialDangBaiContainer">
+                        @Html.Action("PartialDangBai", new { id = item.MaCauHoi })
+                    </div>
                 </div>
             }
         }

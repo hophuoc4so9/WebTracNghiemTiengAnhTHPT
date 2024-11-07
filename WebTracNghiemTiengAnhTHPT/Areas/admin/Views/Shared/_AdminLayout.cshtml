@@ -16,6 +16,13 @@
     <link href="~/Content/font-awesome.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- jQuery library -->
+
+    <!-- Latest compiled JavaScript -->
+
 </head>
 <body>
     @if (TempData["SuccessMessage"] != null)
@@ -33,7 +40,7 @@
             <!-- Sidebar section -->
             <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0" style="background-color: #f8f9fa;">
                 <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-dark min-vh-100" style="background: #f1f3f5;">
-                   @Html.Action("PartialPhanQuyen", "Home", new { area = "admin" });
+                    @Html.Action("PartialPhanQuyen", "Home", new { area = "admin" });
                 </div>
             </div>
 
@@ -51,6 +58,7 @@
             </div>
         </div>
     </div>
+    @RenderSection("script", required: false)
     <script>
         // Hide the success message after 2 seconds
         setTimeout(function () {
@@ -102,7 +110,7 @@
         }
         /* ... previous styles ... */
 
-     
+
 
     </style>
 

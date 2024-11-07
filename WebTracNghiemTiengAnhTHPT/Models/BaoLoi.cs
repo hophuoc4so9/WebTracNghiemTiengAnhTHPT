@@ -18,6 +18,7 @@ namespace WebTracNghiemTiengAnhTHPT.Models
         public string Username { get; set; }
         public int MaCauHoi { get; set; }
         public int MaDe { get; set; }
+        public string Response { get; set; }
     
         public virtual CauHoi CauHoi { get; set; }
         public virtual TaiKhoan TaiKhoan { get; set; }
