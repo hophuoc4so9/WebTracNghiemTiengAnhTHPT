@@ -2,46 +2,114 @@
 @{
     ViewBag.Title = "Cuộc thi";
     Layout = "~/Views/Shared/LayoutWeb.cshtml";
-    string rq = Request["PhongThiId"]?.ToString()?? "";
+    string rq = Request["PhongThiId"]?.ToString() ?? "";
 }
 
-<h2>Danh sách kỳ thi</h2>
-@if (Model != null && Model.Count() > 0)
-{
-    <div class="container">
-        <div class="row">
-            @foreach (var item in Model)
-            {
-                if (item.CongKhai == true || string.IsNullOrEmpty(rq)!=true)
-                {
-                    <div class="col-6 col-md-3 ">
-                        <div class="bg-light border border-primary rounded-3 p-4 m-3 w-auto">
-                            <h2>  @Html.DisplayFor(modelItem => item.TenKyThi)</h2>
-                            <div>
-                                <p> @item.Soluot  Số lượt <img src="~/Content/img/mdi--account-check-outline.svg" /> </p>
-                                <p>  @item.ThoiGian phút <img src="~/Content/img/mingcute--time-line.svg" /> </p>
-                                <p>   @item.DiemTrungBinh Đánh giá <img src="~/Content/img/material-symbols--star-rate.svg" /> </p>
-                                <p>  @item.SoCauHoi  câu hỏi <img src="~/Content/img/ph--question.svg" /></p>
-                            </div>
+<h2 class="search">Tìm kiếm đề thi</h2>
 
-                            <center>
-
-                                @Html.ActionLink("Tham gia", "ChiTiet", "Contests", new { made = item.MaDe }, new { @class = "btn btn-outline-success " })
-                            </center>
-                        </div>
-
-
+<div class="container-fluid px-0 mb-3">
+    <div class="row">
+        <!-- Bảng lọc kết quả bên trái -->
+        <div class="col-12 col-md-4 col-lg-3">
+            <div class="border rounded p-3">
+                <div class="lockq">
+                        <span><h4>Lọc Kết Quả</h4></span>
+                </div>
+                <!-- Lọc theo số câu hỏi -->
+                <div class="form-group mb-3">
+                    <label><strong>Số câu hỏi</strong></label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="questions10" value="10">
+                        <label class="form-check-label" for="questions10">10 câu hỏi</label>
                     </div>
-                }
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="questions20" value="20">
+                        <label class="form-check-label" for="questions20">20 câu hỏi</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="questions30" value="30">
+                        <label class="form-check-label" for="questions30">30 câu hỏi</label>
+                    </div>
+                </div>
 
+                <!-- Lọc theo thời gian thi -->
+                <div class="form-group mb-3">
+                    <label><strong>Thời gian thi</strong></label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="time15" value="15">
+                        <label class="form-check-label" for="time15">15 phút</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="time30" value="30">
+                        <label class="form-check-label" for="time30">30 phút</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="time60" value="60">
+                        <label class="form-check-label" for="time60">60 phút</label>
+                    </div>
+                </div>
+
+                <!-- Lọc theo đánh giá -->
+                <div class="form-group">
+                    <label><strong>Đánh giá</strong></label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="rating4" value="4">
+                        <label class="form-check-label" for="rating4">4 sao trở lên</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="rating3" value="3">
+                        <label class="form-check-label" for="rating3">3 sao trở lên</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="rating2" value="2">
+                        <label class="form-check-label" for="rating2">2 sao trở lên</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Danh sách kỳ thi bên phải -->
+        <div class="col-12 col-md-8 col-lg-9">
+            @if (Model != null && Model.Count() > 0)
+            {
+                <div class="row">
+                    @foreach (var item in Model)
+                    {
+                        if (item.CongKhai == true || !string.IsNullOrEmpty(rq))
+                        {
+                            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                                <div class="card shadow-sm h-100 border-0 rounded-3">
+                                    <div class="card-body">
+                                        <!-- Tên kỳ thi -->
+                                        <h5 class="card-title text-primary">@Html.DisplayFor(modelItem => item.TenKyThi)</h5>
+
+                                        <!-- Thông tin chi tiết -->
+                                        <ul class="list-unstyled mt-3">
+                                            <li><strong>Số lượt:</strong> @item.Soluot <img src="~/Content/img/mdi--account-check-outline.svg" class="ms-1" alt="Icon" /></li>
+                                            <li><strong>Thời gian:</strong> @item.ThoiGian phút <img src="~/Content/img/mingcute--time-line.svg" class="ms-1" alt="Icon" /></li>
+                                            <li><strong>Đánh giá:</strong> @item.DiemTrungBinh <img src="~/Content/img/material-symbols--star-rate.svg" class="ms-1" alt="Icon" /></li>
+                                            <li><strong>Số câu hỏi:</strong> @item.SoCauHoi <img src="~/Content/img/ph--question.svg" class="ms-1" alt="Icon" /></li>
+                                        </ul>
+
+                                        <!-- Nút Tham gia -->
+                                        <div class="d-grid mt-4">
+                                            @Html.ActionLink("Tham gia", "ChiTiet", "Contests", new { made = item.MaDe }, new { @class = "btn btn-outline-success btn-block" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            }
+            else
+            {
+                <p class="text-center text-muted">Không có kỳ thi nào</p>
             }
         </div>
     </div>
-}
-else 
-    {
-    <p>Không có kỳ thi nào</p>
-}
+</div>
+
 
 <style>
     .row.d-flex {
@@ -80,5 +148,32 @@ else
 
     .btn-outline-success {
         margin-top: auto;
+    }
+
+    .btn.btn-outline-success {
+        background: linear-gradient(90.57deg, rgb(62, 101, 254) 0%, rgb(210, 60, 255) 100%);
+    }
+
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+    }
+
+    .btn-outline-success {
+        border-width: 2px;
+    }
+    .col-12.col-md-4.col-lg-3{  
+        background-color: #e0f6fb;
+         padding: 20px; 
+         border: none !important;
     }
 </style>

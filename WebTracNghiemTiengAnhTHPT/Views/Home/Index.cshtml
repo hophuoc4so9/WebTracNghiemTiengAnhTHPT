@@ -3,20 +3,350 @@
 }
 
 @{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "P2N";
 }
 
 <main>
-    <div>
-
+    <div class="container my-5">
+        <!-- Header Section -->
         <div class="d-flex flex-row">
-            <div class="d-flex flex-fill bg-primary flex-column align-items-center justify-content-center col-6">
-                <p> WELCOME TO <span><img class="img-fluid" src="~/Content/img/P2N 1.svg" /> </span>  </p>
-                <p>  Hành trình rèn luyện tiếng Anh THPT </p>
+            <div class="d-flex flex-fill bg-primary flex-column align-items-center justify-content-center text-center col-6 text-white p-5">
+                <h2>WELCOME TO</h2>
+                <div class="logo">
+                    <img class="img-fluid" src="~/Content/img/P2N 1.svg" alt="Logo" style="width: 50%;" />
+                </div>
+                <p class="lead mt-3">Hành trình rèn luyện tiếng Anh THPT</p>
+                <p class="small">Nâng cao kỹ năng tiếng Anh của bạn mỗi ngày với các bài thi và ôn tập được thiết kế riêng cho học sinh THPT.</p>
             </div>
-            <img class="col-6" src="~/Content/img/phan-mem-thi-truc-tuyen-lino 1.png" />
+            <div class="col-6 p-0">
+                <img class="img-fluid w-100" src="~/Content/img/phan-mem-thi-truc-tuyen-lino 1.png" alt="Online Exam Platform" />
+            </div>
         </div>
 
+        <!-- Main Features Section -->
+        <section class="mt-5">
+            <h3 class="text-center mb-4">Các tính năng nổi bật</h3>
+            <div class="row text-center">
+                <div class="col-md-4 mb-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <img src="~/Content/img/thithu.jpg" class="card-img-top"> <!-- Đường dẫn tới hình ảnh -->
+                        <div class="card-body">
+                            <p class="card-text">Tham gia các bài thi thử theo từng cấp độ và chủ đề để đánh giá kiến thức.</p>
+                            <a href="~/Contests/Index" class="btn btn-primary btn-lg">Thi ngay</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <img src="~/Content/img/ontap.jpg" class="card-img-top"> <!-- Đường dẫn tới hình ảnh -->
+                        <div class="card-body">
+                            <p class="card-text">Cải thiện kiến thức với các bài ôn tập có hướng dẫn và đáp án chi tiết.</p>
+                            <a href="~/OnTap" class="btn btn-primary btn-lg">Vào ôn thi</a>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <img src="~/Content/img/lophoc.jpg" class="card-img-top"> <!-- Đường dẫn tới hình ảnh -->
+                        <div class="card-body">
+                            <p class="card-text">Tham gia lớp học để có những kỳ thi sát chủ đề nhất.</p>
+                            <a href="~/PhongThi" class="btn btn-primary btn-lg">Vào lớp</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="container text-center py-5">
+            <!-- Header -->
+            <h2 class="feature-heading">Nền tảng học tập linh hoạt và dễ sử dụng</h2>
+
+            <div class="row align-items-center">
+                <!-- Left Column: Text Content -->
+                <div class="col-md-6 text-start">
+                    <button class="badge bg-gradient" style="border: none; outline: none; box-shadow: none;">NHANH</button>
+                    <h3 class="feature-title">Tự động tạo câu hỏi và đề thi trắc nghiệm</h3>
+                    <p class="feature-description">
+                        Tạo đề nhanh với vài cú nhấp chuột. Bằng cách nhập file tài liệu định dạng WORD hoặc PDF, AI sẽ giúp bạn tạo đề chính xác 100% trong vài phút.
+                    </p>
+                    <p class="feature-description">
+                        Tối ưu trải nghiệm, tiết kiệm thời gian, công sức, đảm bảo tính khách quan và có thêm thời gian nghiên cứu, học tập.
+                    </p>
+                    <a href="~/OnTap" class="btn btn-primary btn-lg mt-3">Bắt đầu ngay</a>
+                </div>
+
+                <!-- Right Column: Images -->
+                <div class="col-md-6 text-center">
+                    <div class="image-container">
+                        <img src="~/Content/img/AI1.jpg" alt="Exam Creation Preview" class="img-fluid main-image">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section class="p2n-section">
+            <div class="p2n-images">
+                <img src="~/Content/img/giaodien1.jpg" alt="Phone 1" class="phone-image">
+                <img src="~/Content/img/giaodien.jpg" alt="Phone 2" class="phone-image">
+            </div>
+            <div class="p2n-content">
+                <h2>Thân thiện dễ sử dụng, cá nhân hóa việc học tập</h2>
+                <ul>
+                    <li>👑 Giao diện P2N được thiết kế trực quan, thân thiện giúp người dùng thực hiện thao tác nhanh chóng và sử dụng được tối đa các tính năng hữu ích trên nền tảng.</li>
+                    <li>👤 Bằng cách cá nhân hóa, mỗi người dùng có trải nghiệm riêng và xây dựng lộ trình học tập phù hợp cho chính mình. Từ đó, kích thích tư duy độc lập, sáng tạo và đạt kết quả học tập tốt.</li>
+                </ul>
+                <a href="#" class="btn btn-primary btn-lg mt-3">Bắt đầu ngay</a>
+            </div>
+        </section>
+        <section class="container1">
+            <section class="info-section">
+                <h2>Học tập mọi lúc mọi nơi</h2>
+                <p>Bất kể bạn đang ở đâu, chỉ cần có thiết bị kết nối internet, bạn đều có thể học tập.</p>
+                <p>Bạn có thể học trên điện thoại thông minh, máy tính bảng, laptop hoặc máy tính để bàn.</p>
+                <a href="#" class="btn btn-primary btn-lg mt-3">Bắt đầu ngay</a>
+            </section>
+
+            <section class="image-section">
+                <img src="~/Content/img/neverstop learn.png" alt="Laptop Mockup" class="laptop-image">
+                <img src="~/Content/img/laptop.png" alt="Phone Mockup" class="phone-image" style="position: absolute; right: 10px; bottom: -50px; width: 150px;">
+                <img src="~/Content/img/maytinhbang.png" alt="Clock Icon" class="clock-icon" style="width:100px">
+            </section>
+        </section>
+
     </div>
-    
 </main>
+
+<!-- Optional Styling -->
+<style>
+    .effect-wrapper {
+        display: inline-block; /* Để nút căn giữa */
+        position: relative; /* Để điều chỉnh vị trí tuyệt đối bên trong */
+        overflow: hidden; /* Giúp ẩn phần hiệu ứng bên ngoài */
+    }
+
+    .btn-primary {
+        color: black; /* Màu chữ mặc định */
+        transition: color 0.3s, transform 0.3s; /* Thêm hiệu ứng chuyển màu và phóng to */
+    }
+
+        .btn-primary:hover {
+            color: white; /* Màu chữ khi hơ chuột */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Thêm bóng cho nút */
+        }
+
+    .text-center.mb-4 {
+        text-align: center;
+        background: linear-gradient(90deg, #ff0000, #ffff00, #ff00f3, #0033ff, #ff00c4, #ff0000);
+        background-size: 400%;
+        font-size: 40px;
+        font-family: "Arial", sans-serif;
+        word-spacing: 5px;
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        animation: animate 10s linear infinite;
+    }
+    .bg-primary {
+        background-color: #0094ff !important;
+        color: white;
+    }
+
+    .card {
+        transition: transform 0.3s;
+    }
+    .card-body{
+        cursor: pointer;
+    }
+    .card:hover {
+        transform: translateY(-10px);
+    }
+    .btn {
+        background-image: linear-gradient(90.57deg, rgb(62, 101, 254) 0%, rgb(210, 60, 255) 100%) !important;
+    }
+    .feature-section {
+        background-color: #f5f7fe;
+        padding: 50px 0;
+    }
+
+    .feature-heading {
+        color: #6e42f4;
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 30px;
+    }
+
+    .badge {
+        background-color: #6e42f4;
+        color: white;
+        font-weight: bold;
+        padding: 5px 10px;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        border: none; /* Bỏ viền */
+        outline: none; /* Bỏ outline khi nhấn vào nút */
+        box-shadow: none; /* Bỏ shadow nếu có */
+    }
+
+    .feature-title {
+        color: #333;
+        font-weight: bold;
+        font-size: 1.8rem;
+        margin-top: 15px;
+    }
+
+    .feature-description {
+        color: black;
+        font-size: 1rem;
+        margin-top: 15px;
+    }
+
+    .btn-primary {
+        background-color: #6e42f4;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 8px;
+    }
+
+    .image-container {
+        position: relative;
+    }
+
+    .main-image {
+        width: 90%;
+    }
+
+    .floating-icon {
+        position: absolute;
+        bottom: -10px;
+        left: -30px;
+        width: 50px;
+    }
+    .p2n-section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 50px;
+        background-color: #f7f8fe;
+    }
+
+    .p2n-content {
+        max-width: 500px;
+        margin-right: 50px;
+        margin-left: 150px;
+    }
+
+        .p2n-content h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #6b4cff;
+            line-height: 1.2;
+        }
+
+        .p2n-content ul {
+            margin-top: 20px;
+            list-style-type: none;
+        }
+
+            .eduquiz-content ul li {
+                font-size: 16px;
+                line-height: 1.6;
+                margin-top: 10px;
+            }
+
+    .start-button {
+        display: inline-block;
+        margin-top: 30px;
+        padding: 12px 24px;
+        background-color: #3b5bdb;
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .p2n-images {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .phone-image {
+        width: 420px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+        .phone-image:first-child {
+            position: absolute;
+            top: 10px;
+            left: -40px;
+            transform: rotate(-10deg);
+        }
+
+        .phone-image:last-child {
+            position: relative;
+            left: 40px;
+            transform: rotate(10deg);
+        }
+    .container1 {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 50px;
+        }
+
+        .info-section {
+            max-width: 500px;
+            text-align: left;
+        }
+
+        .info-section h2 {
+            font-size: 2rem;
+            color: #6a00f4;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .info-section p {
+            color: #333;
+            line-height: 1.6;
+            font-size: 1rem;
+            margin: 10px 0;
+        }
+
+        .info-section .start-button {
+            background: linear-gradient(45deg, #6a00f4, #a800ff);
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none;
+        }
+
+        .info-section .start-button:hover {
+            opacity: 0.9;
+        }
+
+        .image-section {
+            position: relative;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .laptop-image,
+        .phone-image {
+            max-width: 100%;
+        }
+
+        .clock-icon {
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            width: 60px;
+        }
+    .container.text-center.py-5 {
+        background-color: #e3e7fe;
+    }
+</style>

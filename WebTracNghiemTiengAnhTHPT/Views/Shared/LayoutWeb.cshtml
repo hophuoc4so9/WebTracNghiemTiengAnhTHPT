@@ -21,13 +21,12 @@
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Kỳ thi", "Index", "Contests", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Khám phá", "Index", "Contests", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Ôn tập", "Index", "OnTap", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Lớp học", "Index", "PhongThi", new { area = "" }, new { @class = "nav-link" })</li>
 
                     <li>@Html.ActionLink("Về chúng tôi", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Liên hệ", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    
                 </ul>
 
             </div>
@@ -177,4 +176,29 @@
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+    .navbar-nav li {
+        display: inline-block;
+        position: relative;
+    }
+        .navbar-nav li::before,
+        .navbar-nav li::after {
+            content: "";
+            position: absolute;
+            height: 3px;
+            width: 0;
+            background: linear-gradient(90.57deg, rgb(62, 101, 254) 0%, rgb(210, 60, 255) 100%);
+            transition: .5s;
+        }
+        .navbar-nav li::after {
+            left: 0;
+            bottom: 0px;
+        }
+        .navbar-nav li::before {
+            right: 0;
+            top: 0px;
+        }
+        .navbar-nav li:hover::after,
+        .navbar-nav li:hover::before {
+            width: 100%;
+        }
 </style>

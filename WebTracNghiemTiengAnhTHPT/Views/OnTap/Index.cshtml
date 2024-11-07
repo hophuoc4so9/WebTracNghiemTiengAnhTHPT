@@ -14,57 +14,71 @@
     <div class="alert alert-danger">@TempData["Error"]</div>
 }
 
-<h2>Ôn tập</h2>
+<h2 class="text-center my-4">Ôn tập</h2>
 
 <form method="post" action="@Url.Action("AutoGenerateExam", "OnTap")">
-    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+    <div class="row">
         <!-- Cột bên trái: Số lượng câu hỏi trong CSDL -->
-        <div style="flex: 1; margin-right: 10px;">
-            <h3>Câu hỏi trong CSDL</h3>
-            <div>
-                <label>Tổng số lượng câu hỏi <span>@ViewBag.TotalQuestions</span></label>
-            </div>
-            <div>
-                <label>Số lượng câu hỏi dễ : <span>@ViewBag.EasyQuestions</span></label>
-
-            </div>
-            <div>
-                <label>Số lượng câu hỏi khó : <span>@ViewBag.HardQuestions</span></label>
-
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Câu hỏi trong CSDL</h3>
+                </div>
+                <div class="card-body">
+                    <p><strong>Tổng số lượng câu hỏi:</strong> <span>@ViewBag.TotalQuestions</span></p>
+                    <p><strong>Số lượng câu hỏi dễ:</strong> <span>@ViewBag.EasyQuestions</span></p>
+                    <p><strong>Số lượng câu hỏi khó:</strong> <span>@ViewBag.HardQuestions</span></p>
+                </div>
             </div>
         </div>
 
         <!-- Cột bên phải: Lựa chọn số câu hỏi -->
-        <div style="flex: 1; margin-left: 10px;">
-            <h3>Lựa chọn số câu hỏi</h3>
-            <div>
-                <label>Số lượng câu hỏi dễ trong đề thi:</label>
-                <input type="number" name="SoCauHoiDe" min="0" max="@ViewBag.EasyQuestions" required />
-            </div>
-            <div>
-                <label>Số lượng câu hỏi khó trong đề thi:</label>
-                <input type="number" name="SoCauHoiKho" min="0" max="@ViewBag.HardQuestions" required />
-            </div>
-            <div>
-                <label>Thời gian đề thi (phút):</label>
-                <select name="ThoiGian" required>
-                    @for (int i = 10; i <= 120; i += 10)
-                    {
-                        <option value="@i">@i phút</option>
-                    }
-                </select>
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Lựa chọn số câu hỏi</h3>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="SoCauHoiDe" class="form-label">Số lượng câu hỏi dễ trong đề thi:</label>
+                        <input type="number" class="form-control" id="SoCauHoiDe" name="SoCauHoiDe" min="0" max="@ViewBag.EasyQuestions" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="SoCauHoiKho" class="form-label">Số lượng câu hỏi khó trong đề thi:</label>
+                        <input type="number" class="form-control" id="SoCauHoiKho" name="SoCauHoiKho" min="0" max="@ViewBag.HardQuestions" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="ThoiGian" class="form-label">Thời gian đề thi (phút):</label>
+                        <select class="form-select" id="ThoiGian" name="ThoiGian" required>
+                            @for (int i = 10; i <= 120; i += 10)
+                            {
+                                <option value="@i">@i phút</option>
+                            }
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div>
-        <input type="submit" value="Tạo Đề Thi" />
+
+    <!-- Nút tạo đề thi -->
+    <div class="text-center my-4">
+        <input type="submit" class="btn btn-success btn-lg px-5" value="Tạo Đề Thi" />
     </div>
 </form>
-<div class="col-lg-3 col-12" id="partiview">
- 
-    @Html.Action("PartialLichSuLamBaiOnTap", "Contests")
 
+<!-- Phần lịch sử làm bài ôn tập -->
+<div class="col-lg-3 col-12 mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-secondary text-white">
+            <h4 class="mb-0">Lịch sử làm bài ôn tập</h4>
+        </div>
+        <div class="card-body">
+            @Html.Action("PartialLichSuLamBaiOnTap", "Contests")
+        </div>
+    </div>
 </div>
+
 
 <style>
     form {
@@ -101,16 +115,16 @@
     }
 
     input[type="submit"] {
-        background-color: #4CAF50; /* Màu nền cho nút submit */
+        background-image: linear-gradient(90.57deg, rgb(62, 101, 254) 0%, rgb(210, 60, 255) 100%) !important;
         color: white; /* Màu chữ trắng */
         border: none; /* Bỏ đường viền */
         padding: 10px 15px; /* Đệm cho nút */
         border-radius: 4px; /* Bo tròn các góc */
         cursor: pointer; /* Thay đổi con trỏ khi di chuột qua */
         transition: background-color 0.3s; /* Hiệu ứng chuyển đổi màu nền */
+        border-radius: 5px;
     }
-
-        input[type="submit"]:hover {
-            background-color: #45a049; /* Màu nền khi di chuột qua nút */
-        }
+    input[type="submit"]:hover{
+        transform: scale(1.1) translate(0);
+    }
 </style>
