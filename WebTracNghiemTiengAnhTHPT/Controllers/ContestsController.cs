@@ -34,30 +34,30 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
         // GET: Contests
         public ActionResult Index(int? PhongThiId)
         {
-            
-            if(PhongThiId!=null)
+
+            if (PhongThiId != null)
             {
                 PhongThi phong = _db.PhongThis.FirstOrDefault(n => n.MaPhong == PhongThiId);
-                List<ViewChitietKyThi_2> list =new List<ViewChitietKyThi_2>();
-                foreach(KyThi item in phong.KyThis)
+                List<ViewChitietKyThi_2> list = new List<ViewChitietKyThi_2>();
+                foreach (KyThi item in phong.KyThis)
                 {
                     ViewChitietKyThi_2 tam = new ViewChitietKyThi_2();
                     tam.MaDe = item.MaDe;
                     tam.TenKyThi = item.TenKyThi;
-                    tam.ThoiGian = item.ThoiGian;  
-                    tam.ThoiGianBatDau=item.ThoiGianBatDau;
+                    tam.ThoiGian = item.ThoiGian;
+                    tam.ThoiGianBatDau = item.ThoiGianBatDau;
                     tam.ThoiGianKetThuc = item.ThoiGianKetThuc;
                     tam.SoCauHoi = item.SoCauHoi;
-                    tam.Soluot = item.KetQuas.Count(); 
-                     if(item.KetQuas.Count()>0)     tam.DiemTrungBinh = (int)item.KetQuas.Average(k => k.Diem);
+                    tam.Soluot = item.KetQuas.Count();
+                    if (item.KetQuas.Count() > 0) tam.DiemTrungBinh = (int)item.KetQuas.Average(k => k.Diem);
                     else tam.DiemTrungBinh = 0;
                     list.Add(tam);
 
-                }    
+                }
                 return View(list);
-            }    
-          
-            
+            }
+
+
             var model = _db.ViewChitietKyThi_2.AsNoTracking().ToList();
             return View(model);
         }
@@ -73,7 +73,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             var danhGia = _db.DanhGias.Where(d => d.MaDe == made).ToList();
             ViewBag.DanhGia = danhGia;
             string username = Session["UserName"].ToString();
-            Session["made"] = made; 
+            Session["made"] = made;
             var ketQua = _db.KetQuas
             .AsNoTracking()
             .FirstOrDefault(k => k.Username == username && k.status == false && k.thoigian_ketthuc > DateTime.Now);
@@ -149,7 +149,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
                 // If already rated, update the existing rating
                 existingRating.Rate = rate;
                 existingRating.NoiDung = comment;
-               
+
             }
             else
             {
@@ -177,17 +177,17 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             {
                 return HttpNotFound();
             }
-            if(kq.status==true)
+            if (kq.status == true)
             {
                 return RedirectToAction("Result", new { maketqua = kq.Maketqua });
-            }    
+            }
             ViewBag.MaDe = kq.Maketqua;
-            ViewBag.MaDeReal = Session["made"]; 
+            ViewBag.MaDeReal = Session["made"];
             ViewBag.endTime = kq.thoigian_ketthuc;
             return View(kq);
         }
         [HttpPost]
- 
+
         public ActionResult ReportError(int MaDe, int MaCauHoi, string ErrorMessage)
         {
             // Validate input parameters
@@ -207,25 +207,25 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             var kyThiExists = _db.KyThis.Any(k => k.MaDe == MaDe);
             if (!kyThiExists)
             {
-                return Json(new { success = false, message = kyThiExists});
+                return Json(new { success = false, message = kyThiExists });
             }
 
-      
+
 
             // Create a new BaoLoi entry
-            BaoLoi errorReport = new BaoLoi(); 
+            BaoLoi errorReport = new BaoLoi();
             errorReport.NoiDung = ErrorMessage;
             errorReport.Username = username;
             errorReport.MaCauHoi = MaCauHoi;
-            errorReport.MaDe = MaDe; 
+            errorReport.MaDe = MaDe;
 
-                _db.BaoLois.Add(errorReport);
-                _db.SaveChanges();
+            _db.BaoLois.Add(errorReport);
+            _db.SaveChanges();
 
-                // Return a success response
-                return Json(new { success = true, message = "Error report submitted successfully!" });
-            
-  
+            // Return a success response
+            return Json(new { success = true, message = "Error report submitted successfully!" });
+
+
         }
 
 
@@ -314,7 +314,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
         public ActionResult PartialLichSuLamBaiOnTap()
         {
             string username = Session["UserName"]?.ToString() ?? string.Empty;
-            var model = _db.KetQuas.AsNoTracking().Where(c =>c.Username == username && c.status == true && c.KyThi.UsernameTacGia==username).ToList();
+            var model = _db.KetQuas.AsNoTracking().Where(c => c.Username == username && c.status == true && c.KyThi.UsernameTacGia == username).ToList();
             return View("PartialLichSuLamBai", model);
 
         }
@@ -325,7 +325,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             return View("PartialBieuDoLichSuLamBai", model);
 
         }
-        public async Task< ActionResult> GiveAdvice(int maketqua)
+        public async Task<ActionResult> GiveAdvice(int maketqua)
         {
             var kq = _db.KetQuas.AsNoTracking().SingleOrDefault(k => k.Maketqua == maketqua);
             if (kq == null)
@@ -399,10 +399,10 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             {
                 // Log or handle error as needed
                 return PartialView("GiveAdvice", $"An error occurred: {ex.Message}");
-               
+
             }
 
-         
+
         }
 
         public ActionResult PartialDangBai(int id)
@@ -444,7 +444,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
 
 
 
-       
+
 
 
     }
