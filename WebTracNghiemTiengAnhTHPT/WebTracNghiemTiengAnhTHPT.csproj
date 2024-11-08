@@ -388,7 +388,6 @@
     <Compile Include="Areas\admin\adminAreaRegistration.cs" />
     <Compile Include="Areas\admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\admin\Controllers\LoginController.cs" />
-    <Compile Include="Areas\admin\Controllers\QuanLyDangBaiController.cs" />
     <Compile Include="Areas\admin\Controllers\SignUpController.cs" />
     <Compile Include="Areas\giaovien\Controllers\HomeController.cs" />
     <Compile Include="Areas\giaovien\Controllers\QuanLyBaoLoiController.cs" />
@@ -487,14 +486,8 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
-<<<<<<< HEAD
     <Content Include="Content\img\AI.jpg" />
     <Content Include="Content\img\AI1.jpg" />
-=======
-    <Content Include="Content\img\englishBanner.jpg" />
-    <Content Include="Content\img\englishLogo.jpeg" />
-    <Content Include="Content\img\englishLogo2.jpg" />
->>>>>>> 1a05bc59cada444b9e0a72dce0890e5dafa4b61e
     <Content Include="Content\img\Frame 7.png" />
     <Content Include="Content\img\giaodien.jpg" />
     <Content Include="Content\img\giaodien1.jpg" />
@@ -572,9 +565,6 @@
     <Content Include="Areas\giaovien\Views\QuanLyDeThi\AutoGenerateExam.cshtml" />
     <Content Include="Areas\admin\Views\Home\AddNew.cshtml" />
     <Content Include=".env" />
-    <Content Include="Areas\admin\Views\QuanLyDangBai\Index.cshtml" />
-    <Content Include="Areas\giaovien\Views\QuanLyBaoLoi\Index.cshtml" />
-    <Content Include="Areas\giaovien\Views\QuanLyDeThi\PartialDangBai.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
@@ -806,8 +796,8 @@
     <Content Include="Views\PhongThi\Index.cshtml" />
     <Content Include="Views\OnTap\Index.cshtml" />
     <Content Include="Views\Shared\GiveAdvice.cshtml" />
-    <Content Include="Views\Shared\PartialDangBai.cshtml" />
     <Content Include="Views\Shared\PartialBieuDoLichSuLamBai.cshtml" />
+    <Content Include="Views\Shared\PartialDangBai.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\admin\Data\" />
