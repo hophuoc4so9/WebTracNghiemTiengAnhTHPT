@@ -3,7 +3,7 @@
     ViewBag.Title = "Cuộc thi";
     Layout = "~/Views/Shared/LayoutWeb.cshtml";
     string rq = Request["PhongThiId"]?.ToString() ?? "";
-<<<<<<< HEAD
+
 }
 
 <h2 class="search">Tìm kiếm đề thi</h2>
@@ -112,105 +112,8 @@
 </div>
 
 
-    var now = DateTime.Now;
-}
 
-<h2 class="text-center my-4">Danh sách kỳ thi</h2>
-@if (Model != null && Model.Count() > 0)
-{
-    <div class="container">
-        <div class="row">
-            <div class="row">
-                <h3>Danh sách kỳ thi sắp tới</h3>
-                @foreach (var item in Model.Where(i => i.ThoiGianBatDau > now))
-                {
-                    if (item.CongKhai == true || !string.IsNullOrEmpty(rq))
-                    {
-                        <div class="col-lg-6 col-12 mb-4">
-                            <div class="contest-card bg-light border border-primary rounded-3 p-4 h-100 shadow-sm">
-                                <h2 class="contest-title">@Html.DisplayFor(modelItem => item.TenKyThi)</h2>
-                                <div class="d-flex justify-content-between align-items-center gap-3 mb-3">
-                                    <span class="contest-detail"><img src="~/Content/img/mdi--account-check-outline.svg" alt="Users" /> @item.Soluot</span>
-                                    <span class="contest-detail"><img src="~/Content/img/mingcute--time-line.svg" alt="Time" /> @item.ThoiGian phút</span>
-                                    <span class="contest-detail"><img src="~/Content/img/material-symbols--star-rate.svg" alt="Rating" /> @item.DiemTrungBinh</span>
-                                    <span class="contest-detail"><img src="~/Content/img/ph--question.svg" alt="Questions" /> @item.SoCauHoi</span>
-                                </div>
 
-                                <p class="text-muted">Bắt đầu: @item.ThoiGianBatDau</p>
-                                <p class="text-muted">Kết thúc: @item.ThoiGianKetThuc</p>
-
-                                <center>
-                                    @Html.ActionLink("Tham gia", "ChiTiet", "Contests", new { made = item.MaDe }, new { @class = "btn btn-outline-success" })
-                                </center>
-                            </div>
-                        </div>
-                    }
-                }
-            </div>
-            <div class="row">
-                <h3>Danh sách kỳ thi đang diễn ra</h3>
-                @foreach (var item in Model.Where(i => i.ThoiGianBatDau <= now && i.ThoiGianKetThuc >= now))
-                {
-                    if (item.CongKhai == true || !string.IsNullOrEmpty(rq))
-                    {
-                        <div class="col-lg-6 col-12 mb-4">
-                            <div class="contest-card bg-light border border-primary rounded-3 p-4 h-100 shadow-sm">
-                                <h2 class="contest-title">@Html.DisplayFor(modelItem => item.TenKyThi)</h2>
-                                <div class="d-flex justify-content-between align-items-center gap-3 mb-3">
-                                    <span class="contest-detail"><img src="~/Content/img/mdi--account-check-outline.svg" alt="Users" /> @item.Soluot</span>
-                                    <span class="contest-detail"><img src="~/Content/img/mingcute--time-line.svg" alt="Time" /> @item.ThoiGian phút</span>
-                                    <span class="contest-detail"><img src="~/Content/img/material-symbols--star-rate.svg" alt="Rating" /> @item.DiemTrungBinh</span>
-                                    <span class="contest-detail"><img src="~/Content/img/ph--question.svg" alt="Questions" /> @item.SoCauHoi</span>
-                                </div>
-
-                                <p class="text-muted">Bắt đầu: @item.ThoiGianBatDau</p>
-                                <p class="text-muted">Kết thúc: @item.ThoiGianKetThuc</p>
-
-                                <center>
-                                    @Html.ActionLink("Tham gia", "ChiTiet", "Contests", new { made = item.MaDe }, new { @class = "btn btn-outline-success" })
-                                </center>
-                            </div>
-                        </div>
-                    }
-                }
-            </div>
-            <div class="row">
-                <h3>Danh sách kỳ thi đã diễn ra</h3>
-                @foreach (var item in Model.Where(i => i.ThoiGianKetThuc < now || i.ThoiGianBatDau == null || i.ThoiGianKetThuc == null))
-                {
-                    if (item.CongKhai == true || !string.IsNullOrEmpty(rq))
-                    {
-                        <div class="col-lg-6 col-12 mb-4">
-                            <div class="contest-card bg-light border border-primary rounded-3 p-4 h-100 shadow-sm">
-                                <h2 class="contest-title">@Html.DisplayFor(modelItem => item.TenKyThi)</h2>
-                                <div class="d-flex justify-content-between align-items-center gap-3 mb-3">
-                                    <span class="contest-detail"><img src="~/Content/img/mdi--account-check-outline.svg" alt="Users" /> @item.Soluot</span>
-                                    <span class="contest-detail"><img src="~/Content/img/mingcute--time-line.svg" alt="Time" /> @item.ThoiGian phút</span>
-                                    <span class="contest-detail"><img src="~/Content/img/material-symbols--star-rate.svg" alt="Rating" /> @item.DiemTrungBinh</span>
-                                    <span class="contest-detail"><img src="~/Content/img/ph--question.svg" alt="Questions" /> @item.SoCauHoi</span>
-                                </div>
-                                @if (item.ThoiGianBatDau != null && item.ThoiGianKetThuc != null)
-                                {
-                                    <p class="text-muted">Bắt đầu: @item.ThoiGianBatDau</p>
-                                    <p class="text-muted">Kết thúc: @item.ThoiGianKetThuc</p>
-                                }
-
-                                <center>
-                                    @Html.ActionLink("Tham gia ảo", "ChiTiet", "Contests", new { made = item.MaDe }, new { @class = "btn btn-outline-success" })
-                                </center>
-                            </div>
-                        </div>
-                    }
-                }
-            </div>
-        </div>
-    </div>
-}
-else
-{
-    <p class="text-center">Không có kỳ thi nào</p>
-}
->>>>>>> 1a05bc59cada444b9e0a72dce0890e5dafa4b61e
 
 <style>
 /* General Styles */
@@ -296,7 +199,7 @@ h3 {
         font-size: 1.4rem;
     }
 
-<<<<<<< HEAD
+
     .btn.btn-outline-success {
         background: linear-gradient(90.57deg, rgb(62, 101, 254) 0%, rgb(210, 60, 255) 100%);
     }
@@ -323,10 +226,10 @@ h3 {
          padding: 20px; 
          border: none !important;
     }
-=======
+
     .contest-title {
         font-size: 1.4rem;
     }
 }
->>>>>>> 1a05bc59cada444b9e0a72dce0890e5dafa4b61e
+
 </style>

@@ -72,19 +72,26 @@
             }
         </select>
     </div>
-    <div id="yearGrid" class="year-grid"></div>
+    <div id="yearGrid" class="year-grid">
+        <!-- Example data cells with classes for styling based on data presence -->
+        <div class="day-cell no-data" data-date="2024-01-01"></div>
+        <div class="day-cell has-data" data-date="2024-01-02"></div>
+        <!-- Repeat these cells dynamically based on your data -->
+    </div>
 </div>
 <style>
     .test-count {
-        display: block; /* Ensure each count is on a new line */
-        font-weight: bold; /* Make the text bold */
-        margin-bottom: 10px; /* Add some space between the lines */
-        color: #333; /* Darker color for better contrast */
+        display: block;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #333;
     }
+
     /* General Styles */
     body {
-        background-color: #f0f2f5; /* Light background for better contrast */
+        background-color: #f0f2f5;
         font-family: Arial, sans-serif;
+        color: #333;
     }
 
     .personal-info-page {
@@ -92,90 +99,145 @@
     }
 
     .form-container {
-        background-color: #ffffff; /* White background for form */
+        background-color: #ffffff;
         padding: 30px;
         border-radius: 10px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        transition: box-shadow 0.3s ease; /* Smooth shadow transition */
+        transition: box-shadow 0.3s ease;
     }
 
-        .form-container:hover {
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
-        }
+    .form-container:hover {
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
 
     .form-group {
         margin-bottom: 20px;
     }
 
     .form-control {
-        border: 1px solid #ced4da; /* Border color */
+        border: 1px solid #ced4da;
         border-radius: 5px;
-        transition: border-color 0.3s ease; /* Smooth border color transition */
+        transition: border-color 0.3s ease;
     }
 
-        .form-control:focus {
-            border-color: #007bff; /* Primary color on focus */
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Box shadow on focus */
-        }
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
 
     .btn-primary {
-        background-color: #007bff; /* Primary button color */
+        background-color: #007bff;
         border: none;
         border-radius: 5px;
         padding: 10px;
         font-size: 1rem;
-        transition: background-color 0.3s ease; /* Smooth background transition */
+        transition: background-color 0.3s ease;
     }
 
-        .btn-primary:hover {
-            background-color: #007bff; /* Darker shade for hover */
-        }
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
     /* Responsive Styles */
     @@media (max-width: 768px) {
         .form-container {
-            width: 100%; /* Full width on smaller screens */
+            width: 100%;
         }
     }
 
+    /* Year Grid Styles */
     .year-grid {
         display: grid;
-        grid-template-columns: repeat(52, 1fr); /* 52 columns for weeks */
-        gap: 1px; /* Small gap between cells */
+        grid-template-columns: repeat(52, 1fr);
+        gap: 2px; /* Slightly larger gap for distinction */
+        margin-top: 20px;
     }
 
-        .year-grid .day-cell {
-            width: 10px; /* Smaller width */
-            height: 10px; /* Smaller height */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #ccc;
-            position: relative; /* For positioning the tooltip */
-        }
-
-            .year-grid .day-cell:hover::after {
-                content: attr(data-date); /* Show the date on hover */
-                position: absolute;
-                top: -25px; /* Position above the cell */
-                left: 50%;
-                transform: translateX(-50%);
-                background-color: #333;
-                color: #fff;
-                border-radius: 3px;
-                font-size: 10px;
-                white-space: nowrap;
-            }
-
-    .has-data {
-        background-color: green;
-        color: white;
+    .year-grid .day-cell {
+        width: 12px;
+        height: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 3px;
+        transition: transform 0.2s, background-color 0.3s;
+        position: relative;
     }
 
-    .no-data {
-        background-color: gray;
-        color: white;
+    /* Data-specific coloring with vibrant hues */
+    .year-grid .has-data {
+        background-color: #4CAF50; /* Bright green for emphasis */
+        color: #fff;
     }
+
+    .year-grid .no-data {
+        background-color: #B0BEC5; /* Soft gray for non-data cells */
+        color: #fff;
+    }
+
+    /* Tooltip on hover */
+    .year-grid .day-cell:hover::after {
+        content: attr(data-date);
+        position: absolute;
+        top: -28px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #333;
+        color: #fff;
+        padding: 2px 5px;
+        border-radius: 3px;
+        font-size: 10px;
+        white-space: nowrap;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .year-grid .day-cell:hover {
+        transform: scale(1.1); /* Slight zoom effect */
+    }
+    /* Container for the form group and statistics */
+.col-lg-6.col-12 {
+    background-color: #f8f9fa; /* Light background to enhance readability */
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+
+
+/* Select dropdown styling */
+#timePeriod {
+    border: 2px solid #007bff;
+    border-radius: 4px;
+    color: #333;
+}
+
+#timePeriod:focus {
+    border-color: #0056b3;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.4); /* Focus glow */
+}
+
+/* Headings styling */
+.test-count {
+    color: #007bff;
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 1.2em;
+}
+
+/* Additional styling for responsive display */
+@@media (max-width: 768px) {
+    .col-lg-6.col-12 {
+        padding: 15px;
+    }
+
+    .form-group label,
+    .test-count {
+        font-size: 1em;
+    }
+}
+
 </style>
+
 @section scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>

@@ -388,7 +388,12 @@
     <Compile Include="Areas\admin\adminAreaRegistration.cs" />
     <Compile Include="Areas\admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\admin\Controllers\LoginController.cs" />
+    <Compile Include="Areas\admin\Controllers\QuanLyDangBaiController.cs" />
     <Compile Include="Areas\admin\Controllers\SignUpController.cs" />
+    <Compile Include="Areas\admin\HomeController.cs" />
+    <Compile Include="Areas\admin\LoginController.cs" />
+    <Compile Include="Areas\admin\QuanLyDangBaiController.cs" />
+    <Compile Include="Areas\admin\SignUpController.cs" />
     <Compile Include="Areas\giaovien\Controllers\HomeController.cs" />
     <Compile Include="Areas\giaovien\Controllers\QuanLyBaoLoiController.cs" />
     <Compile Include="Areas\giaovien\Controllers\QuanLyCauHoiController.cs" />
@@ -565,6 +570,7 @@
     <Content Include="Areas\giaovien\Views\QuanLyDeThi\AutoGenerateExam.cshtml" />
     <Content Include="Areas\admin\Views\Home\AddNew.cshtml" />
     <Content Include=".env" />
+    <Content Include="Areas\admin\Views\QuanLyDangBai\Index.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
