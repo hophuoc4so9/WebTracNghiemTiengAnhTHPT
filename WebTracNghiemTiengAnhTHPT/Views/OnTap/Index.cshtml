@@ -77,8 +77,9 @@
 
     <input type="hidden" id="ssInput" name="Seleted" value="" />
 
-    <div>
-        <input type="submit" value="Tạo Đề Thi" />
+    <!-- Nút tạo đề thi -->
+    <div class="text-center my-4">
+        <input type="submit" class="btn btn-success btn-lg px-5" value="Tạo Đề Thi" />
     </div>
 </form>
 
@@ -100,18 +101,14 @@
         color: #333;
     }
 
-    div {
-        margin-bottom: 15px;
-    }
-
-    label {
+    .form-label, label {
         display: block;
         font-weight: bold;
         margin-bottom: 5px;
         color: #555;
     }
 
-    input[type="number"], select {
+    input[type="number"], select, .form-control {
         width: 100%;
         padding: 10px;
         border: 1px solid #ccc;
@@ -133,7 +130,7 @@
     }
 
         input[type="submit"]:hover {
-            background-color: #45a049;
+            transform: scale(1.1);
         }
 
     .dangbai-list {
@@ -141,7 +138,7 @@
         padding: 0;
     }
 
-        .dangbai-list li, .dangbai-list div {
+        .dangbai-list li {
             padding: 10px;
             border: 1px solid #ddd;
             margin-bottom: 5px;
@@ -152,7 +149,7 @@
             align-items: center;
         }
 
-            .dangbai-list li button, .dangbai-list div button {
+            .dangbai-list li button {
                 margin-left: 10px;
                 background: none;
                 border: none;
@@ -161,7 +158,7 @@
                 cursor: pointer;
             }
 
-                .dangbai-list li button:hover, .dangbai-list div button:hover {
+                .dangbai-list li button:hover {
                     color: darkred;
                 }
 
@@ -225,7 +222,6 @@
                 li.appendChild(removeButton);
                 document.getElementById("ss").appendChild(li);
                 document.getElementById("ssInput").value = ss.join(",");
-                console.log(document.getElementById("ssInput").value)
 
             } else {
                 alert("Chỉ có thể thêm tối đa 3 dạng bài.");

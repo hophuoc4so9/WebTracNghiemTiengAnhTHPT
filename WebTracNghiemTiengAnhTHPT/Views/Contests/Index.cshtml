@@ -3,7 +3,6 @@
     ViewBag.Title = "Cuộc thi";
     Layout = "~/Views/Shared/LayoutWeb.cshtml";
     string rq = Request["PhongThiId"]?.ToString() ?? "";
-
 }
 
 <h2 class="search">Tìm kiếm đề thi</h2>
@@ -14,7 +13,7 @@
         <div class="col-12 col-md-4 col-lg-3">
             <div class="border rounded p-3">
                 <div class="lockq">
-                        <span><h4>Lọc Kết Quả</h4></span>
+                    <span><h4>Lọc Kết Quả</h4></span>
                 </div>
                 <!-- Lọc theo số câu hỏi -->
                 <div class="form-group mb-3">
@@ -110,10 +109,6 @@
         </div>
     </div>
 </div>
-
-
-
-
 
 <style>
 /* General Styles */
@@ -231,5 +226,4 @@ h3 {
         font-size: 1.4rem;
     }
 }
-
 </style>
