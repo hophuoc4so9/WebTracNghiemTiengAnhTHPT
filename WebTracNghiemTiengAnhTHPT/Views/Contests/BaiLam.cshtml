@@ -272,14 +272,24 @@
                                         <label class="form-check-label bg-info w-100 my-1 border-danger border-2"
                                                for=@($"dapAn{choice.Value}_{item.MaCauHoi}")>
                                             <span class="form-check mb-2">
-                                                <input class="form-check-input"
-                                                       type="radio" name="answer_@item.MaCauHoi" id=@($"dapAn{choice.Value}_{item.MaCauHoi}") value="@choice.Value"
-                                                       @(item.DapAnChon == choice.Value ? "checked" : "") onchange="updateButtonColor('@item.MaCauHoi')">
+                                                @if (item.CauHoi.DapAnChinhXac.Length == 1)
+                                                {
+                                                    <input class="form-check-input"
+                                                           type="radio" name="answer_@item.MaCauHoi" id=@($"dapAn{choice.Value}_{item.MaCauHoi}") value="@choice.Value"
+                                                           @(item.DapAnChon == choice.Value ? "checked" : "") onchange="updateButtonColor('@item.MaCauHoi')">
+                                                }
+                                                else
+                                                {
+                                                    <input class="form-check-input"
+                                                           type="checkbox" name="answer_@item.MaCauHoi" id=@($"dapAn{choice.Value}_{item.MaCauHoi}") value="@choice.Value"
+                                                           @(item.DapAnChon.Contains(choice.Value) ? "checked" : "") onchange="updateButtonColor('@item.MaCauHoi')">
+                                                }
                                                 <span class="custom-radio"></span>
                                                 @choice.Text
                                             </span>
                                         </label>
                                     }
+
 
                                     <!-- Error reporting -->
                                     <button class="btn btn-danger" onclick="openReportModal(@item.MaCauHoi); return false;">Report Error</button>

@@ -19,6 +19,7 @@ using iText.Kernel.Pdf.Canvas.Parser;
 using iText.Kernel.Pdf;
 using DocumentFormat.OpenXml.Office.SpreadSheetML.Y2023.MsForms;
 using System.Data.Entity.Validation;
+using DocumentFormat.OpenXml.Office2013.Excel;
 
 
 namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
@@ -483,13 +484,21 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                         }
                         foreach (var item1 in item.CauHois)
                         {
-                            string questionKey = "answer_" + item1.MaCauHoi;
-                            if (!string.IsNullOrEmpty(f[questionKey]))
+                            string radioQuestionKey = "radio_answer_" + item1.MaCauHoi;
+                            string checkboxQuestionKey = "checkbox_answer_" + item1.MaCauHoi;
+                             
+                            if (!string.IsNullOrEmpty(f[radioQuestionKey]) && f["questionType_"+item1.MaCauHoi]=="radio")
                             {
-                                item1.DapAnChinhXac = f[questionKey];
+                                item1.DapAnChinhXac = f[radioQuestionKey];
+                            }
+                            else if (f.GetValues(checkboxQuestionKey) != null && f["questionType_" + item1.MaCauHoi] == "checkbox")
+                            {
+                                var selectedAnswers = f.GetValues(checkboxQuestionKey);
+                                item1.DapAnChinhXac = string.Join("", selectedAnswers);
                             }
 
-                            questionKey = "NoiDung_CauHoi" + item1.MaCauHoi;
+
+                            string questionKey = "NoiDung_CauHoi" + item1.MaCauHoi;
                             if (!string.IsNullOrEmpty(f[questionKey]))
                             {
                                 // Encode the HTML content before saving

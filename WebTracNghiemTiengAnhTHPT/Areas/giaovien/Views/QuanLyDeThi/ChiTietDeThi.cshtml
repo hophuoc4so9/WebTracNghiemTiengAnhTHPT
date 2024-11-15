@@ -181,31 +181,71 @@
                         <button type="submit" name="action" value="delete_@item.MaCauHoi" class="btn btn-danger">Xóa câu hỏi khỏi đề thi</button>
                     </div>
 
+                    <!-- Select list to choose radio or checkbox -->
+                    <div class="mb-2">
+                        <label for="questionType_@item.MaCauHoi">Loại câu hỏi:</label>
+                        <select id="questionType_@item.MaCauHoi" name="questionType_@item.MaCauHoi" class="form-control" onchange="toggleQuestionType(@item.MaCauHoi)">
+                            <option value="radio" @(item.DapAnChinhXac.Length == 1 ? "selected" : "")>một đáp án</option>
+                            <option value="checkbox" @(item.DapAnChinhXac.Length >1 ? "selected" : "")>nhiếu đáp án</option>
+                        </select>
+                    </div>
+
                     <!-- Answer choices with radio buttons -->
-                    <label class="form-check-label bg-info w-100 my-1 border-danger border-2" for="dapAnA_@item.MaCauHoi">
-                        <span class="form-check mb-2">
-                            <input @(item.DapAnChinhXac == "A" ? "checked" : "") class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAnA_@item.MaCauHoi" value="A">
-                            @Html.DisplayFor(modelItem => item.DapAnA)
-                        </span>
-                    </label>
-                    <label class="form-check-label bg-info w-100 my-1" for="dapAnB_@item.MaCauHoi">
-                        <span class="form-check mb-2">
-                            <input @(item.DapAnChinhXac == "B" ? "checked" : "") class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAnB_@item.MaCauHoi" value="B">
-                            @Html.DisplayFor(modelItem => item.DapAnB)
-                        </span>
-                    </label>
-                    <label class="form-check-label bg-info w-100 my-1" for="dapAnC_@item.MaCauHoi">
-                        <span class="form-check mb-2">
-                            <input @(item.DapAnChinhXac == "C" ? "checked" : "") class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAnC_@item.MaCauHoi" value="C">
-                            @Html.DisplayFor(modelItem => item.DapAnC)
-                        </span>
-                    </label>
-                    <label class="form-check-label bg-info w-100 my-1" for="dapAnD_@item.MaCauHoi">
-                        <span class="form-check mb-2">
-                            <input @(item.DapAnChinhXac == "D" ? "checked" : "") class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAnD_@item.MaCauHoi" value="D">
-                            @Html.DisplayFor(modelItem => item.DapAnD)
-                        </span>
-                    </label>
+                    <div id="radioOptions_@item.MaCauHoi" class="question-options" style="display: @(item.DapAnChinhXac.Length == 1  ? "block" : "none");">
+                        <label class="form-check-label bg-info w-100 my-1 border-danger border-2" for="dapAnA_@item.MaCauHoi">
+                            <span class="form-check mb-2">
+                                <input @(item.DapAnChinhXac == "A" ? "checked" : "") class="form-check-input" type="radio" name="radio_answer_@item.MaCauHoi" id="dapAnA_@item.MaCauHoi" value="A">
+                                @Html.DisplayFor(modelItem => item.DapAnA)
+                            </span>
+                        </label>
+                        <label class="form-check-label bg-info w-100 my-1" for="dapAnB_@item.MaCauHoi">
+                            <span class="form-check mb-2">
+                                <input @(item.DapAnChinhXac == "B" ? "checked" : "") class="form-check-input" type="radio" name="radio_answer_@item.MaCauHoi" id="dapAnB_@item.MaCauHoi" value="B">
+                                @Html.DisplayFor(modelItem => item.DapAnB)
+                            </span>
+                        </label>
+                        <label class="form-check-label bg-info w-100 my-1" for="dapAnC_@item.MaCauHoi">
+                            <span class="form-check mb-2">
+                                <input @(item.DapAnChinhXac == "C" ? "checked" : "") class="form-check-input" type="radio" name="radio_answer_@item.MaCauHoi" id="dapAnC_@item.MaCauHoi" value="C">
+                                @Html.DisplayFor(modelItem => item.DapAnC)
+                            </span>
+                        </label>
+                        <label class="form-check-label bg-info w-100 my-1" for="dapAnD_@item.MaCauHoi">
+                            <span class="form-check mb-2">
+                                <input @(item.DapAnChinhXac == "D" ? "checked" : "") class="form-check-input" type="radio" name="radio_answer_@item.MaCauHoi" id="dapAnD_@item.MaCauHoi" value="D">
+                                @Html.DisplayFor(modelItem => item.DapAnD)
+                            </span>
+                        </label>
+                    </div>
+
+                    <!-- Answer choices with checkboxes -->
+                    <div id="checkboxOptions_@item.MaCauHoi" class="question-options" style="display: @(item.DapAnChinhXac.Length>1 ? "block" : "none");">
+                        <label class="form-check-label bg-info w-100 my-1 border-danger border-2" for="dapAnA_checkbox_@item.MaCauHoi">
+                            <span class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="checkbox_answer_@item.MaCauHoi" id="dapAnA_checkbox_@item.MaCauHoi" value="A" @(item.DapAnChinhXac.Contains("A") ? "checked" : "")>
+                                @Html.DisplayFor(modelItem => item.DapAnA)
+                            </span>
+                        </label>
+                        <label class="form-check-label bg-info w-100 my-1" for="dapAnB_checkbox_@item.MaCauHoi">
+                            <span class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="checkbox_answer_@item.MaCauHoi" id="dapAnB_checkbox_@item.MaCauHoi" value="B" @(item.DapAnChinhXac.Contains("B") ? "checked" : "")>
+                                @Html.DisplayFor(modelItem => item.DapAnB)
+                            </span>
+                        </label>
+                        <label class="form-check-label bg-info w-100 my-1" for="dapAnC_checkbox_@item.MaCauHoi">
+                            <span class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="checkbox_answer_@item.MaCauHoi" id="dapAnC_checkbox_@item.MaCauHoi" value="C" @(item.DapAnChinhXac.Contains("C") ? "checked" : "")>
+                                @Html.DisplayFor(modelItem => item.DapAnC)
+                            </span>
+                        </label>
+                        <label class="form-check-label bg-info w-100 my-1" for="dapAnD_checkbox_@item.MaCauHoi">
+                            <span class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="checkbox_answer_@item.MaCauHoi" id="dapAnD_checkbox_@item.MaCauHoi" value="D" @(item.DapAnChinhXac.Contains("D") ? "checked" : "")>
+                                @Html.DisplayFor(modelItem => item.DapAnD)
+                            </span>
+                        </label>
+                    </div>
+
                     <div id="partialDangBaiContainer">
                         @Html.Action("PartialDangBai", new { id = item.MaCauHoi })
                     </div>
@@ -215,3 +255,19 @@
         <button type="submit" class="btn btn-success">Lưu</button>
     }
 </div>
+<script>
+    function toggleQuestionType(questionId) {
+        var selectElement = document.getElementById('questionType_' + questionId);
+        var selectedValue = selectElement.value;
+        var radioOptions = document.getElementById('radioOptions_' + questionId);
+        var checkboxOptions = document.getElementById('checkboxOptions_' + questionId);
+
+        if (selectedValue === 'radio') {
+            radioOptions.style.display = 'block';
+            checkboxOptions.style.display = 'none';
+        } else {
+            radioOptions.style.display = 'none';
+            checkboxOptions.style.display = 'block';
+        }
+    }
+</script>

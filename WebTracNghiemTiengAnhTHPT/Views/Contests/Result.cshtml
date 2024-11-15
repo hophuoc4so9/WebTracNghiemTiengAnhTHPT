@@ -46,11 +46,11 @@
                                         var answerText = item.CauHoi.GetType().GetProperty($"DapAn{answer}").GetValue(item.CauHoi, null);
                                         var isChecked = item.DapAnChon == answer;
 
-                                        var isCorrect = item.CauHoi.DapAnChinhXac == answer;
+                                        var isCorrect = item.CauHoi.DapAnChinhXac.Contains(answer) ;
                                         var cssClass = isCorrect ? "correct-answer" : (isChecked ? "incorrect-answer" : "");
 
                                         <label class="form-check-label bg-info w-100 my-1 border-danger border-2 @cssClass" for="dapAn@answer_@item.MaCauHoi">
-                                            <input class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAn@answer_@item.MaCauHoi" value="@answer" @(isChecked ? "checked" : "") disabled>
+                                            <input class="form-check-input" type="checkbox" name="answer_@item.MaCauHoi" id="dapAn@answer_@item.MaCauHoi" value="@answer" @(isChecked ? "checked" : "") disabled>
                                             <span class="answer-text">
                                                 @answerText
                                             </span>

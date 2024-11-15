@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Drawing.Charts;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -249,12 +250,23 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             foreach (var item in ketqua.ChiTietKetQuas)
             {
                 string questionKey = "answer_" + item.MaCauHoi;
-                string selectedValue = form[questionKey];
+                var test = form.GetValue(questionKey);
+                string selectedValue = test?.AttemptedValue ?? string.Empty;
+
                 item.DapAnChon = !string.IsNullOrEmpty(selectedValue) ? selectedValue : "N";
-                if (item.CauHoi.DapAnChinhXac.ToLower().Contains(item.DapAnChon.ToLower()))
+                int cnt = 0;
+                foreach (char answer in item.DapAnChon)
                 {
-                    correct++;
+                    if (item.CauHoi.DapAnChinhXac.ToLower().Contains(answer.ToString().ToLower()))
+                    {
+                        cnt++;
+                    }
+                    else
+                    {
+                        cnt--;
+                    }
                 }
+                correct+=cnt/ (double)item.CauHoi.DapAnChinhXac.Length;
             }
 
             ketqua.Diem = correct * 10 / total;
@@ -263,7 +275,31 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
                 ketqua.status = true;
             }
 
-            _db.SaveChanges();
+            try
+            {
+                _db.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                // Handle validation errors
+                foreach (var validationErrors in ex.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        // Log the error or handle it as needed
+                        Debug.WriteLine($"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
+                    }
+                }
+                // Optionally, rethrow the exception or return an error message
+                throw;
+            }
+            catch (Exception ex)
+            {
+                // Handle other types of errors
+                Debug.WriteLine($"An error occurred: {ex.Message}");
+                // Optionally, rethrow the exception or return an error message
+                throw;
+            }
 
             if (ketqua.status == false && int.Parse(form["flag"]) == 0 && !string.IsNullOrEmpty(form["url"]))
             {
