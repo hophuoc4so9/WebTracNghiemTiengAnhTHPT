@@ -50,7 +50,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
                     ViewBag.TotalQuestions = db.CauHois.Count();
                     ViewBag.EasyQuestions = easyQuestions.Count;
                     ViewBag.HardQuestions = hardQuestions.Count;
-                    return View();
+                    return View("Index");
                 }
 
                 Random random = new Random();
