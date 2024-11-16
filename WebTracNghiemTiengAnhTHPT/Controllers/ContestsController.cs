@@ -264,7 +264,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
                         cnt--;
                     }
                 }
-                correct += cnt / (double)item.CauHoi.DapAnChinhXac.Length;
+                correct += cnt / 4;
             }
 
             ketqua.Diem = correct * 10 / total;
