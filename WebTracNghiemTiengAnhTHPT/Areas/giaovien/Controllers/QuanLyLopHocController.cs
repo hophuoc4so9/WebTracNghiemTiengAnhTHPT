@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using WebTracNghiemTiengAnhTHPT.Models;
 
@@ -21,7 +19,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
         public ActionResult Create()
         {
 
-                return View();
+            return View();
         }
         // POST: PhongThi/Create
         [HttpPost]
@@ -58,14 +56,14 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             {
 
                 LopHoc lophoc = context.LopHocs.Find(id);
-                Session["malop"] = id;  
+                Session["malop"] = id;
 
                 if (lophoc == null)
                 {
                     return HttpNotFound();
                 }
 
-             
+
 
                 return View(lophoc);
             }
@@ -78,7 +76,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             {
                 using (var context = new TracNghiemTiengAnhTHPTEntities1())
                 {
-                  
+
                     int malop = (int)Session["malop"];
                     var currentLop = context.LopHocs.FirstOrDefault(k => k.MaLop == malop);
 

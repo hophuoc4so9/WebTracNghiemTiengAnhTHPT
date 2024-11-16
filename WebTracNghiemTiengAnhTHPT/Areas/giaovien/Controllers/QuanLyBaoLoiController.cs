@@ -1,6 +1,6 @@
-﻿using System.Linq;
+﻿using System.Data.Entity;
+using System.Linq;
 using System.Web.Mvc;
-using System.Data.Entity;
 using WebTracNghiemTiengAnhTHPT.Models;
 
 namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
@@ -25,19 +25,19 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
         [HttpPost]
         public JsonResult RespondToError(int MaCauHoi, string ResponseText)
         {
-            if (MaCauHoi==null || string.IsNullOrEmpty(ResponseText))
+            if (MaCauHoi == null || string.IsNullOrEmpty(ResponseText))
             {
                 return Json(new { success = false, message = "Mã câu hỏi và nội dung phản hồi không được để trống." });
             }
 
-     
-            var errorReport = _db.BaoLois.SingleOrDefault(k=>k.MaCauHoi==MaCauHoi);
+
+            var errorReport = _db.BaoLois.SingleOrDefault(k => k.MaCauHoi == MaCauHoi);
             if (errorReport != null)
             {
-                    errorReport.Response = ResponseText;
-                    _db.SaveChanges(); 
-                
-        
+                errorReport.Response = ResponseText;
+                _db.SaveChanges();
+
+
 
                 return Json(new { success = true, message = "Phản hồi đã được gửi thành công!" });
             }

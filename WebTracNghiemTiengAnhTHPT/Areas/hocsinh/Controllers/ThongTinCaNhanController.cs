@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
 using WebTracNghiemTiengAnhTHPT.Models;
 
@@ -74,7 +71,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.hocsinh.Controllers
                 using (var context = new TracNghiemTiengAnhTHPTEntities1())
                 {
                     var username = Session["UserName"].ToString() ?? "";
-                    var user = context.TaiKhoans.FirstOrDefault(u => u.Username == username);   
+                    var user = context.TaiKhoans.FirstOrDefault(u => u.Username == username);
                     if (user != null)
                     {
                         user.HoTen = model.HoTen;

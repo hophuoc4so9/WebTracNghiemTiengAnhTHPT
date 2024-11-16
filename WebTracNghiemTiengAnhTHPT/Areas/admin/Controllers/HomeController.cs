@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using WebTracNghiemTiengAnhTHPT.Models;
 
@@ -23,7 +21,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
 
         //edit user 
         [HttpPost]
-        public JsonResult EditUser(string Username,string PhanQuyen, string Gmail)
+        public JsonResult EditUser(string Username, string PhanQuyen, string Gmail)
         {
             try
             {
@@ -60,24 +58,24 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
             {
                 using (TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1())
                 {
-                    var user = db.TaiKhoans.FirstOrDefault(u => u.Username == Username);  
+                    var user = db.TaiKhoans.FirstOrDefault(u => u.Username == Username);
 
                     if (user != null)
                     {
                         user.isDeleted = true;
                         db.SaveChanges();
                         TempData["SuccessMessage"] = "Bạn đã xóa user này thành công. User này sẽ được chuyển vào mục thùng rác !";
-                        return Json(new { success = true});
+                        return Json(new { success = true });
                     }
                     else
                     {
-                        return Json(new { success = false});
+                        return Json(new { success = false });
                     }
                 }
             }
             catch (Exception ex)
             {
-                
+
                 return Json(new { success = false, message = "An error occurred while deleting the user." });
             }
         }
@@ -87,22 +85,22 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
         {
             try
             {
-                var gg = Username; 
+                var gg = Username;
                 TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
                 List<TaiKhoan> model = db.TaiKhoans.ToList();
                 // Assuming you have a DbContext for accessing the database
                 var user = model.SingleOrDefault(u => u.Username == gg);
                 if (user != null)
                 {
-                    user.status = isActive;  
-                    db.SaveChanges(); 
+                    user.status = isActive;
+                    db.SaveChanges();
                 }
                 TempData["SuccessMessage"] = "Bạn đã thay đổi trạng thái thành công.";
                 return Json(new { success = true });
             }
             catch (Exception ex)
             {
-               
+
                 return Json(new { success = false, message = ex.Message });
             }
         }
@@ -129,19 +127,19 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
 
         public ActionResult PartialPhanQuyen()
         {
-            if(Session["phanquyen"]==null)
+            if (Session["phanquyen"] == null)
             {
                 return null;
-            }    
+            }
 
             if (Session["phanquyen"].ToString() == "admin")
-             {
+            {
                 return PartialView("_PartialChucNangAdmin");
             }
             else
             {
                 return PartialView("~/Areas/giaovien/Views/Shared/_PartialChucNangGiaoVien.cshtml");
-            }    
+            }
         }
         // GET: Admin/TaiKhoan/AddNew
         public ActionResult AddNew()
@@ -172,7 +170,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
             {
                 using (var db = new TracNghiemTiengAnhTHPTEntities1())
                 {
-                    model.isDeleted = false; 
+                    model.isDeleted = false;
                     db.TaiKhoans.Add(model);
                     db.SaveChanges();
                     TempData["SuccessMessage"] = "Thêm mới 1 tài khoản thành công!";

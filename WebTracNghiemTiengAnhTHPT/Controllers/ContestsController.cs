@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Drawing.Charts;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
@@ -7,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using WebTracNghiemTiengAnhTHPT.Models;
 using WebTracNghiemTiengAnhTHPT.Services;
@@ -266,7 +264,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
                         cnt--;
                     }
                 }
-                correct+=cnt/ (double)item.CauHoi.DapAnChinhXac.Length;
+                correct += cnt / (double)item.CauHoi.DapAnChinhXac.Length;
             }
 
             ketqua.Diem = correct * 10 / total;

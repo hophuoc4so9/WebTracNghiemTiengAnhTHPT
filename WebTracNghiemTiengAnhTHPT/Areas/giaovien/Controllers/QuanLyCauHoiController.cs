@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using WebTracNghiemTiengAnhTHPT.Models;
 
@@ -111,7 +108,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
 
         // POST: Lưu thay đổi
         [HttpPost]
-        
+
         public ActionResult Edit(CauHoi cauHoi)
         {
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
@@ -179,7 +176,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             return Content(result);
         }
         // Chức năng tự động sinh đề thi
-        
+
 
     }
 }

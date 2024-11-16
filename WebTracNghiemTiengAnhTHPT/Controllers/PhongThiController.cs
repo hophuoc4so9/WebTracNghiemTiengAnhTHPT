@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using WebTracNghiemTiengAnhTHPT.Models;
 
@@ -28,16 +26,16 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             return View();
         }
         [HttpPost]
-     
+
         public JsonResult JoinPhongThi(int PhongThiId, string password)
         {
             string username = Session["UserName"]?.ToString() ?? "";
-            if(string.IsNullOrEmpty(Session["UserName"]?.ToString()))
+            if (string.IsNullOrEmpty(Session["UserName"]?.ToString()))
             {
                 return Json(new { success = false, message = "Bạn phải đăng nhập để vào PhongThi." });
             }
             var phongThi = db.PhongThis.Find(PhongThiId);
-          
+
 
             if (phongThi.MatKhau != password)
             {
