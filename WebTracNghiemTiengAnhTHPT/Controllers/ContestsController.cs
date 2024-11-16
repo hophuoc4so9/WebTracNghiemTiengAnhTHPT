@@ -253,6 +253,11 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
 
                 item.DapAnChon = !string.IsNullOrEmpty(selectedValue) ? selectedValue : "N";
                 int cnt = 0;
+              
+                string validAnswers = "ABCDN";
+                item.DapAnChon = new string(item.DapAnChon.Where(c => validAnswers.Contains(c)).ToArray());
+                item.CauHoi.DapAnChinhXac = new string(item.CauHoi.DapAnChinhXac.Where(c => validAnswers.Contains(c)).ToArray());
+
                 foreach (char answer in item.DapAnChon)
                 {
                     if (item.CauHoi.DapAnChinhXac.ToLower().Contains(answer.ToString().ToLower()))
@@ -264,7 +269,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
                         cnt--;
                     }
                 }
-                correct += cnt / 4;
+                correct += cnt / (double)item.CauHoi.DapAnChinhXac.Length;
             }
 
             ketqua.Diem = correct * 10 / total;
