@@ -253,7 +253,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
 
                 item.DapAnChon = !string.IsNullOrEmpty(selectedValue) ? selectedValue : "N";
                 int cnt = 0;
-              
+
                 string validAnswers = "ABCDN";
                 item.DapAnChon = new string(item.DapAnChon.Where(c => validAnswers.Contains(c)).ToArray());
                 item.CauHoi.DapAnChinhXac = new string(item.CauHoi.DapAnChinhXac.Where(c => validAnswers.Contains(c)).ToArray());
