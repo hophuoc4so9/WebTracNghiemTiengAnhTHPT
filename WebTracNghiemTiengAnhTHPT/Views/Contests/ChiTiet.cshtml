@@ -11,11 +11,10 @@
 
 <div class="container">
     <div class="row">
+        <!-- Thông tin kỳ thi -->
         <div class="col-lg-9 col-12">
             <div class="test-info-card">
-                <h3 class="test-title">
-                    @Html.DisplayFor(model => model.TenKyThi)
-                </h3>
+                <h3 class="test-title">@Html.DisplayFor(model => model.TenKyThi)</h3>
                 <p class="test-meta">
                     <span><img src="~/Content/img/ph--question.svg" alt="Questions" /> @Html.DisplayFor(model => model.SoCauHoi) câu hỏi</span> |
                     <span><img src="~/Content/img/mdi--account-check-outline.svg" alt="Users" /> @Html.DisplayFor(model => model.SoCauHoi) người đã làm bài</span> |
@@ -30,11 +29,12 @@
                     @Html.Action("PartialDangBai", new { id = made })
                 </div>
             </div>
+
             <!-- Hiển thị các đánh giá -->
             <ul id="ratings-list" style="list-style-type: none">
                 @if (danhgialist != null && danhgialist.Count() > 0)
                 {
-                    foreach (WebTracNghiemTiengAnhTHPT.Models.DanhGia dg in danhgialist)
+                    foreach (var dg in danhgialist)
                     {
                         <li>
                             <strong>@dg.Username</strong> -
@@ -61,18 +61,17 @@
                 }
             </ul>
 
+            <!-- Form đánh giá -->
             <h4>Đánh giá kỳ thi</h4>
             <div class="rating-form">
                 <form id="ratingForm" method="post">
                     <div class="form-group">
                         <label for="rate">Chọn đánh giá (1 đến 5 sao):</label>
-                        <br>
                         <div id="starRating" class="star-rating">
-                            <span class="star" data-value="1" onclick="showRating(1)">&#9733;</span>
-                            <span class="star" data-value="2" onclick="showRating(2)">&#9733;</span>
-                            <span class="star" data-value="3" onclick="showRating(3)">&#9733;</span>
-                            <span class="star" data-value="4" onclick="showRating(4)">&#9733;</span>
-                            <span class="star" data-value="5" onclick="showRating(5)">&#9733;</span>
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <span class="star" data-value="@i" onclick="showRating(@i)">&#9733;</span>
+                            }
                         </div>
                         <input type="hidden" id="rate" name="rate" required>
                     </div>
@@ -83,206 +82,118 @@
                     <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
                 </form>
             </div>
+        </div>
 
-            <style>
-                .star-rating {
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: flex-start;
-                }
+        <!-- Lịch sử làm bài -->
+        <div class="col-lg-3 col-12" id="partiview">
+            @Html.Action("PartialLichSuLamBai", "Contests", new { made = made })
+        </div>
+    </div>
+</div>
 
-                .star {
-                    font-size: 1em;
-                    color: #ddd;
-                    cursor: pointer;
-                    transition: color 0.2s;
-                }
+<!-- CSS -->
+<style>
+    .container {
+        margin-top: 20px;
+    }
 
-                    .star.hovered,
-                    .star.selected {
-                        color: #ffca08;
-                    }
+    .test-info-card {
+        background-color: #f8f9fa;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
 
-                .star-rating {
-                    display: inline-flex;
-                    align-items: center;
-                    font-size: 1.5em;
-                    color: #ddd;
-                }
+    .test-title {
+        font-size: 1.6em;
+        font-weight: bold;
+        color: #007bff;
+    }
 
-                .star {
-                    color: #ddd;
-                }
+    .test-meta span {
+        font-size: 1.1em;
+        color: #666;
+    }
 
-                    .star.filled {
-                        color: #ffca08; /* Màu vàng cho các ngôi sao đã đánh giá */
-                    }
+    .test-note {
+        margin-top: 15px;
+        padding: 10px;
+        background-color: #e0f7fa;
+        border-radius: 5px;
+        font-size: 1em;
+        color: #333;
+    }
 
-            </style>
+    .btn-primary {
+        margin-top: 20px;
+        font-size: 1.2em;
+        background-color: #007bff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        color: #fff;
+    }
 
+    .star-rating {
+        display: flex;
+        flex-direction: row;
+    }
 
+    .star {
+        font-size: 1.5em;
+        color: #ddd;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
 
-            <script>
-               let clickedRating = 0; // Biến lưu trữ giá trị đã chọn
-
-function showRating(value) {
-    clickedRating = value; // Cập nhật giá trị đã chọn
-    $("#rate").val(value);
-
-    $(".star").removeClass("selected");
-    $(".star").each(function () {
-        if ($(this).data("value") <= value) {
-            $(this).addClass("selected");
+        .star.filled,
+        .star.selected {
+            color: #ffca08;
         }
-    });
-}
 
-// Thêm sự kiện hover để tô màu từ trái sang phải
-$(".star").on("mouseenter", function () {
-    let hoverValue = $(this).data("value");
-
-    $(".star").removeClass("hovered");
-    $(".star").each(function () {
-        if ($(this).data("value") <= hoverValue) {
-            $(this).addClass("hovered");
+        .star.hovered {
+            color: #ffc107;
         }
-    });
-});
+</style>
 
-// Khi rời khỏi ngôi sao, trả lại màu theo giá trị đã chọn trước đó
-$(".star-rating").on("mouseleave", function () {
-    $(".star").removeClass("hovered");
-    $(".star").each(function () {
-        if ($(this).data("value") <= clickedRating) {
-            $(this).addClass("selected");
-        } else {
-            $(this).removeClass("selected");
-        }
-    });
-});
+<!-- JavaScript -->
+<script>
+    let clickedRating = 0;
 
-$(document).ready(function () {
-    $("#ratingForm").submit(function (e) {
-        e.preventDefault();
+    function showRating(value) {
+        clickedRating = value;
+        $("#rate").val(value);
 
-        var rate = $("#rate").val();
-        var comment = $("#comment").val();
-        var made = @made;
+        $(".star").removeClass("selected");
+        $(".star").each(function () {
+            if ($(this).data("value") <= value) {
+                $(this).addClass("selected");
+            }
+        });
+    }
 
-        $.ajax({
-            url: '@Url.Action("DanhGia", "Contests")',
-            type: 'POST',
-            data: {
-                made: made,
-                rate: rate,
-                comment: comment
-            },
-            success: function (response) {
-                alert("Đánh giá thành công!");
-                location.reload(); // Tải lại trang để cập nhật danh sách đánh giá
-            },
-            error: function (error) {
-                alert("Đã xảy ra lỗi, vui lòng thử lại.");
+    $(".star").on("mouseenter", function () {
+        let hoverValue = $(this).data("value");
+        $(".star").removeClass("hovered");
+        $(".star").each(function () {
+            if ($(this).data("value") <= hoverValue) {
+                $(this).addClass("hovered");
             }
         });
     });
-});
 
-            </script>
-
-
-
-
-            <div class="col-lg-3 col-12" id="partiview">
-                @Html.Action("PartialLichSuLamBai", "Contests", new { made = made })
-            </div>
-        </div>
-      
-    </div>
-
-    <style>
-        .container {
-            margin-top: 20px;
-        }
-
-        .test-info-card {
-            background-color: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .test-title {
-            font-size: 1.6em;
-            font-weight: bold;
-            color: #007bff;
-        }
-
-        .test-meta span {
-            font-size: 1.1em;
-            color: #666;
-        }
-
-        .test-meta img {
-            vertical-align: middle;
-            margin-right: 5px;
-        }
-
-        .test-note {
-            margin-top: 15px;
-            padding: 10px;
-            background-color: #e0f7fa;
-            border-radius: 5px;
-            font-size: 1em;
-            color: #333;
-        }
-
-        .btn-primary {
-            margin-top: 20px;
-            font-size: 1.2em;
-            background-color: #007bff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            color: #fff;
-        }
-
-        .practice-options h4 {
-            font-size: 1.4em;
-            font-weight: bold;
-            color: #333;
-            margin-top: 20px;
-        }
-
-        .option-list {
-            margin-top: 10px;
-        }
-
-            .option-list div {
-                padding: 10px;
-                border: 1px solid #ddd;
-                margin-bottom: 5px;
-                border-radius: 4px;
-                background-color: #f9f9f9;
-                transition: background-color 0.3s ease, transform 0.3s ease;
-                cursor: pointer;
+    $(".star-rating").on("mouseleave", function () {
+        $(".star").removeClass("hovered");
+        $(".star").each(function () {
+            if ($(this).data("value") <= clickedRating) {
+                $(this).addClass("selected");
+            } else {
+                $(this).removeClass("selected");
             }
+        });
+    });
 
-                .option-list div:hover {
-                    background-color: #e0f7fa;
-                    transform: scale(1.02);
-                }
-
-        #partiview {
-            margin-top: 20px;
-        }
-
-        #partialDangBaiContainer {
-            margin-top: 20px;
-        }
-    </style>
-    <script>
     $(document).ready(function () {
         $("#ratingForm").submit(function (e) {
             e.preventDefault();
@@ -299,14 +210,14 @@ $(document).ready(function () {
                     rate: rate,
                     comment: comment
                 },
-                success: function (response) {
+                success: function () {
                     alert("Đánh giá thành công!");
-                    location.reload(); // Reload the page to update the list of ratings
+                    location.reload();
                 },
-                error: function (error) {
+                error: function () {
                     alert("Đã xảy ra lỗi, vui lòng thử lại.");
                 }
             });
         });
     });
-    </script>
+</script>

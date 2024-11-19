@@ -19,18 +19,23 @@
                 <div class="form-group mb-3">
                     <label><strong>Số câu hỏi</strong></label>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="questions10" value="10">
-                        <label class="form-check-label" for="questions10">10 câu hỏi</label>
+                        <input class="form-check-input" type="checkbox" id="questions10" value="1-10">
+                        <label class="form-check-label" for="questions10">1 - 10 câu hỏi</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="questions20" value="20">
-                        <label class="form-check-label" for="questions20">20 câu hỏi</label>
+                        <input class="form-check-input" type="checkbox" id="questions20" value="10-20">
+                        <label class="form-check-label" for="questions20">10 - 20 câu hỏi</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="questions30" value="30">
-                        <label class="form-check-label" for="questions30">30 câu hỏi</label>
+                        <input class="form-check-input" type="checkbox" id="questions30" value="20-30">
+                        <label class="form-check-label" for="questions30">20 - 30 câu hỏi</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="questionsOther" value="other">
+                        <label class="form-check-label" for="questionsOther">Kết quả khác</label>
                     </div>
                 </div>
+
 
                 <!-- Lọc theo thời gian thi -->
                 <div class="form-group mb-3">
@@ -78,7 +83,8 @@
                         if (item.CongKhai == true || !string.IsNullOrEmpty(rq))
                         {
                             <div class="col-12 col-md-6 col-lg-4 mb-4">
-                                <div class="card shadow-sm h-100 border-0 rounded-3">
+                                <div class="card shadow-sm h-100 border-0 rounded-3" data-questions="@item.SoCauHoi" data-time="@item.ThoiGian" data-rating="@item.DiemTrungBinh">
+                                    
                                     <div class="card-body">
                                         <!-- Tên kỳ thi -->
                                         <h5 class="card-title text-primary">@Html.DisplayFor(modelItem => item.TenKyThi)</h5>
@@ -227,3 +233,80 @@ h3 {
     }
 }
 </style>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const filters = {
+            questions: [], // Bộ lọc khoảng số câu hỏi
+            time: [],      // Bộ lọc thời gian
+            rating: []     // Bộ lọc đánh giá
+        };
+
+        // Cập nhật bộ lọc khi checkbox thay đổi
+        const updateFilters = (category, value, isChecked) => {
+            if (isChecked) {
+                filters[category].push(value);
+            } else {
+                const index = filters[category].indexOf(value);
+                if (index > -1) {
+                    filters[category].splice(index, 1);
+                }
+            }
+            applyFilters();
+        };
+
+        // Hàm kiểm tra khoảng số câu hỏi
+        const matchesQuestionsRange = (questions, ranges) => {
+            let isInRange = false;
+            let hasOther = false;
+
+            ranges.forEach(range => {
+                if (range === "other") {
+                    hasOther = true; // Nếu chọn "Kết quả khác"
+                } else {
+                    const [min, max] = range.split("-").map(Number); // Tách khoảng min-max
+                    if (questions >= min && questions <= max) {
+                        isInRange = true; // Kiểm tra nếu nằm trong khoảng
+                    }
+                }
+            });
+
+            // Nếu có "Kết quả khác" và không thuộc các khoảng khác, trả về true
+            return (hasOther && !isInRange) || (!hasOther && isInRange);
+        };
+
+        // Áp dụng bộ lọc để hiển thị/ẩn các kỳ thi
+        const applyFilters = () => {
+            document.querySelectorAll(".card").forEach(card => {
+                const questions = parseInt(card.dataset.questions, 10);
+                const time = parseInt(card.dataset.time, 10);
+                const rating = parseFloat(card.dataset.rating);
+
+                const matchesQuestions = !filters.questions.length || matchesQuestionsRange(questions, filters.questions);
+                const matchesTime = !filters.time.length || filters.time.includes(time);
+                const matchesRating = !filters.rating.length || filters.rating.some(r => rating >= r);
+
+                if (matchesQuestions && matchesTime && matchesRating) {
+                    card.style.display = "block"; // Hiển thị nếu phù hợp
+                } else {
+                    card.style.display = "none"; // Ẩn nếu không phù hợp
+                }
+            });
+        };
+
+        // Lắng nghe sự kiện thay đổi trên các checkbox
+        document.querySelectorAll(".form-check-input").forEach(checkbox => {
+            checkbox.addEventListener("change", (e) => {
+                const { id, checked } = e.target;
+                const category = id.startsWith("questions") ? "questions"
+                    : id.startsWith("time") ? "time"
+                        : "rating";
+
+                const value = category === "questions" ? e.target.value // Giữ nguyên giá trị cho khoảng
+                    : category === "rating" ? parseFloat(e.target.value)
+                        : parseInt(e.target.value, 10);
+                updateFilters(category, value, checked);
+            });
+        });
+    });
+
+</script>

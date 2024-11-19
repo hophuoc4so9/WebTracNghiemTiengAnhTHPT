@@ -49,23 +49,23 @@
                                         var isCorrect = item.CauHoi.DapAnChinhXac == answer;
                                         var cssClass = isCorrect ? "correct-answer" : (isChecked ? "incorrect-answer" : "");
 
-                                        <label class="form-check-label bg-info w-100 my-1 border-danger border-2 @cssClass" for="dapAn@answer_@item.MaCauHoi">
+                                        <label class="form-check-label w-100 my-1 border @cssClass" for="dapAn@answer_@item.MaCauHoi">
                                             <input class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAn@answer_@item.MaCauHoi" value="@answer" @(isChecked ? "checked" : "") disabled>
                                             <span class="answer-text">
                                                 @answerText
                                             </span>
+                                            @if (isChecked && !isCorrect)
+                                            {
+                                                <span class="selected-label">Đáp á bạn chọn</span>
+                                            }
+                                            @if (isCorrect)
+                                            {
+                                                <span class="correct-label">Đáp án chính xác</span>
+                                            }
                                         </label>
-                                    }
-                                    @if (item.CauHoi.DapAnChinhXac.ToLower().Contains(item.DapAnChon.ToLower()))
-                                    {
-                                        sodapandung++;
-                                    }
-                                    <div class="field">
-                                        <strong>DapAnChinhXac:</strong> @Html.DisplayFor(modelItem => item.CauHoi.DapAnChinhXac)
-                                    </div>
+                                        }
                                 </div>
-                                sodapan++;
-                            }
+                             }
                         </div>
 
                     }
@@ -77,54 +77,29 @@
         </form>
     </div>
 </div>
-<div>
-    <div id="advice-container">
-
-    </div>
-</div>
 <style>
+    .form-check-label{
+        border-radius: 7px;
+    }
     .correct-answer {
-        background-color: green !important;
-        color: white;
-    }
-
-    .incorrect-answer {
-        background-color: red !important;
-        color: white;
-    }
-</style>
-<style>
-    .correct-answer {
-        background-color: green !important;
-        color: white;
-    }
-
-    .incorrect-answer {
-        background-color: red !important;
-        color: white;
-    }
-
-    .form-check-input[type="radio"] {
-        display: none;
-    }
-
-    .form-check-label {
-        display: block;
+        border: 2px solid #28a745; /* Viền màu xanh lá cây */
+        border-radius: 5px; /* Tùy chỉnh bo góc */
+        position: relative; /* Để căn chỉnh "Đáp án chính xác" */
         padding: 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s, color 0.3s;
     }
 
-    .form-check-input[type="radio"]:checked + .form-check-label {
-        background-color: #007bff;
-        color: white;
+    .correct-label {
+        position: absolute;
+        top: 5px;
+        right: 10px; /* Góc phải */
+        font-size: 12px; /* Kích thước nhỏ */
+        color: #28a745; /* Màu xanh lá cây */
+        font-weight: bold;
+        background-color: #f0fff0; /* Nền nhạt hơn cho chữ */
+        padding: 2px 6px;
+        border-radius: 3px;
     }
 
-    .form-check-label:hover {
-        background-color: #0056b3;
-        color: white;
-    }
 </style>
 <!-- Ensure jQuery is included before your script -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

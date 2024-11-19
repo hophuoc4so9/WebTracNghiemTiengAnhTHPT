@@ -3,11 +3,13 @@
 @{
     ViewBag.Title = "ChiTietKyThi";
     Layout = "~/Views/Shared/LayoutWeb.cshtml";
+
     var groupedItems = Model.ChiTietKetQuas
-                         .GroupBy(item => new { item.CauHoi.MaNhom, item.CauHoi.NhomCauHoi.NoiDung });
+        .GroupBy(item => new { item.CauHoi.MaNhom, item.CauHoi.NhomCauHoi.NoiDung });
     var isFirst = true;
     int made = ViewBag.MaDe;
     DateTime endTime = (DateTime)ViewBag.endTime;
+
     var myDictionary = new Dictionary<int, int>();
     int counter = 1;
 
@@ -17,6 +19,7 @@
         counter++;
     }
 }
+
 @*Reference the TinyMCE script*@
 <!-- Place the first <script> tag in your HTML's <head> -->
 <script src="https://cdn.tiny.cloud/1/4inckogq00f5sh986duadaulucd1rekxhug1kgjjozr5abyu/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
@@ -139,6 +142,7 @@
             background-color: #0056b3;
             color: #fff;
         }
+
     .col-lg-3 {
         background-color: #f8f9fa;
         border: 1px solid #007bff;
@@ -183,6 +187,7 @@
                 background-color: grey;
                 color: white;
             }
+
     .btn-sm {
         padding: 0.25rem 0.5rem;
         font-size: 0.875rem;
@@ -200,6 +205,9 @@
             color: #fff;
             background-color: #218838;
             border-color: #1e7e34;
+        }
+        .bg-info{
+            background-color: white !important;
         }
 </style>
 
@@ -251,7 +259,7 @@
                             {
                                 // Create a list of answer choices
                                 var choices = new List<(string Value, string Text)>
-                                            {
+                                                        {
                                     ("A", item.CauHoi.DapAnA),
                                     ("B", item.CauHoi.DapAnB),
                                     ("C", item.CauHoi.DapAnC),
@@ -311,7 +319,7 @@
 
                 <!-- Timer and Submit Button -->
                 <div class="col-lg-3 col-12 bg-light border border-primary rounded-3 p-4 mx-1">
-                    <input onclick="ketthuc()" type="submit" value="Nộp bài" 
+                    <input onclick="ketthuc()" type="submit" value="Nộp bài"
                            class="btn-sm btn-success" />
                     <div id="timer">90:00</div>
                     @foreach (var group in groupedItems)
