@@ -20,9 +20,7 @@
                     <span><img src="~/Content/img/mdi--account-check-outline.svg" alt="Users" /> @Html.DisplayFor(model => model.SoCauHoi) người đã làm bài</span> |
                     <span><img src="~/Content/img/mingcute--time-line.svg" alt="Time" /> @Html.DisplayFor(model => model.ThoiGian) phút</span>
                 </p>
-                <p class="test-note">
-                    <strong>Chú ý:</strong> Để được quy đổi sang scaled score, vui lòng chọn chế độ làm FULL TEST.
-                </p>
+              
                 @Html.ActionLink("Tham gia", "ChiTietKyThi", "Contests", new { made = made }, new { @class = "btn btn-primary" })
 
                 <div id="partialDangBaiContainer">

@@ -1,24 +1,16 @@
-﻿using Microsoft.Ajax.Utilities;
+﻿using Aspose.Words;
+using DocumentFormat.OpenXml.Packaging;
+using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas.Parser;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Security;
 using WebTracNghiemTiengAnhTHPT.Models;
-using System.Xml.Linq;
-using System.Text.RegularExpressions;
-using System.Threading;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Wordprocessing;
-using Aspose.Words;
-using iText.Kernel.Pdf.Canvas.Parser;
-using iText.Kernel.Pdf;
-using DocumentFormat.OpenXml.Office.SpreadSheetML.Y2023.MsForms;
-using System.Data.Entity.Validation;
 
 
 namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
@@ -35,7 +27,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                 return View(model);
             }
 
-           
+
         }
         public ActionResult ThemMoiDeThi()
         {
@@ -71,10 +63,10 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                     return RedirectToAction("Index");
                 }
 
-              
+
                 return View(model);
-            }    
-               
+            }
+
         }
         public ActionResult ChiTietDeThi(int made)
         {
@@ -124,7 +116,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
 
                 var cauHoi = context.CauHois
                     .Include(c => c.DangBais)
-                    .FirstOrDefault(n => n.MaCauHoi == id );
+                    .FirstOrDefault(n => n.MaCauHoi == id);
 
                 var allDangBais = context.DangBais
                     .Where(db => !excludedCategories.Contains(db.TenLoai))
@@ -198,19 +190,19 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             {
                 var kyThi = db.KyThis.Include(k => k.CauHois)
                                  .FirstOrDefault(k => k.MaDe == made);
-            if (kyThi == null)
-            {
-                return HttpNotFound();
-            }
+                if (kyThi == null)
+                {
+                    return HttpNotFound();
+                }
 
-            // Find the CauHoi in the KyThi
-            var cauHoiToRemove = kyThi.CauHois.FirstOrDefault(ch => ch.MaCauHoi == maCauHoi);
-            if (cauHoiToRemove != null)
-            {
-                kyThi.CauHois.Remove(cauHoiToRemove);
-                db.SaveChanges();
-            }
-            return RedirectToAction("ChiTietDeThi", new { made });
+                // Find the CauHoi in the KyThi
+                var cauHoiToRemove = kyThi.CauHois.FirstOrDefault(ch => ch.MaCauHoi == maCauHoi);
+                if (cauHoiToRemove != null)
+                {
+                    kyThi.CauHois.Remove(cauHoiToRemove);
+                    db.SaveChanges();
+                }
+                return RedirectToAction("ChiTietDeThi", new { made });
             }
         }
         [HttpPost]
@@ -232,7 +224,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                         if (int.TryParse(indexString, out index))
                         {
                             // Get the MaDe value to find the specific KyThi item
-                            int maDe =int.Parse( form[$"KyThi[{index}].MaDe"]);
+                            int maDe = int.Parse(form[$"KyThi[{index}].MaDe"]);
                             var kyThi = db.KyThis.Find(maDe);
 
                             if (kyThi != null)
@@ -243,20 +235,20 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
 
                                 // Update ThoiGianBatDau
                                 var batDauDate = form[$"KyThi[{index}].ThoiGianBatDau"];
-                                kyThi.ThoiGianBatDau = string.IsNullOrEmpty(batDauDate) 
+                                kyThi.ThoiGianBatDau = string.IsNullOrEmpty(batDauDate)
                                     ? (DateTime?)null
                                     : DateTime.Parse(batDauDate);
 
                                 // Update ThoiGianKetThuc
                                 var ketThucDate = form[$"KyThi[{index}].ThoiGianKetThuc"];
-                                kyThi.ThoiGianKetThuc = string.IsNullOrEmpty(ketThucDate) 
+                                kyThi.ThoiGianKetThuc = string.IsNullOrEmpty(ketThucDate)
                                     ? (DateTime?)null
                                     : DateTime.Parse(ketThucDate);
 
                                 // Update CongKhai   KyThi[@item.MaDe].CongKhai
                                 kyThi.CongKhai = form[$"KyThi[{index}].CongKhai"] != null && form[$"KyThi[{index}].CongKhai"] == "on";
 
-                               if(Session["UserName"]!=null)   kyThi.UsernameTacGia = Session["UserName"].ToString();
+                                if (Session["UserName"] != null) kyThi.UsernameTacGia = Session["UserName"].ToString();
 
                                 // Handle isDeleted
                                 kyThi.isDeleted = form[$"KyThi[{index}].isDeleted"] == "true"; // Set as deleted if true
@@ -275,10 +267,10 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
 
         [HttpPost]
         public ActionResult Upload(HttpPostedFileBase file)
-            {
-           
+        {
+
             string contents = string.Empty;
-        
+
             KyThi ktthi = new KyThi();
             ktthi.TenKyThi = Path.ChangeExtension(file.FileName, null);
             try
@@ -322,8 +314,8 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                 TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
                 //db.KyThis.Add(ktthi);
                 //db.SaveChanges();
-                ProcessExamText(contents,ktthi);
-             
+                ProcessExamText(contents, ktthi);
+
             }
             catch (Exception ex)
             {
@@ -422,7 +414,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                         }
                     }
                 }
-               if(kt.SoCauHoi==null || kt.SoCauHoi<=0) kt.SoCauHoi=kt.CauHois.Count;
+                if (kt.SoCauHoi == null || kt.SoCauHoi <= 0) kt.SoCauHoi = kt.CauHois.Count;
 
                 db.SaveChanges();
             }
@@ -483,13 +475,21 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                         }
                         foreach (var item1 in item.CauHois)
                         {
-                            string questionKey = "answer_" + item1.MaCauHoi;
-                            if (!string.IsNullOrEmpty(f[questionKey]))
+                            string radioQuestionKey = "radio_answer_" + item1.MaCauHoi;
+                            string checkboxQuestionKey = "checkbox_answer_" + item1.MaCauHoi;
+
+                            if (!string.IsNullOrEmpty(f[radioQuestionKey]) && f["questionType_" + item1.MaCauHoi] == "radio")
                             {
-                                item1.DapAnChinhXac = f[questionKey];
+                                item1.DapAnChinhXac = f[radioQuestionKey];
+                            }
+                            else if (f.GetValues(checkboxQuestionKey) != null && f["questionType_" + item1.MaCauHoi] == "checkbox")
+                            {
+                                var selectedAnswers = f.GetValues(checkboxQuestionKey);
+                                item1.DapAnChinhXac = string.Join("", selectedAnswers);
                             }
 
-                            questionKey = "NoiDung_CauHoi" + item1.MaCauHoi;
+
+                            string questionKey = "NoiDung_CauHoi" + item1.MaCauHoi;
                             if (!string.IsNullOrEmpty(f[questionKey]))
                             {
                                 // Encode the HTML content before saving
@@ -552,8 +552,8 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {
                 var totalQuestions = db.CauHois.Count();
-                var easyQuestions = db.CauHois.Count(q => q.MucDo == 1); 
-                var hardQuestions = db.CauHois.Count(q => q.MucDo == 2); 
+                var easyQuestions = db.CauHois.Count(q => q.MucDo == 1);
+                var hardQuestions = db.CauHois.Count(q => q.MucDo == 2);
 
                 ViewBag.TotalQuestions = totalQuestions;
                 ViewBag.EasyQuestions = easyQuestions;
@@ -581,7 +581,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                     ViewBag.TotalQuestions = db.CauHois.Count();
                     ViewBag.EasyQuestions = easyQuestions.Count;
                     ViewBag.HardQuestions = hardQuestions.Count;
-                    return View(); 
+                    return View();
                 }
 
                 Random random = new Random();
@@ -602,7 +602,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                     isDeleted = false,
                     UsernameTacGia = Session["UserName"]?.ToString()
                 };
-                newExam.SoCauHoi=SoCauHoiDe + SoCauHoiKho;
+                newExam.SoCauHoi = SoCauHoiDe + SoCauHoiKho;
                 db.KyThis.Add(newExam);
                 db.SaveChanges();
 
@@ -614,8 +614,8 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                 {
                     newExam.CauHois.Add(question);
                 }
-                
-                db.SaveChanges(); 
+
+                db.SaveChanges();
 
                 TempData["Success"] = "Đề thi đã được tạo thành công!";
                 return RedirectToAction("Index");

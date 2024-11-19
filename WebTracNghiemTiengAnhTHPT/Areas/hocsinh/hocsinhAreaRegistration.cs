@@ -2,17 +2,17 @@
 
 namespace WebTracNghiemTiengAnhTHPT.Areas.hocsinh
 {
-    public class hocsinhAreaRegistration : AreaRegistration 
+    public class hocsinhAreaRegistration : AreaRegistration
     {
-        public override string AreaName 
+        public override string AreaName
         {
-            get 
+            get
             {
                 return "hocsinh";
             }
         }
 
-        public override void RegisterArea(AreaRegistrationContext context) 
+        public override void RegisterArea(AreaRegistrationContext context)
         {
             context.MapRoute(
                 "hocsinh_default",

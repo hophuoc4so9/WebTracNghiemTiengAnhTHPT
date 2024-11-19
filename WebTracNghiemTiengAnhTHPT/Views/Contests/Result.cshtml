@@ -46,7 +46,7 @@
                                         var answerText = item.CauHoi.GetType().GetProperty($"DapAn{answer}").GetValue(item.CauHoi, null);
                                         var isChecked = item.DapAnChon == answer;
 
-                                        var isCorrect = item.CauHoi.DapAnChinhXac == answer;
+                                        var isCorrect = item.CauHoi.DapAnChinhXac.Contains(answer) ;
                                         var cssClass = isCorrect ? "correct-answer" : (isChecked ? "incorrect-answer" : "");
 
                                         <label class="form-check-label w-100 my-1 border @cssClass" for="dapAn@answer_@item.MaCauHoi">

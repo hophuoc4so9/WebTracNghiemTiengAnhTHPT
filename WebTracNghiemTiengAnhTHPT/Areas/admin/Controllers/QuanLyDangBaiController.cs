@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using WebTracNghiemTiengAnhTHPT.Models;
 namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
@@ -98,7 +96,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
         {
             try
             {
-                var cd = db.DangBais.SingleOrDefault(c => c.MaLoai == maCD); 
+                var cd = db.DangBais.SingleOrDefault(c => c.MaLoai == maCD);
                 cd.TenLoai = strTenCD;
                 db.SaveChanges();
                 return Json(new { code = 200, msg = "Sửa dạng bài thành công." }, JsonRequestBehavior.AllowGet);

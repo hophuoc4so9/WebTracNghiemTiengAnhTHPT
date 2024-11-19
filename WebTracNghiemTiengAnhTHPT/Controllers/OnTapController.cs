@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using WebTracNghiemTiengAnhTHPT.Models;
 
@@ -33,15 +32,32 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {
                 // Parse selected DangBai IDs from the hidden input
-                var selectedDangBaiIds = Seleted?.Split(',').Select(int.Parse).ToList();
-                var allDangBais = db.DangBais.Where(d => selectedDangBaiIds.Contains(d.MaLoai)).ToList();
+                var selectedDangBaiIds = !string.IsNullOrEmpty(Seleted) ? Seleted.Split(',').Select(int.Parse).ToList() : null;
 
-                var easyQuestions = db.CauHois
-                    .Where(q => q.MucDo == 1 && !q.isDeleted && q.DangBais.Any(d => selectedDangBaiIds.Contains(d.MaLoai)))
-                    .ToList();
-                var hardQuestions = db.CauHois
-                    .Where(q => q.MucDo == 2 && !q.isDeleted && q.DangBais.Any(d => selectedDangBaiIds.Contains(d.MaLoai)))
-                    .ToList();
+                List<DangBai> allDangBais = new List<DangBai>();
+                List<CauHoi> easyQuestions = new List<CauHoi>();
+                List<CauHoi> hardQuestions = new List<CauHoi>();
+
+                if (selectedDangBaiIds != null && selectedDangBaiIds.Any())
+                {
+                    allDangBais = db.DangBais.Where(d => selectedDangBaiIds.Contains(d.MaLoai)).ToList();
+
+                    easyQuestions = db.CauHois
+                        .Where(q => q.MucDo == 1 && !q.isDeleted && q.DangBais.Any(d => selectedDangBaiIds.Contains(d.MaLoai)))
+                        .ToList();
+                    hardQuestions = db.CauHois
+                        .Where(q => q.MucDo == 2 && !q.isDeleted && q.DangBais.Any(d => selectedDangBaiIds.Contains(d.MaLoai)))
+                        .ToList();
+                }
+                else
+                {
+                    easyQuestions = db.CauHois
+                        .Where(q => q.MucDo == 1 && !q.isDeleted)
+                        .ToList();
+                    hardQuestions = db.CauHois
+                        .Where(q => q.MucDo == 2 && !q.isDeleted)
+                        .ToList();
+                }
 
                 if (SoCauHoiDe > easyQuestions.Count || SoCauHoiKho > hardQuestions.Count)
                 {
@@ -50,7 +66,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
                     ViewBag.TotalQuestions = db.CauHois.Count();
                     ViewBag.EasyQuestions = easyQuestions.Count;
                     ViewBag.HardQuestions = hardQuestions.Count;
-                    return View();
+                    return View("Index");
                 }
 
                 Random random = new Random();

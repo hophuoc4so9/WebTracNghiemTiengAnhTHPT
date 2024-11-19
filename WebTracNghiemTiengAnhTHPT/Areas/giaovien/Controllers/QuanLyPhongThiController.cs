@@ -1,10 +1,8 @@
-﻿using iText.Forms.Xfdf;
-using OfficeOpenXml;
+﻿using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using WebTracNghiemTiengAnhTHPT.Models;
 
@@ -16,10 +14,10 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
         {
             using (var context = new TracNghiemTiengAnhTHPTEntities1())
             {
-            
+
                 var phongThiList = context.PhongThis.Include("LopHoc").ToList();
 
-           
+
                 var viewModelList = phongThiList.Select(pt => new PhongThiViewModel
                 {
                     PhongThi = pt,
@@ -28,7 +26,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                         {
                     new SelectListItem { Value = pt.LopHoc.MaLop.ToString(), Text = pt.LopHoc.TenLop }
                         }
-                        : new List<SelectListItem>() 
+                        : new List<SelectListItem>()
                 }).ToList();
 
                 return View(viewModelList);
@@ -42,18 +40,18 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
         {
             using (var context = new TracNghiemTiengAnhTHPTEntities1())
             {
-             
+
                 var lopHocList = context.LopHocs.Select(l => new SelectListItem
                 {
                     Value = l.MaLop.ToString(),
                     Text = l.TenLop
                 }).ToList();
 
-             
+
                 var viewModel = new PhongThiViewModel
                 {
                     LopHocList = lopHocList,
-                    PhongThi = new PhongThi() 
+                    PhongThi = new PhongThi()
                 };
 
                 return View(viewModel);
@@ -70,7 +68,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             {
                 using (var context = new TracNghiemTiengAnhTHPTEntities1())
                 {
-                   
+
                     context.PhongThis.Add(viewModel.PhongThi);
                     context.SaveChanges();
                     return RedirectToAction("Index");
@@ -98,7 +96,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                 string usernameTacGia = Session["UserName"].ToString();
 
                 ViewBag.otherKyThi = context.KyThis
-                    .Where(k => k.PhongThis.All(n => n.MaPhong != id) && k.UsernameTacGia == usernameTacGia && k.ThoiGianKetThuc> DateTime.Now)
+                    .Where(k => k.PhongThis.All(n => n.MaPhong != id) && k.UsernameTacGia == usernameTacGia && k.ThoiGianKetThuc > DateTime.Now)
                     .ToList();
 
                 if (phongThi == null)

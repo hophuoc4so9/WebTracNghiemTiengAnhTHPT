@@ -3,6 +3,8 @@
   <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>
@@ -547,7 +549,6 @@
     <Content Include="Areas\admin\Views\Home\QL_LOPHOC.cshtml" />
     <Content Include="Areas\admin\Views\Shared\Render_QLLOPHOC.cshtml" />
     <Content Include="Areas\giaovien\Views\QuanLyDeThi\ThemMoiDeThi.cshtml" />
-    <Content Include="Areas\giaovien\Views\QuanLyDeThi\AddFile.cshtml" />
     <Content Include="Areas\hocsinh\Views\web.config" />
     <Content Include="Areas\hocsinh\Views\_ViewStart.cshtml" />
     <Content Include="Areas\hocsinh\Views\Shared\_Layout.cshtml" />
@@ -567,6 +568,8 @@
     <Content Include="Areas\admin\Views\Home\AddNew.cshtml" />
     <Content Include=".env" />
     <Content Include="Areas\admin\Views\QuanLyDangBai\Index.cshtml" />
+    <Content Include="Areas\giaovien\Views\QuanLyBaoLoi\Index.cshtml" />
+    <Content Include="Areas\giaovien\Views\QuanLyDeThi\PartialDangBai.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />

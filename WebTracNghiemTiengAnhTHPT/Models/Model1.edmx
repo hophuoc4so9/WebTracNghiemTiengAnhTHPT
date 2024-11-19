@@ -51,7 +51,7 @@
           <Property Name="Username" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Maketqua" Type="int" Nullable="false" />
           <Property Name="MaCauHoi" Type="int" Nullable="false" />
-          <Property Name="DapAnChon" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="DapAnChon" Type="varchar" MaxLength="10" />
           <Property Name="MaDe" Type="int" />
         </EntityType>
         <EntityType Name="DangBai">
@@ -701,7 +701,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.ViewChitietKyThi_2' doe
           <Property Name="Username" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Maketqua" Type="Int32" Nullable="false" />
           <Property Name="MaCauHoi" Type="Int32" Nullable="false" />
-          <Property Name="DapAnChon" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="DapAnChon" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="CauHoi" Relationship="TracNghiemTiengAnhTHPTModel.FK_ChiTietKetQua_CauHoi" FromRole="ChiTietKetQua" ToRole="CauHoi" />
           <NavigationProperty Name="KetQua" Relationship="TracNghiemTiengAnhTHPTModel.FK_ChiTietKetQua_Maketqua" FromRole="ChiTietKetQua" ToRole="KetQua" />
           <NavigationProperty Name="TaiKhoan" Relationship="TracNghiemTiengAnhTHPTModel.FK_ChiTietKetQua_TaiKhoan" FromRole="ChiTietKetQua" ToRole="TaiKhoan" />

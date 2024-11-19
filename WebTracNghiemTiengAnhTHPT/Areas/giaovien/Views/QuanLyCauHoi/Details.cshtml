@@ -6,10 +6,8 @@
 }
 
 <h2>Chi tiết câu hỏi</h2>
-
 <div class="form-group">
-    @Html.Label("Nội dung")
-    <p>@Html.DisplayFor(m => m.NoiDung)</p>
+    @Html.Raw(Model.NoiDung)
 </div>
 
 <div class="form-group">

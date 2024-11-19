@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
 using System.Web.Mvc;
 using WebTracNghiemTiengAnhTHPT.Models;
 
@@ -28,21 +26,21 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
                 return View();
             }
 
-         
+
             if (!IsValidEmail(email))
             {
                 ViewBag.Message = "Email không hợp lệ.";
                 return View();
             }
 
-      
+
             if (password != repassword)
             {
                 ViewBag.Message = "Mật khẩu xác nhận không khớp.";
                 return View();
             }
 
-         
+
             if (password.Length < 6)
             {
                 ViewBag.Message = "Mật khẩu phải có ít nhất 6 ký tự.";
@@ -93,11 +91,11 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
                 return RedirectToAction("Login", "Login");
 
             }
-           
+
         }
         private string HashPassword(string password)
         {
-           
+
             if (string.IsNullOrWhiteSpace(password))
             {
                 throw new ArgumentException("Password cannot be null or empty", nameof(password));
@@ -105,12 +103,12 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
 
             using (var sha256 = SHA256.Create())
             {
-            
+
                 var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-             
+
                 var base64Hash = Convert.ToBase64String(hashedBytes);
 
-               
+
                 return base64Hash.Substring(0, Math.Min(28, base64Hash.Length));
             }
         }
