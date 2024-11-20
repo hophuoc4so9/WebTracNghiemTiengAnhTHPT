@@ -23,7 +23,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {
                 List<KyThi> model = db.KyThis.ToList();
-                //model=model.Where(item => item.UsernameTacGia == Session["UserName"].ToString()).ToList();  
+                model=model.Where(item => item.UsernameTacGia == Session["UserName"].ToString()).ToList();  
                 return View(model);
             }
 
