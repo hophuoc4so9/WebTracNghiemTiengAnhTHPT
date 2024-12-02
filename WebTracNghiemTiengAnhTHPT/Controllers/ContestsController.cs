@@ -75,7 +75,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             Session["made"] = made;
             var ketQua = _db.KetQuas
             .AsNoTracking()
-            .FirstOrDefault(k => k.Username == username && k.status == false && k.thoigian_ketthuc > DateTime.Now);
+            .FirstOrDefault(k => k.Username == username && k.status == false && k.thoigian_ketthuc > DateTime.UtcNow);
 
             if (ketQua != null)
             {
@@ -103,8 +103,8 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
                 Username = username,
                 MaDe = made,
                 status = false,
-                thoigian_batdau = DateTime.Now,
-                thoigian_ketthuc = DateTime.Now.AddMinutes(kt.ThoiGian)
+                thoigian_batdau = DateTime.UtcNow,
+                thoigian_ketthuc = DateTime.UtcNow.AddMinutes(kt.ThoiGian)
             };
 
             _db.KetQuas.Add(ketQua);
@@ -183,6 +183,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             ViewBag.MaDe = kq.Maketqua;
             ViewBag.MaDeReal = Session["made"];
             ViewBag.endTime = kq.thoigian_ketthuc;
+            ViewBag.startTime = DateTime.UtcNow;
             return View(kq);
         }
         [HttpPost]
@@ -237,7 +238,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
                 return HttpNotFound();
             }
 
-            if (int.Parse(form["flag"]) == 0 || ketqua.thoigian_ketthuc <= DateTime.Now)
+            if (int.Parse(form["flag"]) == 0 || ketqua.thoigian_ketthuc <= DateTime.UtcNow)
             {
                 ketqua.status = true;
             }
@@ -273,7 +274,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             }
 
             ketqua.Diem = correct * 10 / total;
-            if (int.Parse(form["flag"]) == 0 || ketqua.thoigian_ketthuc <= DateTime.Now)
+            if (int.Parse(form["flag"]) == 0 || ketqua.thoigian_ketthuc <= DateTime.UtcNow)
             {
                 ketqua.status = true;
             }

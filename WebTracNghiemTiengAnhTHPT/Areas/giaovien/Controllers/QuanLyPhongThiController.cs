@@ -96,7 +96,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                 string usernameTacGia = Session["UserName"].ToString();
 
                 ViewBag.otherKyThi = context.KyThis
-                    .Where(k => k.PhongThis.All(n => n.MaPhong != id) && k.UsernameTacGia == usernameTacGia && k.ThoiGianKetThuc > DateTime.Now)
+                    .Where(k => k.PhongThis.All(n => n.MaPhong != id) && k.UsernameTacGia == usernameTacGia && k.ThoiGianKetThuc > DateTime.UtcNow)
                     .ToList();
 
                 if (phongThi == null)

@@ -81,9 +81,9 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
 
                 var newExam = new KyThi
                 {
-                    TenKyThi = "Đề Thi Ngẫu Nhiên " + DateTime.Now.ToString("yyyyMMddHHmm") + " - " + Guid.NewGuid().ToString().Substring(0, 8),
+                    TenKyThi = "Đề Thi Ngẫu Nhiên " + DateTime.UtcNow.ToString("yyyyMMddHHmm") + " - " + Guid.NewGuid().ToString().Substring(0, 8),
                     ThoiGian = ThoiGian,
-                    ThoiGianBatDau = DateTime.Now,
+                    ThoiGianBatDau = DateTime.UtcNow,
                     isDeleted = false,
                     CongKhai = false,
                     UsernameTacGia = Session["UserName"]?.ToString()

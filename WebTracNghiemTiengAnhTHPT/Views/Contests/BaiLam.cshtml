@@ -9,7 +9,7 @@
     var isFirst = true;
     int made = ViewBag.MaDe;
     DateTime endTime = (DateTime)ViewBag.endTime;
-
+    DateTime startTime = (DateTime)ViewBag.startTime;
     var myDictionary = new Dictionary<int, int>();
     int counter = 1;
 
@@ -218,6 +218,7 @@
             <input type="hidden" name="flag" id="flag" value="0" />
             <input type="hidden" name="url" id="url" />
             <input type="hidden" id="endTime" value="@endTime" />
+            <input type="hidden" id="startTime" value="@startTime" />
             <input type="hidden" id="maDe" value="@ViewBag.MaDe" />
 
             <div class="col-12 d-lg-flex flex-lg-row flex-column">
@@ -259,7 +260,7 @@
                             {
                                 // Create a list of answer choices
                                 var choices = new List<(string Value, string Text)>
-                                                        {
+                                                                    {
                                     ("A", item.CauHoi.DapAnA),
                                     ("B", item.CauHoi.DapAnB),
                                     ("C", item.CauHoi.DapAnC),
@@ -401,20 +402,22 @@
             }
         });
     }
-
+  
+    let now = new Date(document.getElementById('startTime').value).getTime(); // Thời gian ban đầu được gán trước
     let endTime = new Date(document.getElementById('endTime').value).getTime();
-    var interval;
+
+    let interval;
     function startTimer() {
         const timerDiv = document.getElementById('timer');
 
         interval = setInterval(() => {
-            let now = new Date().getTime();
-            let distance = endTime - now;
+            now += 1000; // Tăng thời gian `now` thêm 1 giây (1000 milliseconds)
+            const distance = endTime - now;
 
             if (distance <= 0) {
                 clearInterval(interval);
                 timerDiv.textContent = "00:00";
-                ketthuc();
+                ketthuc(); // Gọi hàm kết thúc
                 return;
             }
 
@@ -423,6 +426,7 @@
             timerDiv.textContent = `Thời gian còn lại: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }, 1000);
     }
+
 
     function ketthuc() {
         if (confirm("Bạn có chắc chắn muốn nộp bài?")) {

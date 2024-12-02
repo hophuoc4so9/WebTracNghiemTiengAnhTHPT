@@ -12,17 +12,14 @@ namespace WebTracNghiemTiengAnhTHPT.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class BaoLoi
+    public partial class BinhLuan
     {
-        public string NoiDung { get; set; }
-        public string Username { get; set; }
-        public int MaCauHoi { get; set; }
+        public int BinhLuanId { get; set; }
         public int MaDe { get; set; }
-        public string Response { get; set; }
-        public System.DateTime ThoiGian { get; set; }
+        public string Username { get; set; }
+        public string NoiDung { get; set; }
+        public Nullable<System.DateTime> NgayTao { get; set; }
     
-        public virtual CauHoi CauHoi { get; set; }
-        public virtual TaiKhoan TaiKhoan { get; set; }
         public virtual KyThi KyThi { get; set; }
     }
 }
