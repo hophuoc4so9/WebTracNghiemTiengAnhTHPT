@@ -270,6 +270,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
                         cnt--;
                     }
                 }
+                cnt = Math.Max(0, cnt);
                 correct += cnt / (double)item.CauHoi.DapAnChinhXac.Length;
             }
 
