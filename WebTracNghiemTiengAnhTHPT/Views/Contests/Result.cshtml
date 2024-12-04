@@ -54,18 +54,20 @@
                                             <span class="answer-text">
                                                 @answerText
                                             </span>
-                                            @if (isChecked && !isCorrect)
-                                            {
-                                                <span class="selected-label">Đáp á bạn chọn</span>
-                                            }
                                             @if (isCorrect)
                                             {
                                                 <span class="correct-label">Đáp án chính xác</span>
                                             }
+                                           @if (isChecked && isCorrect)
+                                           {
+                                               sodapandung++;
+                                           }
+                                               
                                         </label>
                                         }
                                 </div>
-                             }
+                                sodapan++;
+                            }
                         </div>
 
                     }
@@ -85,7 +87,7 @@
         border: 2px solid #28a745; /* Viền màu xanh lá cây */
         border-radius: 5px; /* Tùy chỉnh bo góc */
         position: relative; /* Để căn chỉnh "Đáp án chính xác" */
-        padding: 10px;
+        padding: 5px;
     }
 
     .correct-label {
@@ -99,7 +101,11 @@
         padding: 2px 6px;
         border-radius: 3px;
     }
-
+    .incorrect-answer {
+        border: 2px solid red !important; /* Viền đỏ */
+        border-radius: 5px; /* Tùy chỉnh bo góc */
+        background-color: #ffe6e6;  
+    }
 </style>
 <!-- Ensure jQuery is included before your script -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

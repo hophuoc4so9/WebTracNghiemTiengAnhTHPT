@@ -17,6 +17,16 @@
           <Property Name="MaDe" Type="int" Nullable="false" />
           <Property Name="Response" Type="varchar" MaxLength="500" />
         </EntityType>
+        <EntityType Name="BinhLuan">
+          <Key>
+            <PropertyRef Name="BinhLuanId" />
+          </Key>
+          <Property Name="BinhLuanId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MaDe" Type="int" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="NoiDung" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="NgayTao" Type="datetime" />
+        </EntityType>
         <EntityType Name="CauHoi">
           <Key>
             <PropertyRef Name="MaCauHoi" />
@@ -194,6 +204,18 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.ViewChitietKyThi_2' doe
           <Property Name="DiemTrungBinh" Type="int" />
           <Property Name="Soluot" Type="int" />
         </EntityType>
+        <Association Name="FK__BinhLuan__MaDe__2A164134">
+          <End Role="KyThi" Type="Self.KyThi" Multiplicity="1" />
+          <End Role="BinhLuan" Type="Self.BinhLuan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KyThi">
+              <PropertyRef Name="MaDe" />
+            </Principal>
+            <Dependent Role="BinhLuan">
+              <PropertyRef Name="MaDe" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_BaoLoi_CauHoi">
           <End Role="CauHoi" Type="Self.CauHoi" Multiplicity="1" />
           <End Role="BaoLoi" Type="Self.BaoLoi" Multiplicity="*" />
@@ -448,6 +470,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.ViewChitietKyThi_2' doe
         </Association>
         <EntityContainer Name="TracNghiemTiengAnhTHPTModelStoreContainer">
           <EntitySet Name="BaoLoi" EntityType="Self.BaoLoi" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BinhLuan" EntityType="Self.BinhLuan" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CauHoi" EntityType="Self.CauHoi" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChiTietCauHoiDangBai" EntityType="Self.ChiTietCauHoiDangBai" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChiTietKetQua" EntityType="Self.ChiTietKetQua" Schema="dbo" store:Type="Tables" />
@@ -483,6 +506,10 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.ViewChitietKyThi_2' doe
     [ViewChitietKyThi_2].[Soluot] AS [Soluot]
     FROM [dbo].[ViewChitietKyThi_2] AS [ViewChitietKyThi_2]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK__BinhLuan__MaDe__2A164134" Association="Self.FK__BinhLuan__MaDe__2A164134">
+            <End Role="KyThi" EntitySet="KyThi" />
+            <End Role="BinhLuan" EntitySet="BinhLuan" />
+          </AssociationSet>
           <AssociationSet Name="FK_BaoLoi_CauHoi" Association="Self.FK_BaoLoi_CauHoi">
             <End Role="CauHoi" EntitySet="CauHoi" />
             <End Role="BaoLoi" EntitySet="BaoLoi" />
@@ -654,6 +681,11 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.ViewChitietKyThi_2' doe
             <End Role="LopHoc" EntitySet="LopHocs" />
             <End Role="PhongThi" EntitySet="PhongThis" />
           </AssociationSet>
+          <EntitySet Name="BinhLuans" EntityType="TracNghiemTiengAnhTHPTModel.BinhLuan" />
+          <AssociationSet Name="FK__BinhLuan__MaDe__2A164134" Association="TracNghiemTiengAnhTHPTModel.FK__BinhLuan__MaDe__2A164134">
+            <End Role="KyThi" EntitySet="KyThis" />
+            <End Role="BinhLuan" EntitySet="BinhLuans" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="BaoLoi">
           <Key>
@@ -760,6 +792,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.ViewChitietKyThi_2' doe
           <NavigationProperty Name="CauHois" Relationship="TracNghiemTiengAnhTHPTModel.KyThiCauHoi" FromRole="KyThi" ToRole="CauHoi" />
           <NavigationProperty Name="PhongThis" Relationship="TracNghiemTiengAnhTHPTModel.PhongThiKyThi" FromRole="KyThi" ToRole="PhongThi" />
           <Property Name="SoCauHoi" Type="Int32" />
+          <NavigationProperty Name="BinhLuans" Relationship="TracNghiemTiengAnhTHPTModel.FK__BinhLuan__MaDe__2A164134" FromRole="KyThi" ToRole="BinhLuan" />
         </EntityType>
         <EntityType Name="NhomCauHoi">
           <Key>
@@ -1014,6 +1047,29 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.ViewChitietKyThi_2' doe
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="BinhLuan">
+          <Key>
+            <PropertyRef Name="BinhLuanId" />
+          </Key>
+          <Property Name="BinhLuanId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MaDe" Type="Int32" Nullable="false" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NoiDung" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NgayTao" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="KyThi" Relationship="TracNghiemTiengAnhTHPTModel.FK__BinhLuan__MaDe__2A164134" FromRole="BinhLuan" ToRole="KyThi" />
+        </EntityType>
+        <Association Name="FK__BinhLuan__MaDe__2A164134">
+          <End Type="TracNghiemTiengAnhTHPTModel.KyThi" Role="KyThi" Multiplicity="1" />
+          <End Type="TracNghiemTiengAnhTHPTModel.BinhLuan" Role="BinhLuan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KyThi">
+              <PropertyRef Name="MaDe" />
+            </Principal>
+            <Dependent Role="BinhLuan">
+              <PropertyRef Name="MaDe" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1204,6 +1260,17 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.ViewChitietKyThi_2' doe
               <MappingFragment StoreEntitySet="LopHoc">
                 <ScalarProperty Name="TenLop" ColumnName="TenLop" />
                 <ScalarProperty Name="MaLop" ColumnName="MaLop" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BinhLuans">
+            <EntityTypeMapping TypeName="TracNghiemTiengAnhTHPTModel.BinhLuan">
+              <MappingFragment StoreEntitySet="BinhLuan">
+                <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
+                <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="MaDe" ColumnName="MaDe" />
+                <ScalarProperty Name="BinhLuanId" ColumnName="BinhLuanId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

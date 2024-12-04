@@ -18,6 +18,9 @@
         myDictionary[item.CauHoi.MaCauHoi] = counter;
         counter++;
     }
+    <!-- Thêm vào trong phần <head> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
 }
 
 @*Reference the TinyMCE script*@
@@ -206,9 +209,25 @@
             background-color: #218838;
             border-color: #1e7e34;
         }
-        .bg-info{
-            background-color: white !important;
+
+    .bg-info {
+        background-color: white !important;
+    }
+    .report-error-container {
+        position: relative;
+        display: inline-block;
+        margin-top: 10px;
+    }
+
+    .report-icon {
+        font-size: 24px; /* Kích thước của icon */
+        cursor: pointer;
+    }
+
+        .report-icon:hover {
+            color: #dc3545; /* Màu khi hover */
         }
+
 </style>
 
 <div class="container">
@@ -259,7 +278,7 @@
                             {
                                 // Create a list of answer choices
                                 var choices = new List<(string Value, string Text)>
-                                                        {
+                                                                                {
                                     ("A", item.CauHoi.DapAnA),
                                     ("B", item.CauHoi.DapAnB),
                                     ("C", item.CauHoi.DapAnC),
@@ -299,10 +318,15 @@
                                     }
 
 
-                                    <!-- Error reporting -->
-                                    <button class="btn btn-danger" onclick="openReportModal(@item.MaCauHoi); return false;">Report Error</button>
+                                    <!-- Report Error Icon -->
+                                    <div class="report-error-container">
+                                        <i class="fa fa-exclamation-circle text-danger report-icon"
+                                           title="Report Error"
+                                           onclick="openReportModal(@item.MaCauHoi); return false;">
+                                        </i>
+                                    </div>
 
-                                    <!-- Error report modal -->
+                                    <!-- Error Report Modal -->
                                     <div class="modal fade" id="reportModal-@item.MaCauHoi" tabindex="-1" role="dialog">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
@@ -320,6 +344,7 @@
                                         </div>
                                     </div>
 
+
                                 </div>
                             }
                         </div>
@@ -331,7 +356,7 @@
                 <div class="col-lg-3 col-12 bg-light border border-primary rounded-3 p-4 mx-1">
                     <input onclick="ketthuc()" type="submit" value="Nộp bài"
                            class="btn-sm btn-success" />
-                    <div id="timer">90:00</div>
+                    <div id="timer"></div>
                     @foreach (var group in groupedItems)
                     {
                         <div class="group-container-right">
@@ -345,6 +370,7 @@
                         </div>
                     }
                 </div>
+
             </div>
         </form>
     </div>
@@ -416,7 +442,33 @@
                 timerDiv.textContent = "00:00";
                 ketthuc();
                 return;
+            }// Hàm đếm ngược
+            function startTimer(duration, display) {
+                let timer = duration, minutes, seconds;
+                setInterval(function () {
+                    minutes = Math.floor(timer / 60);
+                    seconds = timer % 60;
+
+                    minutes = minutes < 10 ? "0" + minutes : minutes;
+                    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                    display.textContent = minutes + ":" + seconds;
+
+                    if (--timer < 0) {
+                        // Hết thời gian
+                        timer = 0;
+                        alert("Hết thời gian! Bài thi sẽ được tự động nộp.");
+                        ketthuc(); // Gọi hàm nộp bài khi hết thời gian
+                    }
+                }, 1000);
             }
+
+            // Khi tài liệu sẵn sàng
+            document.addEventListener("DOMContentLoaded", function () {
+                const timerElement = document.getElementById("timer");
+                const duration = 90 * 60; // 90 phút
+                startTimer(duration, timerElement);
+            });
 
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);

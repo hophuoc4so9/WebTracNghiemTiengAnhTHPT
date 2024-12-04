@@ -38,5 +38,6 @@ namespace WebTracNghiemTiengAnhTHPT.Models
         public virtual DbSet<LienHe> LienHes { get; set; }
         public virtual DbSet<ViewChitietKyThi_2> ViewChitietKyThi_2 { get; set; }
         public virtual DbSet<LopHoc> LopHocs { get; set; }
+        public virtual DbSet<BinhLuan> BinhLuans { get; set; }
     }
 }

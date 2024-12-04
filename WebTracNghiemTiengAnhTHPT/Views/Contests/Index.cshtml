@@ -5,6 +5,7 @@
     string rq = Request["PhongThiId"]?.ToString() ?? "";
 }
 
+
 <h2 class="search">Tìm kiếm đề thi</h2>
 
 <div class="container-fluid px-0 mb-3">
@@ -52,22 +53,35 @@
                         <input class="form-check-input" type="checkbox" id="time60" value="60">
                         <label class="form-check-label" for="time60">60 phút</label>
                     </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="timeOther" value="other">
+                        <label class="form-check-label" for="timeOther">Kết quả khác</label>
+                    </div>
+
                 </div>
 
                 <!-- Lọc theo đánh giá -->
                 <div class="form-group">
                     <label><strong>Đánh giá</strong></label>
                     <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="rating2" value="2">
+                        <label class="form-check-label" for="rating5">5 sao</label>
+                    </div>
+                    <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="rating4" value="4">
-                        <label class="form-check-label" for="rating4">4 sao trở lên</label>
+                        <label class="form-check-label" for="rating4">4 sao</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="rating3" value="3">
-                        <label class="form-check-label" for="rating3">3 sao trở lên</label>
+                        <label class="form-check-label" for="rating3">3 sao</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="rating2" value="2">
-                        <label class="form-check-label" for="rating2">2 sao trở lên</label>
+                        <label class="form-check-label" for="rating2">2 sao</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="rating2" value="2">
+                        <label class="form-check-label" for="rating1">1 sao</label>
                     </div>
                 </div>
             </div>
@@ -84,7 +98,9 @@
                         {
                             <div class="col-12 col-md-6 col-lg-4 mb-4">
                                 <div class="card shadow-sm h-100 border-0 rounded-3" data-questions="@item.SoCauHoi" data-time="@item.ThoiGian" data-rating="@item.DiemTrungBinh">
-                                    
+                                    <div class="card-header p-0">
+                                        <img src="~/Content/img/thithu.jpg" alt="Mock Test" class="card-img-top rounded-top">
+                                    </div>
                                     <div class="card-body">
                                         <!-- Tên kỳ thi -->
                                         <h5 class="card-title text-primary">@Html.DisplayFor(modelItem => item.TenKyThi)</h5>
@@ -117,6 +133,69 @@
 </div>
 
 <style>
+    .card {
+        border: 1px solid #ddd; /* Viền nhẹ */
+        background-color: #f8f9fa; /* Nền sáng */
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Bóng mờ */
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .card:hover {
+            transform: scale(1.03); /* Phóng to nhẹ khi hover */
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2); /* Bóng mờ khi hover */
+        }
+    .card-header img {
+        width: 100%; /* Chiều rộng toàn phần */
+        height: 150px; /* Chiều cao cố định */
+        object-fit: cover; /* Đảm bảo ảnh được cắt gọn mà không bị méo */
+        border-radius: 10px 10px 0 0; /* Bo góc chỉ phần đầu */
+    }
+    .card-title {
+        font-size: 1.25rem; /* Tăng kích thước tiêu đề */
+        font-weight: bold;
+        color: #007bff; /* Màu xanh nổi bật */
+    }
+
+    .card-body ul {
+        padding: 0;
+        margin: 0;
+        list-style: none; /* Loại bỏ gạch đầu dòng */
+    }
+
+        .card-body ul li {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem; /* Font nhỏ gọn */
+            margin-bottom: 10px; /* Khoảng cách giữa các mục */
+            color: #333;
+        }
+
+            .card-body ul li img {
+                width: 20px; /* Kích thước biểu tượng nhỏ */
+                height: 20px;
+                margin-left: 8px; /* Khoảng cách giữa nội dung và biểu tượng */
+            }
+
+    .btn-block {
+        padding: 10px;
+        font-size: 1rem;
+        font-weight: bold;
+        background-color: #6c63ff; /* Màu tím nhạt */
+        color: white;
+        border: none;
+        border-radius: 5px; /* Bo góc nút */
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-block:hover {
+            background-color: #5348e3; /* Màu tím đậm hơn khi hover */
+        }
+
+    .text-muted {
+        font-size: 1rem;
+        font-style: italic;
+    }
+
 /* General Styles */
 h2.text-center {
     font-size: 2rem;
@@ -124,16 +203,18 @@ h2.text-center {
     color: #007bff;
     margin-bottom: 1.5rem;
 }
-
-h3 {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: #333;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    padding-left: 10px;
-    border-left: 5px solid #007bff;
-}
+    .btn.btn-outline-success.btn-block {
+        background: linear-gradient(90.57deg, rgb(62, 101, 254) 0%, rgb(210, 60, 255) 100%);
+    }
+    h3 {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #333;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        padding-left: 10px;
+        border-left: 5px solid #007bff;
+    }
 
 .contest-title {
     font-size: 1.6rem;
@@ -231,82 +312,58 @@ h3 {
     .contest-title {
         font-size: 1.4rem;
     }
+
 }
 </style>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        const filters = {
-            questions: [], // Bộ lọc khoảng số câu hỏi
-            time: [],      // Bộ lọc thời gian
-            rating: []     // Bộ lọc đánh giá
-        };
+        const checkboxes = document.querySelectorAll(".form-check-input");
+        const examCards = document.querySelectorAll(".card");
 
-        // Cập nhật bộ lọc khi checkbox thay đổi
-        const updateFilters = (category, value, isChecked) => {
-            if (isChecked) {
-                filters[category].push(value);
-            } else {
-                const index = filters[category].indexOf(value);
-                if (index > -1) {
-                    filters[category].splice(index, 1);
-                }
-            }
-            applyFilters();
-        };
+        // Hàm lọc dữ liệu
+        const filterExams = () => {
+            const selectedQuestions = Array.from(document.querySelectorAll("input[type='checkbox'][id^='questions']:checked"))
+                .map(checkbox => checkbox.value);
+            const selectedTimes = Array.from(document.querySelectorAll("input[type='checkbox'][id^='time']:checked"))
+                .map(checkbox => checkbox.value);
+            const selectedRatings = Array.from(document.querySelectorAll("input[type='checkbox'][id^='rating']:checked"))
+                .map(checkbox => checkbox.value);
 
-        // Hàm kiểm tra khoảng số câu hỏi
-        const matchesQuestionsRange = (questions, ranges) => {
-            let isInRange = false;
-            let hasOther = false;
+            examCards.forEach(card => {
+                const cardQuestions = parseInt(card.getAttribute("data-questions"), 10);
+                const cardTime = parseInt(card.getAttribute("data-time"), 10);
+                const cardRating = parseFloat(card.getAttribute("data-rating"));
 
-            ranges.forEach(range => {
-                if (range === "other") {
-                    hasOther = true; // Nếu chọn "Kết quả khác"
-                } else {
-                    const [min, max] = range.split("-").map(Number); // Tách khoảng min-max
-                    if (questions >= min && questions <= max) {
-                        isInRange = true; // Kiểm tra nếu nằm trong khoảng
-                    }
-                }
-            });
+                const matchesQuestions = selectedQuestions.length === 0 || selectedQuestions.some(value => {
+                    if (value === "other") return cardQuestions > 30; // Kết quả khác cho số câu hỏi
+                    const [min, max] = value.split('-').map(Number);
+                    return cardQuestions >= min && cardQuestions <= max;
+                });
 
-            // Nếu có "Kết quả khác" và không thuộc các khoảng khác, trả về true
-            return (hasOther && !isInRange) || (!hasOther && isInRange);
-        };
+                const matchesTime = selectedTimes.length === 0 || selectedTimes.some(value => {
+                    if (value === "other") return cardTime !== 15 && cardTime !== 30 && cardTime !== 60; // Kết quả khác cho thời gian
+                    return cardTime === parseInt(value, 10);
+                });
 
-        // Áp dụng bộ lọc để hiển thị/ẩn các kỳ thi
-        const applyFilters = () => {
-            document.querySelectorAll(".card").forEach(card => {
-                const questions = parseInt(card.dataset.questions, 10);
-                const time = parseInt(card.dataset.time, 10);
-                const rating = parseFloat(card.dataset.rating);
-
-                const matchesQuestions = !filters.questions.length || matchesQuestionsRange(questions, filters.questions);
-                const matchesTime = !filters.time.length || filters.time.includes(time);
-                const matchesRating = !filters.rating.length || filters.rating.some(r => rating >= r);
+                const matchesRating = selectedRatings.length === 0 || selectedRatings.some(value => {
+                    return cardRating === parseFloat(value);
+                });
 
                 if (matchesQuestions && matchesTime && matchesRating) {
-                    card.style.display = "block"; // Hiển thị nếu phù hợp
+                    card.style.display = "block";
                 } else {
-                    card.style.display = "none"; // Ẩn nếu không phù hợp
+                    card.style.display = "none";
                 }
             });
         };
 
         // Lắng nghe sự kiện thay đổi trên các checkbox
-        document.querySelectorAll(".form-check-input").forEach(checkbox => {
-            checkbox.addEventListener("change", (e) => {
-                const { id, checked } = e.target;
-                const category = id.startsWith("questions") ? "questions"
-                    : id.startsWith("time") ? "time"
-                        : "rating";
-
-                const value = category === "questions" ? e.target.value // Giữ nguyên giá trị cho khoảng
-                    : category === "rating" ? parseFloat(e.target.value)
-                        : parseInt(e.target.value, 10);
-                updateFilters(category, value, checked);
-            });
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener("change", filterExams);
         });
+
+        // Gọi hàm lọc lần đầu tiên để áp dụng ngay nếu cần
+        filterExams();
     });
 
 </script>

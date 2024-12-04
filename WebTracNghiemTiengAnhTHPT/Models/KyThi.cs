@@ -22,6 +22,7 @@ namespace WebTracNghiemTiengAnhTHPT.Models
             this.KetQuas = new HashSet<KetQua>();
             this.CauHois = new HashSet<CauHoi>();
             this.PhongThis = new HashSet<PhongThi>();
+            this.BinhLuans = new HashSet<BinhLuan>();
         }
     
         public int MaDe { get; set; }
@@ -44,5 +45,7 @@ namespace WebTracNghiemTiengAnhTHPT.Models
         public virtual ICollection<CauHoi> CauHois { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhongThi> PhongThis { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BinhLuan> BinhLuans { get; set; }
     }
 }
