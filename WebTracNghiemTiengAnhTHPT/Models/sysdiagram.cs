@@ -12,17 +12,12 @@ namespace WebTracNghiemTiengAnhTHPT.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class BaoLoi
+    public partial class sysdiagram
     {
-        public string NoiDung { get; set; }
-        public string Username { get; set; }
-        public int MaCauHoi { get; set; }
-        public int MaDe { get; set; }
-        public string Response { get; set; }
-        public System.DateTime ThoiGian { get; set; }
-    
-        public virtual CauHoi CauHoi { get; set; }
-        public virtual TaiKhoan TaiKhoan { get; set; }
-        public virtual KyThi KyThi { get; set; }
+        public string name { get; set; }
+        public int principal_id { get; set; }
+        public int diagram_id { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

@@ -23,7 +23,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {
                 List<KyThi> model = db.KyThis.ToList();
-                //model=model.Where(item => item.UsernameTacGia == Session["UserName"].ToString()).ToList();  
+                model=model.Where(item => item.UsernameTacGia == Session["UserName"].ToString()).ToList();  
                 return View(model);
             }
 
@@ -596,9 +596,9 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
 
                 var newExam = new KyThi
                 {
-                    TenKyThi = "Đề Thi Ngẫu Nhiên " + DateTime.Now.ToString("yyyyMMddHHmm") + " - " + Guid.NewGuid().ToString().Substring(0, 8),
+                    TenKyThi = "Đề Thi Ngẫu Nhiên " + DateTime.UtcNow.ToString("yyyyMMddHHmm") + " - " + Guid.NewGuid().ToString().Substring(0, 8),
                     ThoiGian = ThoiGian,
-                    ThoiGianBatDau = DateTime.Now,
+                    ThoiGianBatDau = DateTime.UtcNow,
                     isDeleted = false,
                     UsernameTacGia = Session["UserName"]?.ToString()
                 };

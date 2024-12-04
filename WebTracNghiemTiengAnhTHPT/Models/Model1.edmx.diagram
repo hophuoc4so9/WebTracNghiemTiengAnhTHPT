@@ -35,7 +35,8 @@
         <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.LopHoc" Width="1.5" PointX="5.875" PointY="8.125" />
         <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.FK_MaPhong" />
         <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.FK_MaPhong2" />
-        <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.BinhLuan" Width="1.5" PointX="8.125" PointY="1.875" />
+        <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.BinhLuan" Width="1.5" PointX="8.5" PointY="1.875" />
+        <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.sysdiagram" Width="1.5" PointX="0.75" PointY="9.75" />
         <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.FK__BinhLuan__MaDe__2A164134" />
       </Diagram>
     </edmx:Diagrams>
