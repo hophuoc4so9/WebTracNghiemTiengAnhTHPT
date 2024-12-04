@@ -70,26 +70,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             }
             base.Dispose(disposing);
         }
-        [HttpPost]
-        public ActionResult Delete(int maCauHoi)
-        {
-            using (var db = new TracNghiemTiengAnhTHPTEntities1())
-            {
-                var cauHoi = db.CauHois.FirstOrDefault(k => k.MaCauHoi == maCauHoi);
 
-                if (cauHoi == null)
-                {
-                    return HttpNotFound(); // Nếu không tìm thấy câu hỏi
-                }
-
-                // Nếu tìm thấy, xóa câu hỏi
-                db.CauHois.Remove(cauHoi);
-                db.SaveChanges(); // Lưu thay đổi vào cơ sở dữ liệu
-
-                // Chuyển hướng về trang danh sách câu hỏi
-                return RedirectToAction("Index", "QuanLyCauHoi"); // Chuyển hướng về action Index của controller QuanLyCauHoi
-            }
-        }
         // GET: Hiển thị form chỉnh sửa
         public ActionResult Edit(int maCauHoi)
         {
@@ -98,30 +79,27 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                 var cauHoi = db.CauHois.FirstOrDefault(k => k.MaCauHoi == maCauHoi);
                 if (cauHoi == null)
                 {
-                    return HttpNotFound(); // Nếu không tìm thấy câu hỏi
+                    return HttpNotFound(); 
                 }
                 ViewBag.NhomList = new SelectList(db.NhomCauHois.ToList(), "MaNhom", "MaNhom");
 
-                return View(cauHoi); // Trả về view chỉnh sửa với câu hỏi
+                return View(cauHoi); 
             }
         }
 
-        // POST: Lưu thay đổi
         [HttpPost]
-
         public ActionResult Edit(CauHoi cauHoi)
         {
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {
                 if (ModelState.IsValid)
                 {
-                    db.Entry(cauHoi).State = EntityState.Modified; // Đánh dấu câu hỏi là đã chỉnh sửa
-                    db.SaveChanges(); // Lưu thay đổi vào cơ sở dữ liệu
+                    db.Entry(cauHoi).State = EntityState.Modified; 
+                    db.SaveChanges(); 
 
-                    // Chuyển hướng về trang danh sách câu hỏi
                     return RedirectToAction("Index", "QuanLyCauHoi");
                 }
-                return View(cauHoi); // Nếu có lỗi, quay lại form chỉnh sửa
+                return View(cauHoi); 
             }
         }
         public ActionResult Details(int maCauHoi)
@@ -132,27 +110,23 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                 return HttpNotFound();
             }
 
-            // Khởi tạo danh sách nhóm
             ViewBag.NhomList = new SelectList(db.NhomCauHois.ToList(), "MaNhom", "NoiDung");
 
-            // Tạo danh sách mức độ
             ViewBag.MucDoList = new SelectList(new List<SelectListItem>
-    {
-        new SelectListItem { Value = "1", Text = "Dễ" },
-        new SelectListItem { Value = "2", Text = "Trung bình" },
-        new SelectListItem { Value = "3", Text = "Khó" }
-    }, "Value", "Text");
+            {
+                new SelectListItem { Value = "1", Text = "Dễ" },
+                new SelectListItem { Value = "2", Text = "Trung bình" },
+                new SelectListItem { Value = "3", Text = "Khó" }
+            }, "Value", "Text");
 
             return View(cauHoi);
         }
         public ActionResult TimKiem(string query)
         {
-            // Tìm kiếm câu hỏi dựa trên từ khóa
             var cauHois = db.CauHois
                 .Where(c => c.NoiDung.Contains(query) || c.MaCauHoi.ToString().Contains(query))
                 .ToList();
 
-            // Tạo chuỗi HTML kết quả trả về
             string result = "";
             foreach (var cauHoi in cauHois)
             {
@@ -175,8 +149,28 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
 
             return Content(result);
         }
+        [HttpPost]
+        public ActionResult Delete(int maCauHoi)
+        {
+            using (var db = new TracNghiemTiengAnhTHPTEntities1())
+            {
+                var cauHoi = db.CauHois.FirstOrDefault(k => k.MaCauHoi == maCauHoi);
+
+                if (cauHoi == null)
+                {
+                    return HttpNotFound(); // Nếu không tìm thấy câu hỏi
+                }
+
+                // Nếu tìm thấy, xóa câu hỏi
+                db.CauHois.Remove(cauHoi);
+                db.SaveChanges(); // Lưu thay đổi vào cơ sở dữ liệu
+
+                // Chuyển hướng về trang danh sách câu hỏi
+                return RedirectToAction("Index", "QuanLyCauHoi"); // Chuyển hướng về action Index của controller QuanLyCauHoi
+            }
+        }
+
+
         // Chức năng tự động sinh đề thi
-
-
     }
 }

@@ -56,7 +56,6 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
                 return View(list);
             }
 
-
             var model = _db.ViewChitietKyThi_2.AsNoTracking().ToList();
             return View(model);
         }
@@ -349,9 +348,17 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
         public ActionResult PartialLichSuLamBai(int made)
         {
             string username = Session["UserName"]?.ToString() ?? string.Empty;
-            var model = _db.KetQuas.AsNoTracking().Where(c => c.MaDe == made && c.Username == username && c.status == true).ToList();
+
+            var model = _db.KetQuas
+                .AsNoTracking()
+                .Where(c => c.MaDe == made && c.Username == username && c.status == true)
+                .OrderByDescending(c => c.Maketqua) // Giả sử có cột ThoiGianLamBai để sắp xếp bài mới nhất
+                .Take(10) // Lấy tối đa 10 bài làm
+                .ToList();
+
             return View(model);
         }
+
         public ActionResult PartialLichSuLamBaiOnTap()
         {
             string username = Session["UserName"]?.ToString() ?? string.Empty;
@@ -482,11 +489,5 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
                 return PartialView(groupedDangBai);
             }
         }
-
-
-
-
-
-
     }
 }
