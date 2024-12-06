@@ -390,6 +390,7 @@
     <Compile Include="App_Start\BundleConfig2.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\admin\Controllers\DuyetKyThiController.cs" />
     <Compile Include="Areas\admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\admin\Controllers\LoginController.cs" />
     <Compile Include="Areas\admin\Controllers\QuanLyDangBaiController.cs" />
@@ -580,6 +581,8 @@
     <Content Include="Areas\admin\Views\QuanLyDangBai\Index.cshtml" />
     <Content Include="Areas\giaovien\Views\QuanLyBaoLoi\Index.cshtml" />
     <Content Include="Areas\giaovien\Views\QuanLyDeThi\PartialDangBai.cshtml" />
+    <Content Include="Areas\admin\Views\DuyetKyThi\Index.cshtml" />
+    <Content Include="Areas\admin\Views\DuyetKyThi\ChiTietDeThi.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
@@ -814,6 +817,7 @@
     <Content Include="stylecop.json" />
     <Content Include="Scripts\tinymce\license.md" />
     <Content Include="Scripts\tinymce\langs\README.md" />
+    <Content Include="stylecop1.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\admin\Data\" />

@@ -1,8 +1,10 @@
-﻿@model IEnumerable<WebTracNghiemTiengAnhTHPT.Models.KyThi>
+﻿
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Areas/admin/Views/Shared/_AdminLayout.cshtml";
+    List<WebTracNghiemTiengAnhTHPT.Models.KyThi> KyThiDaDuyet = ViewBag.KyThiDaDuyet as List<WebTracNghiemTiengAnhTHPT.Models.KyThi>;
+    List<WebTracNghiemTiengAnhTHPT.Models.KyThi> KyThiChoDuyet = ViewBag.KyThiChoDuyet as List<WebTracNghiemTiengAnhTHPT.Models.KyThi>;
 }
 @if (TempData["Success"] != null)
 {
@@ -14,37 +16,27 @@
     <div class="alert alert-danger">@TempData["Error"]</div>
 }
 
-<h2>Quản Lý Đề Thi</h2>
-
-<button type="button" class="btn btn-info btn-sm">
-    <a href="/giaovien/QuanLyDeThi/AutoGenerateExam" class="text-light text-decoration-none">Tự động tạo đề thi</a>
-</button>
-
-
-<!-- Single Save Button -->
-<button type="button" class="btn btn-success btn-sm" onclick="saveAllChanges()">Save All</button>
-
-@using (Html.BeginForm("Upload", "QuanLyDeThi", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    <input type="file" name="file" accept=".pdf,.doc,.docx" />
-    <input type="submit" value="Thêm mới đề thi" />
-}
+<h2>Kỳ thi chờ duyệt </h2>
 
 <!-- Bootstrap Grid Layout -->
-<form class="kyThi-form" action="@Url.Action("Update", "QuanLyDeThi")" method="post">
-    <div class="container">
-        <div class="row">
-            <!-- Title Row -->
-            <div class="col"><strong>Tên đề thi</strong></div>
-            <div class="col"><strong>Thời gian</strong></div>
-            <div class="col"><strong>Thời gian bắt đầu</strong></div>
-            <div class="col"><strong>Thời gian kết thúc</strong></div>
-            <div class="col"><strong>Công khai</strong></div>
+<div class="container">
+    <div class="row">
+        <!-- Title Row -->
+        <div class="col"><strong>Tên đề thi</strong></div>
+        <div class="col"><strong>Thời gian</strong></div>
+        <div class="col"><strong>Thời gian bắt đầu</strong></div>
+        <div class="col"><strong>Thời gian kết thúc</strong></div>
+        <div class="col"><strong>Công khai</strong></div>
 
-            <div class="col"><strong>Hoạt động</strong></div>
-        </div>
-
-        @foreach (var item in Model)
+        <div class="col"><strong>Hoạt động</strong></div>
+    </div>
+    @if (KyThiChoDuyet == null || KyThiChoDuyet.Count() == 0)
+    {
+        <div> Hiện tại chưa có kỳ thi nào cần duyệt</div>
+    }
+    else
+    {
+        foreach (var item in KyThiChoDuyet)
         {
             if (item.isDeleted == true)
             {
@@ -55,11 +47,9 @@
                 <div class="col">
 
                     <span class="text-display">@item.TenKyThi</span>
-                    <input type="text" name="KyThi[@item.MaDe].TenKyThi" class="form-control edit-input" value="@item.TenKyThi" style="display:none;" />
                 </div>
                 <div class="col">
                     <span class="text-display">@item.ThoiGian</span>
-                    <input type="number" min="10" name="KyThi[@item.MaDe].ThoiGian" class="form-control edit-input" value="@item.ThoiGian" style="display:none;" />
                 </div>
                 <div class="col">
                     @if (item.ThoiGianBatDau != null)
@@ -71,7 +61,6 @@
                         <span class="text-display">Chưa có thời gian bắt dầu</span>
                     }
 
-                    <input name="KyThi[@item.MaDe].ThoiGianBatDau" type="datetime-local" class="form-control edit-input" value="@String.Format("{0:yyyy-MM-ddTHH:mm}", item.ThoiGianBatDau)" />
 
                 </div>
                 <div class="col">
@@ -83,83 +72,106 @@
                     {
                         <span class="text-display">Chưa có thời gian kết thúc</span>
                     }
-                    <input name="KyThi[@item.MaDe].ThoiGianKetThuc" type="datetime-local" class="form-control edit-input" value="@String.Format("{0:yyyy-MM-ddTHH:mm}", item.ThoiGianBatDau)" />
 
                 </div>
                 <div class="col">
-                  
-                   
-                    <button type="button" class="btn btn-sm @(item.CongKhai == 0 ? "btn-success" : "btn-warning")" onclick="changeStatus('@item.MaDe', @item.CongKhai)">
+
+
+                    <button type="button" class="btn btn-sm @(item.CongKhai == 2 ? "btn-success" : "btn-warning")" onclick="changeStatus('@item.MaDe', @item.CongKhai)">
                         @(item.CongKhai == 0 ? "Riêng" : (item.CongKhai == 1? "Chờ duyệt công khai": "Đã công khai"))
-                      
+
                     </button>
-                    
+
                 </div>
 
-                <div style="display:none;">
-                    <input type="hidden" name="KyThi[@item.MaDe].MaDe" value="@item.MaDe" />
-                    <input type="hidden" name="KyThi[@item.MaDe].isDeleted" value="@item.isDeleted" class="isDeleted-input" />
-                </div>
+
                 <div class="col">
-                    <button type="button" class="btn btn-primary btn-sm edit-btn" onclick="toggleEdit(this)">Sửa</button>
-                    <button type="button" class="btn btn-danger btn-sm delete-btn" onclick="deleteItem(this)">Xóa</button>
-                    @Html.ActionLink("Chi tiết", "ChiTietDeThi", "QuanLyDeThi", new { made = item.MaDe }, new { @class = "btn btn-info btn-sm " })
+
+                    @Html.ActionLink("Chi tiết", "ChiTietDeThi", "DuyetKyThi", new { made = item.MaDe }, new { @class = "btn btn-info btn-sm " })
 
                 </div>
             </div>
         }
+    }
+
+</div>
+<h2> Kỳ thi đã duyệt</h2>
+<div class="container">
+    <div class="row">
+        <!-- Title Row -->
+        <div class="col"><strong>Tên đề thi</strong></div>
+        <div class="col"><strong>Thời gian</strong></div>
+        <div class="col"><strong>Thời gian bắt đầu</strong></div>
+        <div class="col"><strong>Thời gian kết thúc</strong></div>
+        <div class="col"><strong>Công khai</strong></div>
+
+        <div class="col"><strong>Hoạt động</strong></div>
     </div>
-</form>
-
-<script>
-    // Toggle edit inputs
-    function toggleEdit(button) {
-        var row = $(button).closest(".row");
-        row.find(".text-display").toggle(); // Toggle text display
-        row.find(".edit-input").toggle(); // Toggle inputs
-        $(button).toggle(); // Toggle Edit button
+    @if (KyThiDaDuyet == null || KyThiDaDuyet.Count() == 0)
+    {
+        <div> Hiện tại chưa có kỳ thi nào cần duyệt</div>
     }
-
-    // Delete item (set isDeleted to true and hide the row)
-    function deleteItem(button) {
-        var row = $(button).closest(".kyThi-row");
-        var isDeletedInput = row.find(".isDeleted-input");
-
-        // Confirmation alert
-        if (confirm("Bạn chắc chắn muốn xóa mục này?")) {
-            // Set isDeleted to true
-            isDeletedInput.val("true");
-
-            // Hide the row visually
-            row.hide();
-        }
-    }
-
-    // Save all changes function
-    function saveAllChanges() {
-        var forms = $('.kyThi-form');
-        var isValid = true;
-
-        forms.find('.kyThi-row').each(function () {
-            var row = $(this);
-            var thoiGian = parseInt(row.find('input[name*="ThoiGian"]').val()) || 0;
-
-            var thoiGianBatDauDate = new Date(row.find('input[name*="ThoiGianBatDauDate"]').val() + "T" + (row.find('input[name*="ThoiGianBatDauTime"]').val() || "00:00"));
-            var thoiGianKetThucDate = new Date(row.find('input[name*="ThoiGianKetThucDate"]').val() + "T" + (row.find('input[name*="ThoiGianKetThucTime"]').val() || "00:00"));
-            var expectedEndTime = new Date(thoiGianBatDauDate.getTime() + thoiGian * 60000);
-
-            if (thoiGianKetThucDate < expectedEndTime) {
-                alert("Thời gian kết thúc không hợp lệ cho mục này. Vui lòng kiểm tra lại.");
-                isValid = false;
-                return false;
+    else
+    {
+        foreach (var item in KyThiDaDuyet)
+        {
+            if (item.isDeleted == true)
+            {
+                continue;
             }
-        });
 
-        if (isValid) {
-            forms.submit();
+            <div class="row align-items-center kyThi-row" data-id="@item.MaDe">
+                <div class="col">
+
+                    <span class="text-display">@item.TenKyThi</span>
+                </div>
+                <div class="col">
+                    <span class="text-display">@item.ThoiGian</span>
+                </div>
+                <div class="col">
+                    @if (item.ThoiGianBatDau != null)
+                    {
+                        <span class="text-display">@String.Format("{0:dd-MM-yyyy HH:mm}", item.ThoiGianBatDau)</span>
+                    }
+                    else
+                    {
+                        <span class="text-display">Chưa có thời gian bắt dầu</span>
+                    }
+
+
+                </div>
+                <div class="col">
+                    @if (item.ThoiGianKetThuc != null)
+                    {
+                        <span class="text-display">@String.Format("{0:dd-MM-yyyy HH:mm}", item.ThoiGianKetThuc)</span>
+                    }
+                    else
+                    {
+                        <span class="text-display">Chưa có thời gian kết thúc</span>
+                    }
+
+                </div>
+                <div class="col">
+
+
+                    <button type="button" class="btn btn-sm @(item.CongKhai == 2 ? "btn-success" : "btn-warning")" onclick="changeStatus('@item.MaDe', @item.CongKhai)">
+                        @(item.CongKhai == 0 ? "Riêng" : (item.CongKhai == 1? "Chờ duyệt công khai": "Đã công khai"))
+
+                    </button>
+
+                </div>
+
+
+                <div class="col">
+
+                    @Html.ActionLink("Chi tiết", "ChiTietDeThi", "DuyetKyThi", new { made = item.MaDe }, new { @class = "btn btn-info btn-sm " })
+
+                </div>
+            </div>
         }
     }
-</script>
+
+</div>
 <style>
     /* Column Styling - Space Elements Evenly */
     .kyThi-row .col {
@@ -321,18 +333,18 @@
     var newStatus;
     var confirmationMessage;
 
-    if (currentStatus == 0) {
-        newStatus = 1;
+    if (currentStatus == 1) {
+        newStatus = 2;
         confirmationMessage = "Bạn có chắc chắn muốn chuyển đề thi sang công khai kỳ thi này không?";
     } else {
-        newStatus = 0;
+        newStatus = 1;
         confirmationMessage = "Bạn có chắc chắn muốn chuyển kỳ thi này về trạng thái riêng không?";
-    } 
+    }
 
     if (!confirm(confirmationMessage)) return;
 
     $.ajax({
-        url: '@Url.Action("ChangeStatus", "QuanLyDeThi")',
+        url: '@Url.Action("ChangeStatus", "DuyetKyThi")',
         type: 'POST',
         data: {
             made: Username,
@@ -341,11 +353,11 @@
         success: function(response) {
             if (response.success) {
                 var button = $("button[onclick*='" + Username + "']");
-                if (newStatus == 0) {
+                if (newStatus == 1) {
 
                     button.removeClass('btn-danger').addClass('btn-success').text('Riêng').attr('onclick', `changeStatus('${Username}', 0)`);
-                } else if (newStatus == 1) {
-                   
+                } else if (newStatus == 2) {
+
                     button.removeClass('btn-success').addClass('btn-warning').text('Chờ duyệt công khai').attr('onclick', `changeStatus('${Username}', 1)`);
                 }
                 window.location.reload();
