@@ -23,7 +23,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {
                 List<KyThi> model = db.KyThis.ToList();
-                model=model.Where(item => item.UsernameTacGia == Session["UserName"].ToString()).ToList();  
+            //    model=model.Where(item => item.UsernameTacGia == Session["UserName"].ToString()).ToList();  
                 return View(model);
             }
 
@@ -246,7 +246,6 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                                     : DateTime.Parse(ketThucDate);
 
                                 // Update CongKhai   KyThi[@item.MaDe].CongKhai
-                                kyThi.CongKhai = form[$"KyThi[{index}].CongKhai"] != null && form[$"KyThi[{index}].CongKhai"] == "on";
 
                                 if (Session["UserName"] != null) kyThi.UsernameTacGia = Session["UserName"].ToString();
 

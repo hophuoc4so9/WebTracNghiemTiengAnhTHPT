@@ -105,7 +105,7 @@
           <Property Name="ThoiGian" Type="int" Nullable="false" />
           <Property Name="ThoiGianBatDau" Type="datetime" />
           <Property Name="ThoiGianKetThuc" Type="datetime" />
-          <Property Name="CongKhai" Type="bit" Nullable="false" />
+          <Property Name="CongKhai" Type="int" Nullable="false" />
           <Property Name="isDeleted" Type="bit" />
           <Property Name="UsernameTacGia" Type="varchar" MaxLength="30" />
           <Property Name="SoCauHoi" Type="int" />
@@ -481,6 +481,10 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.ViewChitietKyThi_2' doe
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="CalculateDifficulty" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
+          <Parameter Name="MaCauHoi" Type="int" Mode="In" />
+        </Function>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
         <EntityContainer Name="TracNghiemTiengAnhTHPTModelStoreContainer">
           <EntitySet Name="BaoLoi" EntityType="Self.BaoLoi" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BinhLuan" EntityType="Self.BinhLuan" Schema="dbo" store:Type="Tables" />
@@ -801,7 +805,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.ViewChitietKyThi_2' doe
           <Property Name="ThoiGian" Type="Int32" Nullable="false" />
           <Property Name="ThoiGianBatDau" Type="DateTime" Precision="3" />
           <Property Name="ThoiGianKetThuc" Type="DateTime" Precision="3" />
-          <Property Name="CongKhai" Type="Boolean" Nullable="false" />
+          <Property Name="CongKhai" Type="Int32" Nullable="false" />
           <Property Name="isDeleted" Type="Boolean" />
           <Property Name="UsernameTacGia" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="BaoLois" Relationship="TracNghiemTiengAnhTHPTModel.FK_KyThi_BaoLoi" FromRole="KyThi" ToRole="BaoLoi" />

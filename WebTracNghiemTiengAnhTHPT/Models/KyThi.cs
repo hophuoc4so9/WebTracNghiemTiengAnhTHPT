@@ -30,7 +30,7 @@ namespace WebTracNghiemTiengAnhTHPT.Models
         public int ThoiGian { get; set; }
         public Nullable<System.DateTime> ThoiGianBatDau { get; set; }
         public Nullable<System.DateTime> ThoiGianKetThuc { get; set; }
-        public bool CongKhai { get; set; }
+        public int CongKhai { get; set; }
         public Nullable<bool> isDeleted { get; set; }
         public string UsernameTacGia { get; set; }
         public Nullable<int> SoCauHoi { get; set; }
