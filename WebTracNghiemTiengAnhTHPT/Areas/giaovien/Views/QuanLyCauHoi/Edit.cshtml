@@ -4,6 +4,50 @@
     ViewBag.Title = "Chỉnh sửa câu hỏi";
     Layout = "~/Areas/admin/Views/Shared/_AdminLayout.cshtml";
 }
+<script src="~/Scripts/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+
+<script>
+    tinymce.init({
+        selector: 'textarea',
+        plugins: 'media code',
+        toolbar: 'undo redo | link media | code',
+        media_title: true,
+        automatic_uploads: true,
+        media_upload_url: '/giaovien/QuanLyDeThi/UploadAudio',  // Update this URL to match your route
+        file_picker_types: 'media',
+        file_picker_callback: (cb, value, meta) => {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'audio/*');
+
+            input.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                const formData = new FormData();
+                formData.append('audioFile', file);
+
+                fetch('/giaovien/QuanLyDeThi/UploadAudio', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.location) {
+                            cb(data.location, { title: file.name });
+                        } else {
+                            console.error('Upload failed:', data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            });
+
+            input.click();
+        },
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
+    });
+</script>
+
 
 <h2>Chỉnh sửa câu hỏi</h2>
 
@@ -11,11 +55,12 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-group">
-        @Html.Label("Nội dung")
-        @Html.TextAreaFor(m => m.NoiDung, new { @class = "form-control", rows = 2 })
-        @Html.ValidationMessageFor(m => m.NoiDung)
-    </div>
+<div class="form-group">
+    @Html.Label("Nội dung")
+    @Html.TextArea("NoiDung", HttpUtility.HtmlDecode(Model.NoiDung), new { @class = "form-control", rows = 2 })
+
+    @Html.ValidationMessageFor(m => m.NoiDung)
+</div>
 
     <div class="form-group">
         @Html.Label("Đáp án A")

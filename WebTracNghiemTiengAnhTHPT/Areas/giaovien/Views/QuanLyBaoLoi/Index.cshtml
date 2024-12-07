@@ -6,29 +6,50 @@
 @model IEnumerable<WebTracNghiemTiengAnhTHPT.Models.BaoLoi>
 
 <h2>Quản lý báo lỗi</h2>
-<script src="https://cdn.tiny.cloud/1/4inckogq00f5sh986duadaulucd1rekxhug1kgjjozr5abyu/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="~/Scripts/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
 
 <script>
     tinymce.init({
-        selector: 'textarea.tinymce',
-        plugins: [
-            'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
-            'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'ai', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown',
-            'importword', 'exportword', 'exportpdf'
-        ],
-        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-        tinycomments_mode: 'embedded',
-        tinycomments_author: 'Author name',
-        mergetags_list: [
-            { value: 'First.Name', title: 'First Name' },
-            { value: 'Email', title: 'Email' },
-        ],
-        ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
-        exportpdf_converter_options: { 'format': 'Letter', 'margin_top': '1in', 'margin_right': '1in', 'margin_bottom': '1in', 'margin_left': '1in' },
-        exportword_converter_options: { 'document': { 'size': 'Letter' } },
-        importword_converter_options: { 'formatting': { 'styles': 'inline', 'resets': 'inline', 'defaults': 'inline', } },
+        selector: 'textarea',
+        plugins: 'media code',
+        toolbar: 'undo redo | link media | code',
+        media_title: true,
+        automatic_uploads: true,
+        media_upload_url: '/giaovien/QuanLyDeThi/UploadAudio',  // Update this URL to match your route
+        file_picker_types: 'media',
+        file_picker_callback: (cb, value, meta) => {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'audio/*');
+
+            input.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                const formData = new FormData();
+                formData.append('audioFile', file);
+
+                fetch('/giaovien/QuanLyDeThi/UploadAudio', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.location) {
+                            cb(data.location, { title: file.name });
+                        } else {
+                            console.error('Upload failed:', data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            });
+
+            input.click();
+        },
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
     });
 </script>
+
 
 <table class="table table-striped" id="errorTable">
     <thead>
@@ -76,7 +97,7 @@
                                     <div class="form-group">
                                         <label for="responseText">Your Response</label>
                                         <textarea class="tinymce form-control" id="responseText" rows="3"></textarea>
-                                        <input type="hidden" id="errorId" value=@error.MaCauHoi/>
+                                        <input type="hidden" id="errorId" value=@error.MaCauHoi />
                                     </div>
                                     <button type="submit" class="btn btn-primary">Submit Response</button>
                                 </form>
@@ -121,7 +142,7 @@ $(document).ready(function () {
             alert("Response text cannot be empty.");
             return;
         }
-        console.log(errorId, responseText); 
+        console.log(errorId, responseText);
         $.ajax({
             type: "POST",
             url: '@Url.Action("RespondToError", "QuanLyBaoLoi")',

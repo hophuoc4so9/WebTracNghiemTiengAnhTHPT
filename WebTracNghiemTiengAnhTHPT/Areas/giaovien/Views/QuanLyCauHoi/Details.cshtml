@@ -7,7 +7,8 @@
 
 <h2>Chi tiết câu hỏi</h2>
 <div class="form-group">
-    @Html.Raw(Model.NoiDung)
+    @Html.Raw(HttpUtility.HtmlDecode(Model.NoiDung))
+    @*@Html.Raw(Model.NoiDung)*@
 </div>
 
 <div class="form-group">
@@ -102,3 +103,16 @@
     }
  
 </style>
+
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js"></script>
+<script>
+    tinymce.init({
+        selector: 'textarea',
+        plugins: 'advlist autolink lists link image charmap print preview anchor',
+        toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+        toolbar_mode: 'floating',
+        tinycomments_mode: 'embedded',
+        tinycomments_author: 'Author name',
+        height: 300
+    });
+</script>
