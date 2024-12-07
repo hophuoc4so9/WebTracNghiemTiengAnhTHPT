@@ -212,7 +212,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.ViewChitietKyThi_2' doe
           <Property Name="ThoiGian" Type="int" Nullable="false" />
           <Property Name="ThoiGianBatDau" Type="datetime" />
           <Property Name="ThoiGianKetThuc" Type="datetime" />
-          <Property Name="CongKhai" Type="bit" Nullable="false" />
+          <Property Name="CongKhai" Type="int" Nullable="false" />
           <Property Name="SoCauHoi" Type="int" />
           <Property Name="DiemTrungBinh" Type="int" />
           <Property Name="Soluot" Type="int" />
@@ -1031,7 +1031,7 @@ warning 6002: The table/view 'TracNghiemTiengAnhTHPT.dbo.ViewChitietKyThi_2' doe
           <Property Name="ThoiGian" Type="Int32" Nullable="false" />
           <Property Name="ThoiGianBatDau" Type="DateTime" Precision="3" />
           <Property Name="ThoiGianKetThuc" Type="DateTime" Precision="3" />
-          <Property Name="CongKhai" Type="Boolean" Nullable="false" />
+          <Property Name="CongKhai" Type="Int32" Nullable="false" />
           <Property Name="SoCauHoi" Type="Int32" />
           <Property Name="DiemTrungBinh" Type="Int32" />
           <Property Name="Soluot" Type="Int32" />

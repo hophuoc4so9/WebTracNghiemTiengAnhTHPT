@@ -1,13 +1,7 @@
-﻿using Aspose.Words;
-using DocumentFormat.OpenXml.Packaging;
-using OfficeOpenXml.Drawing.Controls;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System.Web;
 using System.Web.Mvc;
 using WebTracNghiemTiengAnhTHPT.Models;
 
@@ -16,13 +10,13 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
     public class DuyetKyThiController : Controller
     {
         // GET: admin/DuyetKyThi
-       
+
         public ActionResult Index()
         {
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {
 
-                ViewBag.KyThiDaDuyet = db.KyThis.Where(c => c.CongKhai==2).ToList();
+                ViewBag.KyThiDaDuyet = db.KyThis.Where(c => c.CongKhai == 2).ToList();
                 ViewBag.KyThiChoDuyet = db.KyThis.Where(c => c.CongKhai == 1).ToList();
 
                 //    model=model.Where(item => item.UsernameTacGia == Session["UserName"].ToString()).ToList();  
@@ -121,7 +115,11 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
             errorReport.Username = username;
             errorReport.MaCauHoi = MaCauHoi;
             errorReport.MaDe = MaDe;
-            errorReport.ThoiGian =  DateTime.Now; ;
+
+            DateTime newdate = DateTime.UtcNow;
+            newdate = DateTimeHelper.ConvertToLocalTime(newdate);
+
+            errorReport.ThoiGian = newdate;
             db.BaoLois.Add(errorReport);
             db.SaveChanges();
 
