@@ -23,7 +23,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {
                 List<KyThi> model = db.KyThis.ToList();
-                model=model.Where(item => item.UsernameTacGia == Session["UserName"].ToString()).ToList();  
+            //    model=model.Where(item => item.UsernameTacGia == Session["UserName"].ToString()).ToList();  
                 return View(model);
             }
 
@@ -246,7 +246,6 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                                     : DateTime.Parse(ketThucDate);
 
                                 // Update CongKhai   KyThi[@item.MaDe].CongKhai
-                                kyThi.CongKhai = form[$"KyThi[{index}].CongKhai"] != null && form[$"KyThi[{index}].CongKhai"] == "on";
 
                                 if (Session["UserName"] != null) kyThi.UsernameTacGia = Session["UserName"].ToString();
 
@@ -619,6 +618,29 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
 
                 TempData["Success"] = "Đề thi đã được tạo thành công!";
                 return RedirectToAction("Index");
+            }
+        }
+        public JsonResult ChangeStatus(int made, int isActive)
+        {
+            try
+            {
+                var gg = made;
+                TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
+                List<KyThi> model = db.KyThis.ToList();
+                // Assuming you have a DbContext for accessing the database
+                var user = model.SingleOrDefault(u => u.MaDe == gg);
+                if (user != null)
+                {
+                    user.CongKhai = isActive;
+                    db.SaveChanges();
+                }
+                TempData["SuccessMessage"] = "Bạn đã thay đổi trạng thái thành công.";
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { success = false, message = ex.Message });
             }
         }
 

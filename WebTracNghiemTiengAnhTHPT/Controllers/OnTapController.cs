@@ -85,7 +85,7 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
                     ThoiGian = ThoiGian,
                     ThoiGianBatDau = DateTime.UtcNow,
                     isDeleted = false,
-                    CongKhai = false,
+                    CongKhai = 0,
                     UsernameTacGia = Session["UserName"]?.ToString()
                 };
                 newExam.SoCauHoi = SoCauHoiDe + SoCauHoiKho;

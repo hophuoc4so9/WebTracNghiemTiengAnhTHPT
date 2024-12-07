@@ -43,16 +43,19 @@
         {
             <tr>
                 <td>@item.MaCauHoi</td>
-                <td class="noidung">@Html.Raw(item.NoiDung)</td>
+                <td class="noidung">@Html.Raw(HttpUtility.HtmlDecode(item.NoiDung))</td>
+
                 <td>@item.MaNhom</td>
                 <td>@item.MucDo</td>
                 <td>@item.DapAnChinhXac</td>
                 <td>
                     @Html.ActionLink("Sửa", "Edit", new { maCauHoi = item.MaCauHoi }, new { @class = "btn btn-warning" })
                     <form action="@Url.Action("Delete", "QuanLyCauHoi")" method="post" style="display:inline;">
+                        @Html.AntiForgeryToken()
                         <input type="hidden" name="maCauHoi" value="@item.MaCauHoi" />
                         <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa câu hỏi này không?');">Xóa</button>
                     </form>
+
                     @Html.ActionLink("Chi tiết", "Details", new { maCauHoi = item.MaCauHoi }, new { @class = "btn btn-success" })
                 </td>
             </tr>
@@ -158,7 +161,6 @@
 @section scripts{
     <script>
         $(document).ready(function () {
-            // Thiết lập Anti-Forgery Token cho AJAX
             var token = $('input[name="__RequestVerificationToken"]').val();
 
             // Hiển thị modal khi nhấn nút "Thêm Câu Hỏi"
@@ -212,16 +214,15 @@
                 });
             });
         });
-        // Lắng nghe sự kiện input trong ô tìm kiếm
+
         document.getElementById('txtSearch').addEventListener('input', function () {
             var searchQuery = this.value;
 
             $.ajax({
-                url: '/QuanLyCauHoi/TimKiem', // Đường dẫn đến action tìm kiếm
+                url: '/QuanLyCauHoi/TimKiem', 
                 type: 'GET',
                 data: { query: searchQuery },
                 success: function (result) {
-                    // Cập nhật lại phần thân của bảng câu hỏi với kết quả tìm kiếm
                     $('#tableBody').html(result);
                 },
                 error: function () {
@@ -259,32 +260,30 @@
     }
 
     .input-group-addon {
-        background: transparent; /* Hoặc màu nền bạn muốn */
-        border: none; /* Loại bỏ đường viền nếu không cần */
-        margin-left: -20px; /* Điều chỉnh khoảng cách nếu cần */
+        background: transparent; 
+        border: none; 
+        margin-left: -20px; 
     }
 
     .inputmanhom {
-        background: transparent; /* Hoặc màu nền bạn muốn */
-        border: none; /* Loại bỏ đường viền nếu không cần */
-        margin-left: -25px; /* Điều chỉnh khoảng cách nếu cần */
+        background: transparent; 
+        border: none; 
+        margin-left: -25px; 
     }
 
     .phanloai {
         width: 498px;
         margin-left: 0px;
     }
-    /* Định dạng chung cho cột nội dung */
     td {
-        max-width: 150px; /* Điều chỉnh độ rộng phù hợp với yêu cầu của bạn */
-        white-space: nowrap; /* Không cho phép xuống dòng */
-        overflow: hidden; /* Ẩn nội dung bị tràn */
-        text-overflow: ellipsis; /* Hiển thị dấu ba chấm nếu nội dung bị tràn */
+        max-width: 150px; 
+        white-space: nowrap; 
+        overflow: hidden; 
+        text-overflow: ellipsis; 
     }
 
-        /* Nếu bạn chỉ muốn áp dụng cho cột cụ thể, ví dụ cột nội dung */
         td.noidung {
-            max-width: 250px; /* Đặt độ rộng tùy ý cho cột nội dung */
+            max-width: 250px; 
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;

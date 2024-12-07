@@ -87,11 +87,15 @@
 
                 </div>
                 <div class="col">
-
-                    <input type="checkbox" name="KyThi[@item.MaDe].CongKhai" class="edit-input" @(item.CongKhai ? "checked" : "") style="display:none;" />
-                    <span class="text-display">@item.CongKhai</span>
-
+                  
+                   
+                    <button type="button" class="btn btn-sm @(item.CongKhai == 0 ? "btn-success" : "btn-warning")" onclick="changeStatus('@item.MaDe', @item.CongKhai)">
+                        @(item.CongKhai == 0 ? "Riêng" : (item.CongKhai == 1? "Chờ duyệt công khai": "Đã công khai"))
+                      
+                    </button>
+                    
                 </div>
+
                 <div style="display:none;">
                     <input type="hidden" name="KyThi[@item.MaDe].MaDe" value="@item.MaDe" />
                   
@@ -313,3 +317,47 @@
         }
     }
 </style>
+<script>
+      function changeStatus(Username, currentStatus) {
+    var newStatus;
+    var confirmationMessage;
+
+    if (currentStatus == 0) {
+        newStatus = 1;
+        confirmationMessage = "Bạn có chắc chắn muốn chuyển đề thi sang công khai kỳ thi này không?";
+    } else {
+        newStatus = 0;
+        confirmationMessage = "Bạn có chắc chắn muốn chuyển kỳ thi này về trạng thái riêng không?";
+    } 
+
+    if (!confirm(confirmationMessage)) return;
+
+    $.ajax({
+        url: '@Url.Action("ChangeStatus", "QuanLyDeThi")',
+        type: 'POST',
+        data: {
+            made: Username,
+            isActive: newStatus
+        },
+        success: function(response) {
+            if (response.success) {
+                var button = $("button[onclick*='" + Username + "']");
+                if (newStatus == 0) {
+
+                    button.removeClass('btn-danger').addClass('btn-success').text('Riêng').attr('onclick', `changeStatus('${Username}', 0)`);
+                } else if (newStatus == 1) {
+                   
+                    button.removeClass('btn-success').addClass('btn-warning').text('Chờ duyệt công khai').attr('onclick', `changeStatus('${Username}', 1)`);
+                }
+                window.location.reload();
+            } else {
+                alert("Đã có lỗi xảy ra khi thay đổi trạng thái.");
+            }
+        },
+        error: function() {
+            alert("Đã có lỗi xảy ra khi gửi yêu cầu.");
+        }
+    });
+}
+
+</script>

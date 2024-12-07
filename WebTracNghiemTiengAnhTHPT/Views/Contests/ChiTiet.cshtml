@@ -7,26 +7,39 @@
     List<WebTracNghiemTiengAnhTHPT.Models.DanhGia> danhgialist = ViewBag.DanhGia as List<WebTracNghiemTiengAnhTHPT.Models.DanhGia>;
 }
 
-<h2>Chi tiết kỳ thi</h2>
-
 <div class="container">
     <div class="row">
         <!-- Thông tin kỳ thi -->
         <div class="col-lg-9 col-12">
+
             <div class="test-info-card">
-                <h3 class="test-title">@Html.DisplayFor(model => model.TenKyThi)</h3>
-                <p class="test-meta">
-                    <span><img src="~/Content/img/ph--question.svg" alt="Questions" /> @Html.DisplayFor(model => model.SoCauHoi) câu hỏi</span> |
-                    <span><img src="~/Content/img/mdi--account-check-outline.svg" alt="Users" /> @Html.DisplayFor(model => model.SoCauHoi) người đã làm bài</span> |
-                    <span><img src="~/Content/img/mingcute--time-line.svg" alt="Time" /> @Html.DisplayFor(model => model.ThoiGian) phút</span>
-                </p>
-              
-                @Html.ActionLink("Tham gia", "ChiTietKyThi", "Contests", new { made = made }, new { @class = "btn btn-primary" })
+                <h2 class="test-header">Thông tin đề thi</h2>
+                <div class="test-layout">
+                    <!-- Cột hình ảnh -->
+                    <div class="test-image-section">
+                        <img src="~/Content/img/AI.jpg" alt="Test Image" class="test-image">
+                    </div>
+
+                    <!-- Cột thông tin -->
+                    <div class="test-info-section">
+                        <h3 class="test-title">@Html.DisplayFor(model => model.TenKyThi)</h3>
+                        <div class="test-meta">
+                            <p><img src="~/Content/img/ph--question.svg" alt="Questions" /> @Html.DisplayFor(model => model.SoCauHoi) câu hỏi</p>
+                            <p><img src="~/Content/img/mdi--account-check-outline.svg" alt="Users" /> @Html.DisplayFor(model => model.SoCauHoi) người đã làm bài</p>
+                            <p><img src="~/Content/img/mingcute--time-line.svg" alt="Time" /> @Html.DisplayFor(model => model.ThoiGian) phút</p>
+                        </div>
+                        <div class="test-actions">
+                            @Html.ActionLink("Bắt đầu thi", "ChiTietKyThi", "Contests", new { made = made }, new { @class = "btn btn-primary" })
+                        </div>
+                    </div>
+                </div>
 
                 <div id="partialDangBaiContainer">
                     @Html.Action("PartialDangBai", new { id = made })
                 </div>
             </div>
+
+
 
             <!-- Hiển thị các đánh giá -->
             <ul id="ratings-list" style="list-style-type: none">
@@ -91,68 +104,187 @@
 
 <!-- CSS -->
 <style>
-    .container {
-        margin-top: 20px;
-    }
+    /* Tổng quan */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
 
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Thông tin kỳ thi */
+    /* Container tổng */
     .test-info-card {
-        background-color: #f8f9fa;
         border: 1px solid #ddd;
         border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 20px;
+        padding: 16px;
+        margin: auto;
+        background-color: #fff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
-    .test-title {
-        font-size: 1.6em;
+    /* Header */
+    .test-header {
+        font-size: 1.5rem;
         font-weight: bold;
-        color: #007bff;
-    }
-
-    .test-meta span {
-        font-size: 1.1em;
-        color: #666;
-    }
-
-    .test-note {
-        margin-top: 15px;
-        padding: 10px;
-        background-color: #e0f7fa;
-        border-radius: 5px;
-        font-size: 1em;
+        text-align: left;
+        margin-bottom: 20px;
         color: #333;
     }
 
-    .btn-primary {
-        margin-top: 20px;
-        font-size: 1.2em;
-        background-color: #007bff;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        color: #fff;
-    }
-
-    .star-rating {
+    /* Bố cục 2 cột */
+    .test-layout {
         display: flex;
-        flex-direction: row;
+        gap: 16px;
     }
 
-    .star {
-        font-size: 1.5em;
-        color: #ddd;
-        cursor: pointer;
-        transition: color 0.2s;
+    /* Phần hình ảnh */
+    .test-image-section {
+        flex: 1;
     }
 
-        .star.filled,
-        .star.selected {
-            color: #ffca08;
+    .test-image {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+
+    /* Phần thông tin */
+    .test-info-section {
+        flex: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .test-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #007bff;
+        margin-bottom: 12px;
+    }
+
+    .test-meta {
+        font-size: 0.9rem;
+        color: #555;
+    }
+
+        .test-meta img {
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+            margin-right: 8px;
         }
 
-        .star.hovered {
-            color: #ffc107;
+        .test-meta p {
+            margin: 4px 0;
         }
+
+    /* Nút hành động */
+    .test-actions {
+        margin-top: 20px;
+    }
+
+        .test-actions .btn {
+            font-size: 1rem;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+        }
+
+            .test-actions .btn:hover {
+                background-color: #218838;
+            }
+
+/* Danh sách đánh giá */
+#ratings-list {
+    margin: 20px 0;
+    padding: 0;
+}
+
+#ratings-list li {
+    background: #f0f0f0;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    list-style: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+#ratings-list .star-rating {
+    color: #f39c12;
+    font-size: 16px;
+}
+
+.star {
+    cursor: pointer;
+    font-size: 18px;
+    color: #ccc;
+    transition: color 0.3s;
+}
+
+.star.filled {
+    color: #f39c12;
+}
+
+.rating-form {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.rating-form label {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.rating-form textarea {
+    resize: none;
+    border-radius: 5px;
+}
+
+/* Lịch sử làm bài */
+#partiview {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#partiview h4 {
+    color: #007bff;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+/* Đáp ứng màn hình */
+@@media (max-width: 768px) {
+    .test-meta {
+        flex-direction: column;
+    }
+
+    .btn-primary {
+        width: 100%;
+    }
+}
+
 </style>
 
 <!-- JavaScript -->
