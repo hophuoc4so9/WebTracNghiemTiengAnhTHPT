@@ -73,11 +73,17 @@
         </select>
     </div>
     <div id="yearGrid" class="year-grid">
-        <!-- Example data cells with classes for styling based on data presence -->
+        <!-- Calendar cells -->
         <div class="day-cell no-data" data-date="2024-01-01"></div>
         <div class="day-cell has-data" data-date="2024-01-02"></div>
-        <!-- Repeat these cells dynamically based on your data -->
+        <!-- More cells -->
     </div>
+
+    <div id="resultDisplay">
+        <!-- Results will be dynamically inserted here -->
+    </div>
+
+
 </div>
 <style>
     .test-count {
@@ -191,6 +197,21 @@
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
 
+    #resultDisplay {
+        margin-top: 20px;
+        padding: 10px;
+        background: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    .result-item {
+        margin-bottom: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background: #fff;
+    }
     .year-grid .day-cell:hover {
         transform: scale(1.1); /* Slight zoom effect */
     }
@@ -387,5 +408,46 @@
                 }
             });
         });
+
+        //result /////////////////////////////////////////////
+        document.addEventListener('DOMContentLoaded', () => {
+            const yearGrid = document.getElementById('yearGrid');
+            const resultDisplay = document.getElementById('resultDisplay');
+
+            yearGrid.addEventListener('click', (e) => {
+                const cell = e.target.closest('.day-cell');
+                if (!cell || !cell.dataset.date) return;
+
+                const selectedDate = cell.dataset.date;
+
+                // Clear previous results
+                resultDisplay.innerHTML = '<p>Loading results...</p>';
+
+            
+                fetch(`/ThongTinCaNhan/getResults?date=${selectedDate}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length === 0) {
+                            resultDisplay.innerHTML = '<p>No results for this date.</p>';
+                            return;
+                        }
+
+                       
+                        resultDisplay.innerHTML = data.map(result => `
+                    <div class="result-item">
+                        <a href="/Contests/Result?maketqua=${result.maKQ}"><h4>Exam: ${result.examName}</h4></a>
+                        <p>Score: ${result.score}</p>
+                        <p>Status: ${result.status ? 'Đã nộp' : 'Chưa nộp'}</p>
+                       
+                    </div>
+                `).join('');
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        resultDisplay.innerHTML = '<p>Error loading results.</p>';
+                    });
+            });
+        });
+
     </script>
 }

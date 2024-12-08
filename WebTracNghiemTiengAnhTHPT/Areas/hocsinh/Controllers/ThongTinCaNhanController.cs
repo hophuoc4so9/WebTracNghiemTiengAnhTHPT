@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using WebTracNghiemTiengAnhTHPT.Models;
+using System.Data.Entity;
 
 namespace WebTracNghiemTiengAnhTHPT.Areas.hocsinh.Controllers
 {
@@ -102,6 +104,30 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.hocsinh.Controllers
                 .ToList();
 
             return Json(ketQuaData, JsonRequestBehavior.AllowGet);
+        }
+        [HttpGet]
+        public JsonResult GetResults(string date)
+        {
+            if (DateTime.TryParse(date, out DateTime selectedDate))
+            {
+                var results = db.KetQuas
+                    .Where(kq => kq.thoigian_batdau.HasValue &&
+                                 DbFunctions.TruncateTime(kq.thoigian_batdau) == selectedDate.Date)
+                    .Select(kq => new
+                    {
+                        examName = kq.KyThi.TenKyThi,
+                        score = kq.Diem,
+                        status = kq.status,
+                        maKQ = kq.Maketqua,
+                        startTime = kq.thoigian_batdau,
+                        endTime = kq.thoigian_ketthuc
+                    })
+                    .ToList();
+
+                return Json(results, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { error = "Invalid date format." }, JsonRequestBehavior.AllowGet);
         }
 
     }
