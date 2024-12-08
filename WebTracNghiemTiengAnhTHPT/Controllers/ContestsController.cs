@@ -208,12 +208,13 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             }
 
             // Check if the MaDe exists in KyThi table
-            var kyThiExists = _db.KyThis.Any(k => k.MaDe == MaDe);
-            if (!kyThiExists)
+            KetQua kyThiExists = _db.KetQuas.Where(k => k.Maketqua == MaDe).FirstOrDefault();
+            
+            if (kyThiExists == null)
             {
                 return Json(new { success = false, message = kyThiExists });
             }
-
+            var madereal = kyThiExists.MaDe ?? 0;
 
 
             // Create a new BaoLoi entry
@@ -221,8 +222,10 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             errorReport.NoiDung = ErrorMessage;
             errorReport.Username = username;
             errorReport.MaCauHoi = MaCauHoi;
-            errorReport.MaDe = MaDe;
-
+            errorReport.MaDe = madereal;
+            DateTime newdate = DateTime.UtcNow;
+            newdate = DateTimeHelper.ConvertToLocalTime(newdate);
+            errorReport.ThoiGian = newdate;
             _db.BaoLois.Add(errorReport);
             _db.SaveChanges();
 
