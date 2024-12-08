@@ -30,16 +30,6 @@
           <Property Name="NoiDung" Type="nvarchar(max)" Nullable="false" />
           <Property Name="NgayTao" Type="datetime" />
         </EntityType>
-        <EntityType Name="BinhLuan">
-          <Key>
-            <PropertyRef Name="BinhLuanId" />
-          </Key>
-          <Property Name="BinhLuanId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="MaDe" Type="int" Nullable="false" />
-          <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="NoiDung" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="NgayTao" Type="datetime" />
-        </EntityType>
         <EntityType Name="CauHoi">
           <Key>
             <PropertyRef Name="MaCauHoi" />
