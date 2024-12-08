@@ -72,7 +72,7 @@
                                     </div>
                                     <!-- Display question score -->
                                     <div class="mb-2 text-success">
-                                        Điểm: @questionScore.ToString("F2")
+                                        Điểm: @questionScore.ToString("F2") / 1
                                     </div>
 
                                     <!-- Answer choices with radio buttons -->
@@ -133,7 +133,7 @@
                 <div class="col-lg-3 col-12 bg-light border border-primary rounded-3 p-4 mx-1">
                     <div>Số đáp án đúng:  @totalScore.ToString("F2") / @alll</div>
                     <div class="mt-2">
-                        <strong>Tổng điểm: @{ var s = totalScore * 10 / alll; <span> @s.ToString("F2") </span> } </strong>
+                        <strong>Tổng điểm: @{ var s = totalScore * 10 / alll; <span> @s.ToString("F2") / 10 </span> } </strong>
                     </div>
                 </div>
             </div>

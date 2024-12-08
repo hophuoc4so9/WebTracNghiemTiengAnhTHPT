@@ -1,4 +1,5 @@
 ﻿using Aspose.Words;
+using DocumentFormat.OpenXml.EMMA;
 using DocumentFormat.OpenXml.Packaging;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
@@ -23,7 +24,8 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {
                 List<KyThi> model = db.KyThis.ToList();
-                //    model=model.Where(item => item.UsernameTacGia == Session["UserName"].ToString()).ToList();  
+                string username = Session["UserName"]?.ToString();
+                   model =model.Where(item => item.UsernameTacGia == username).ToList();  
                 return View(model);
             }
 
@@ -56,7 +58,8 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                         ModelState.AddModelError("MaDe", "Mã Đề đã tồn tại, vui lòng nhập mã khác.");
                         return View(model);
                     }
-
+                    string username = Session["UserName"]?.ToString();
+                    model.UsernameTacGia = username;
                     // If unique, proceed with adding the new KyThi
                     db.KyThis.Add(model);
                     db.SaveChanges();
@@ -329,7 +332,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {
                 string UsernameTacGia = Session["UserName"]?.ToString();
-
+                
                 var questionPattern = @"Question\s\d+.*?(?=Question\s\d+|$)";
                 var questionMatches = Regex.Matches(text, questionPattern, RegexOptions.Singleline);
                 bool newGroup = true;
@@ -417,7 +420,8 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                     }
                 }
                 if (kt.SoCauHoi == null || kt.SoCauHoi <= 0) kt.SoCauHoi = kt.CauHois.Count;
-
+                string username = Session["UserName"]?.ToString();
+                kt.UsernameTacGia = username;
                 db.SaveChanges();
             }
         }
@@ -540,7 +544,8 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                             }
                         }
                     }
-
+                    string username = Session["UserName"]?.ToString();
+                    kythi.UsernameTacGia = username;
                     db.SaveChanges();
                 }
 
@@ -628,6 +633,8 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                     isDeleted = false,
                     UsernameTacGia = Session["UserName"]?.ToString()
                 };
+                string username = Session["UserName"]?.ToString();
+                newExam.UsernameTacGia = username;
                 newExam.SoCauHoi = SoCauHoiDe + SoCauHoiKho;
                 db.KyThis.Add(newExam);
                 db.SaveChanges();
@@ -640,7 +647,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                 {
                     newExam.CauHois.Add(question);
                 }
-
+              
                 db.SaveChanges();
 
                 TempData["Success"] = "Đề thi đã được tạo thành công!";
