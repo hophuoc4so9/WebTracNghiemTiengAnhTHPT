@@ -435,7 +435,7 @@
                        
                         resultDisplay.innerHTML = data.map(result => `
                     <div class="result-item">
-                        <h4>Exam: ${result.examName}</h4>
+                        <a href="/Contests/Result?maketqua=${result.maKQ}"><h4>Exam: ${result.examName}</h4></a>
                         <p>Score: ${result.score}</p>
                         <p>Status: ${result.status ? 'Đã nộp' : 'Chưa nộp'}</p>
                        

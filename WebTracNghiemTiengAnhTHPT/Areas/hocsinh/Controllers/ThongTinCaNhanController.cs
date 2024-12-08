@@ -118,6 +118,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.hocsinh.Controllers
                         examName = kq.KyThi.TenKyThi,
                         score = kq.Diem,
                         status = kq.status,
+                        maKQ = kq.Maketqua,
                         startTime = kq.thoigian_batdau,
                         endTime = kq.thoigian_ketthuc
                     })
