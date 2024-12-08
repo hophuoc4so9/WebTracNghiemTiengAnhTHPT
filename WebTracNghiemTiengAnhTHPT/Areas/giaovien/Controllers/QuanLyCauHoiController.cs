@@ -79,11 +79,11 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                 var cauHoi = db.CauHois.FirstOrDefault(k => k.MaCauHoi == maCauHoi);
                 if (cauHoi == null)
                 {
-                    return HttpNotFound(); 
+                    return HttpNotFound();
                 }
                 ViewBag.NhomList = new SelectList(db.NhomCauHois.ToList(), "MaNhom", "MaNhom");
 
-                return View(cauHoi); 
+                return View(cauHoi);
             }
         }
 
@@ -94,12 +94,12 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    db.Entry(cauHoi).State = EntityState.Modified; 
-                    db.SaveChanges(); 
+                    db.Entry(cauHoi).State = EntityState.Modified;
+                    db.SaveChanges();
 
                     return RedirectToAction("Index", "QuanLyCauHoi");
                 }
-                return View(cauHoi); 
+                return View(cauHoi);
             }
         }
         public ActionResult Details(int maCauHoi)

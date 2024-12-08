@@ -68,13 +68,15 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             {
                 return RedirectToAction("Login", "Login", new { area = "admin" });
             }
+            DateTime newdate = DateTime.UtcNow;
+            newdate = DateTimeHelper.ConvertToLocalTime(newdate);
             var danhGia = _db.DanhGias.Where(d => d.MaDe == made).ToList();
             ViewBag.DanhGia = danhGia;
             string username = Session["UserName"].ToString();
             Session["made"] = made;
             var ketQua = _db.KetQuas
             .AsNoTracking()
-            .FirstOrDefault(k => k.Username == username && k.status == false && k.thoigian_ketthuc > DateTime.Now);
+            .FirstOrDefault(k => k.Username == username && k.status == false && k.thoigian_ketthuc > newdate);
 
             if (ketQua != null)
             {
@@ -96,14 +98,15 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             {
                 kt.SoCauHoi = kt.CauHois.Count();
             }
-
+            newdate = DateTime.UtcNow;
+            newdate = DateTimeHelper.ConvertToLocalTime(newdate);
             ketQua = new KetQua
             {
                 Username = username,
                 MaDe = made,
                 status = false,
-                thoigian_batdau = DateTime.Now,
-                thoigian_ketthuc = DateTime.Now.AddMinutes(kt.ThoiGian)
+                thoigian_batdau = newdate,
+                thoigian_ketthuc = newdate.AddMinutes(kt.ThoiGian)
             };
 
             _db.KetQuas.Add(ketQua);
@@ -182,7 +185,9 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             ViewBag.MaDe = kq.Maketqua;
             ViewBag.MaDeReal = Session["made"];
             ViewBag.endTime = kq.thoigian_ketthuc;
-            ViewBag.startTime = DateTime.Now;
+            DateTime newdate = DateTime.UtcNow;
+            newdate = DateTimeHelper.ConvertToLocalTime(newdate);
+            ViewBag.startTime = newdate;
             return View(kq);
         }
         [HttpPost]
@@ -236,14 +241,18 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
             {
                 return HttpNotFound();
             }
-
-            if (int.Parse(form["flag"]) == 0 || ketqua.thoigian_ketthuc <= DateTime.Now)
+            DateTime newdate = DateTime.UtcNow;
+            newdate = DateTimeHelper.ConvertToLocalTime(newdate);
+            if (int.Parse(form["flag"]) == 0 || ketqua.thoigian_ketthuc <= newdate)
             {
                 ketqua.status = true;
             }
 
             int total = ketqua.ChiTietKetQuas.Count;
-            double correct = 0;
+            double totalScore = 0;
+
+            // Điểm cho từng câu
+            double[] scoring = { 0.0, 0.1, 0.25, 0.5, 1.0 };
 
             foreach (var item in ketqua.ChiTietKetQuas)
             {
@@ -251,30 +260,40 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
                 var test = form.GetValue(questionKey);
                 string selectedValue = test?.AttemptedValue ?? string.Empty;
 
+                // Lấy đáp án đã chọn và đáp án chính xác, chỉ giữ lại các ký tự ABCD
+                string validAnswers = "ABCD";
                 item.DapAnChon = !string.IsNullOrEmpty(selectedValue) ? selectedValue : "N";
-                int cnt = 0;
-
-                string validAnswers = "ABCDN";
-                item.DapAnChon = new string(item.DapAnChon.Where(c => validAnswers.Contains(c)).ToArray());
                 item.CauHoi.DapAnChinhXac = new string(item.CauHoi.DapAnChinhXac.Where(c => validAnswers.Contains(c)).ToArray());
 
-                foreach (char answer in item.DapAnChon)
+                // Kiểm tra số đáp án khớp
+                int correctCount = 0;
+                foreach (char answer in validAnswers)
                 {
-                    if (item.CauHoi.DapAnChinhXac.ToLower().Contains(answer.ToString().ToLower()))
+                    // Nếu đáp án chọn và đáp án chính xác cùng có hoặc cùng không có thì tăng điểm
+                    bool isSelected = item.DapAnChon.Contains(answer);
+                    bool isCorrect = item.CauHoi.DapAnChinhXac.Contains(answer);
+                    if (isSelected == isCorrect)
                     {
-                        cnt++;
-                    }
-                    else
-                    {
-                        cnt--;
+                        correctCount++;
                     }
                 }
-                cnt = Math.Max(0, cnt);
-                correct += cnt / (double)item.CauHoi.DapAnChinhXac.Length;
+
+                // Điểm cho câu hỏi này
+                double questionScore = scoring[correctCount];
+                if(item.CauHoi.DapAnChinhXac.Length==1)
+                {
+                    if(correctCount!=4)
+                    {
+                        questionScore = 0;
+                    }    
+                }    
+                totalScore += questionScore;
             }
 
-            ketqua.Diem = correct * 10 / total;
-            if (int.Parse(form["flag"]) == 0 || ketqua.thoigian_ketthuc <= DateTime.Now)
+            // Cập nhật điểm tổng
+            ketqua.Diem = totalScore * 10 / total;
+
+            if (int.Parse(form["flag"]) == 0 || ketqua.thoigian_ketthuc <= newdate)
             {
                 ketqua.status = true;
             }

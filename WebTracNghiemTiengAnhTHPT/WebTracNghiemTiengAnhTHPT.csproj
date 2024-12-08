@@ -409,6 +409,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OnTapController.cs" />
     <Compile Include="Controllers\PhongThiController.cs" />
+    <Compile Include="DateTimeHelper.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

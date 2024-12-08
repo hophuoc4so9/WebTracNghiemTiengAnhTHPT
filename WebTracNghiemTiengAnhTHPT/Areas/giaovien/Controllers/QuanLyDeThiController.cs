@@ -23,7 +23,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {
                 List<KyThi> model = db.KyThis.ToList();
-            //    model=model.Where(item => item.UsernameTacGia == Session["UserName"].ToString()).ToList();  
+                //    model=model.Where(item => item.UsernameTacGia == Session["UserName"].ToString()).ToList();  
                 return View(model);
             }
 
@@ -168,13 +168,11 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
         {
             using (var context = new TracNghiemTiengAnhTHPTEntities1())
             {
-                // Find the exam and question
                 var exam = context.KyThis.FirstOrDefault(k => k.MaDe == made);
                 var question = context.CauHois.FirstOrDefault(q => q.MaCauHoi == maCauHoi);
 
                 if (exam != null && question != null)
                 {
-                    // Add the question to the exam (this depends on your model relationships)
                     exam.CauHois.Add(question);
                     context.SaveChanges();
                 }
@@ -330,6 +328,8 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
         {
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {
+                string UsernameTacGia = Session["UserName"]?.ToString();
+
                 var questionPattern = @"Question\s\d+.*?(?=Question\s\d+|$)";
                 var questionMatches = Regex.Matches(text, questionPattern, RegexOptions.Singleline);
                 bool newGroup = true;
@@ -384,7 +384,10 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                         DapAnD = parts[4].Substring(2).Trim(),
                         MaNhom = maxgr,
                         DapAnChinhXac = "A"
+                       
+
                     };
+                    cauHoi.UsernameTacGia = UsernameTacGia;
                     cauHoi.KyThis.Add(kt);
 
                     db.CauHois.Add(cauHoi);
@@ -550,28 +553,52 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
         {
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {
-                var totalQuestions = db.CauHois.Count();
-                var easyQuestions = db.CauHois.Count(q => q.MucDo == 1);
-                var hardQuestions = db.CauHois.Count(q => q.MucDo == 2);
+                string UsernameTacGia = Session["UserName"]?.ToString();
+
+                var totalQuestions = db.CauHois.Where(n=>n.UsernameTacGia== UsernameTacGia).Count();
+                var easyQuestions = db.CauHois.Where(n => n.UsernameTacGia == UsernameTacGia).Count(q => q.MucDo == 1);
+                var hardQuestions = db.CauHois.Where(n => n.UsernameTacGia == UsernameTacGia).Count(q => q.MucDo == 2);
 
                 ViewBag.TotalQuestions = totalQuestions;
                 ViewBag.EasyQuestions = easyQuestions;
                 ViewBag.HardQuestions = hardQuestions;
+                 totalQuestions = db.CauHois.Where(n => n.UsernameTacGia == UsernameTacGia || n.DaDuyet==true).Count();
+                 easyQuestions = db.CauHois.Where(n => n.UsernameTacGia == UsernameTacGia || n.DaDuyet == true).Count(q => q.MucDo == 1);
+                 hardQuestions = db.CauHois.Where(n => n.UsernameTacGia == UsernameTacGia || n.DaDuyet == true).Count(q => q.MucDo == 2);
+                ViewBag.TotalQuestionsAll = totalQuestions;
+                ViewBag.EasyQuestionsAll = easyQuestions;
+                ViewBag.HardQuestionsAll = hardQuestions;
             }
 
             return View();
         }
         [HttpPost]
-        public ActionResult AutoGenerateExam(int SoCauHoiDe, int SoCauHoiKho, int ThoiGian)
+        public ActionResult AutoGenerateExam(string QuestionBankType, int SoCauHoiDe, int SoCauHoiKho, int ThoiGian)
         {
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {
-                var easyQuestions = db.CauHois
-                    .Where(q => q.MucDo == 1 && !q.isDeleted)
-                    .ToList();
-                var hardQuestions = db.CauHois
-                    .Where(q => q.MucDo == 2 && !q.isDeleted)
-                    .ToList();
+              
+                string UsernameTacGia = Session["UserName"]?.ToString();
+
+                // Lựa chọn ngân hàng câu hỏi
+                var questionQuery = db.CauHois.AsQueryable();
+                if (QuestionBankType == "own")
+                {
+                    questionQuery = questionQuery.Where(q => q.UsernameTacGia == UsernameTacGia && !q.isDeleted);
+                }
+                else
+                {
+                    questionQuery = questionQuery.Where(q => (q.UsernameTacGia == UsernameTacGia || q.DaDuyet == true) && !q.isDeleted);
+                }
+
+                var easyQuestions = questionQuery.Where(q => q.MucDo == 1).ToList();
+                var hardQuestions = questionQuery.Where(q => q.MucDo == 2).ToList();
+
+                if (SoCauHoiDe > easyQuestions.Count || SoCauHoiKho > hardQuestions.Count)
+                {
+                    TempData["Error"] = "Không đủ câu hỏi để tạo đề thi.";
+                    return RedirectToAction("AutoGenerateExam");
+                }
 
                 if (SoCauHoiDe > easyQuestions.Count || SoCauHoiKho > hardQuestions.Count)
                 {

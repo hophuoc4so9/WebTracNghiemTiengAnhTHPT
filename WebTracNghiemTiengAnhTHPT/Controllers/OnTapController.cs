@@ -13,9 +13,9 @@ namespace WebTracNghiemTiengAnhTHPT.Controllers
         {
             using (var db = new TracNghiemTiengAnhTHPTEntities1())
             {
-                var totalQuestions = db.CauHois.Count();
-                var easyQuestions = db.CauHois.Count(q => q.MucDo == 1);
-                var hardQuestions = db.CauHois.Count(q => q.MucDo == 2);
+                var totalQuestions = db.CauHois.Where(n=>n.DaDuyet==true).Count();
+                var easyQuestions = db.CauHois.Where(n => n.DaDuyet == true).Count(q => q.MucDo == 1);
+                var hardQuestions = db.CauHois.Where(n => n.DaDuyet == true).Count(q => q.MucDo == 2);
 
                 ViewBag.TotalQuestions = totalQuestions;
                 ViewBag.EasyQuestions = easyQuestions;

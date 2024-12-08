@@ -31,7 +31,7 @@
         <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.KyThiCauHoi" />
         <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.PhongThiKyThi" />
         <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.PhongThiNguoiDung" />
-        <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.ViewChitietKyThi_2" Width="1.5" PointX="0.75" PointY="5.75" />
+        <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.ViewChitietKyThi_2" Width="1.5" PointX="1.125" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TracNghiemTiengAnhTHPTModel.LopHoc" Width="1.5" PointX="5.875" PointY="8.125" />
         <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.FK_MaPhong" />
         <AssociationConnector Association="TracNghiemTiengAnhTHPTModel.FK_MaPhong2" />

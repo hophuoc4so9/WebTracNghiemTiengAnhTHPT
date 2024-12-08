@@ -250,7 +250,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
                     for (j = 3; j < kyThis.Count + 3; j++)
                     {
                         var diem = kyThis[j - 3].KetQuas.FirstOrDefault(kq => kq.Username == hocSinhs[i].Username)?.Diem;
-                        
+
                         if (diem != null)
                         {
                             worksheet.Cells[i + 2, j].Value = diem;

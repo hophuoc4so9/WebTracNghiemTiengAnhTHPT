@@ -20,17 +20,28 @@
     <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
         <!-- Cột bên trái: Số lượng câu hỏi trong CSDL -->
         <div style="flex: 1; margin-right: 10px;">
+            <h3>Loại ngân hàng câu hỏi</h3>
+            <div>
+                <label>
+                    <input type="radio" name="QuestionBankType" value="own" checked onchange="updateQuestionCounts('own')" />
+                    Ngân hàng câu hỏi riêng
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="QuestionBankType" value="all" onchange="updateQuestionCounts('all')" />
+                    Ngân hàng câu hỏi chung
+                </label>
+            </div>
             <h3>Câu hỏi trong CSDL</h3>
             <div>
-                <label>Tổng số lượng câu hỏi <span>@ViewBag.TotalQuestions</span></label>
+                <label>Tổng số lượng câu hỏi: <span id="totalQuestions">@ViewBag.TotalQuestions</span></label>
             </div>
             <div>
-                <label>Số lượng câu hỏi dễ : <span>@ViewBag.EasyQuestions</span></label>
-
+                <label>Số lượng câu hỏi dễ: <span id="easyQuestions">@ViewBag.EasyQuestions</span></label>
             </div>
             <div>
-                <label>Số lượng câu hỏi khó : <span>@ViewBag.HardQuestions</span></label>
-
+                <label>Số lượng câu hỏi khó: <span id="hardQuestions">@ViewBag.HardQuestions</span></label>
             </div>
         </div>
 
@@ -39,11 +50,11 @@
             <h3>Lựa chọn số câu hỏi</h3>
             <div>
                 <label>Số lượng câu hỏi dễ trong đề thi:</label>
-                <input type="number" name="SoCauHoiDe" min="0" max="@ViewBag.EasyQuestions" required />
+                <input type="number" name="SoCauHoiDe" min="0" max="@ViewBag.EasyQuestions" required id="inputEasy" />
             </div>
             <div>
                 <label>Số lượng câu hỏi khó trong đề thi:</label>
-                <input type="number" name="SoCauHoiKho" min="0" max="@ViewBag.HardQuestions" required />
+                <input type="number" name="SoCauHoiKho" min="0" max="@ViewBag.HardQuestions" required id="inputHard" />
             </div>
             <div>
                 <label>Thời gian đề thi (phút):</label>
@@ -61,6 +72,21 @@
     </div>
 </form>
 
+<script>
+    // JavaScript để cập nhật số lượng câu hỏi dựa trên lựa chọn
+    function updateQuestionCounts(type) {
+        const totalQuestions = type === 'own' ? @ViewBag.TotalQuestions : @ViewBag.TotalQuestionsAll;
+        const easyQuestions = type === 'own' ? @ViewBag.EasyQuestions : @ViewBag.EasyQuestionsAll;
+        const hardQuestions = type === 'own' ? @ViewBag.HardQuestions : @ViewBag.HardQuestionsAll;
+
+        document.getElementById('totalQuestions').textContent = totalQuestions;
+        document.getElementById('easyQuestions').textContent = easyQuestions;
+        document.getElementById('hardQuestions').textContent = hardQuestions;
+
+        document.getElementById('inputEasy').max = easyQuestions;
+        document.getElementById('inputHard').max = hardQuestions;
+    }
+</script>
 
 <style>
     form {
