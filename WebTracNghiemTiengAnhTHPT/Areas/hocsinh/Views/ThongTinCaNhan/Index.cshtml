@@ -322,6 +322,7 @@
                 url: '@Url.Action("GetKetQuaData", "ThongTinCaNhan")',
                 method: 'GET',
                 success: function (data) {
+
                     // Initial update for the default period (day)
                     updateStats(data, 'day');
                     // Update stats when the time period changes
@@ -423,15 +424,16 @@
                 // Clear previous results
                 resultDisplay.innerHTML = '<p>Loading results...</p>';
 
-            
                 fetch(`/ThongTinCaNhan/getResults?date=${selectedDate}`)
                     .then(response => response.json())
                     .then(data => {
+                        console.log(selectedDate)
+                        console.log(data)
+
                         if (data.length === 0) {
                             resultDisplay.innerHTML = '<p>No results for this date.</p>';
                             return;
                         }
-
                        
                         resultDisplay.innerHTML = data.map(result => `
                     <div class="result-item">
@@ -443,6 +445,8 @@
                 `).join('');
                     })
                     .catch(err => {
+                        console.log(selectedDate)
+
                         console.error(err);
                         resultDisplay.innerHTML = '<p>Error loading results.</p>';
                     });

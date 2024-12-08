@@ -98,6 +98,10 @@
                                         <label for="responseText">Your Response</label>
                                         <textarea class="tinymce form-control" id="responseText" rows="3"></textarea>
                                         <input type="hidden" id="errorId" value=@error.MaCauHoi />
+                                        <input type="hidden" id="username" value=@error.Username />
+                                        <input type="hidden" id="makythi" value=@error.MaDe />
+
+
                                     </div>
                                     <button type="submit" class="btn btn-primary">Submit Response</button>
                                 </form>
@@ -134,21 +138,25 @@ $(document).ready(function () {
         var tempElement = document.createElement('div');
         tempElement.innerHTML = responseHtml;
         var responseText = tempElement.textContent || tempElement.innerText || '';
+
         var errorId = $('#errorId').val();
         errorId = parseInt(errorId);
-
+        var makythi = $('#makythi').val();
+        var username = $('#username').val();
         // Validate response text
         if (!responseText.trim()) {
             alert("Response text cannot be empty.");
             return;
         }
-        console.log(errorId, responseText);
+        console.log(errorId, responseText, makythi, username);
         $.ajax({
             type: "POST",
             url: '@Url.Action("RespondToError", "QuanLyBaoLoi")',
             data: {
                 MaCauHoi: errorId,
-                ResponseText: responseText
+                ResponseText: responseText,
+                username: username,
+                makythi: makythi
             },
             success: function (response) {
                 if (response.success) {

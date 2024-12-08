@@ -23,7 +23,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
 
         // POST: giaovien/QuanLyBaoLoi/RespondToError
         [HttpPost]
-        public JsonResult RespondToError(int MaCauHoi, string ResponseText)
+        public JsonResult RespondToError(int MaCauHoi, string ResponseText, string username,int makythi)
         {
             if (MaCauHoi == null || string.IsNullOrEmpty(ResponseText))
             {
@@ -31,7 +31,7 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.giaovien.Controllers
             }
 
 
-            var errorReport = _db.BaoLois.SingleOrDefault(k => k.MaCauHoi == MaCauHoi);
+            var errorReport = _db.BaoLois.SingleOrDefault(k => k.MaCauHoi == MaCauHoi && k.Username== username && k.MaDe == k.MaDe);
             if (errorReport != null)
             {
                 errorReport.Response = ResponseText;
