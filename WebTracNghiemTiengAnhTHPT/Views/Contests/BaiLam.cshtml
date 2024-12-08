@@ -12,11 +12,18 @@
 
     var myDictionary = new Dictionary<int, int>();
     int counter = 1;
+    var myDictionary2 = new Dictionary<int, int>();
 
     foreach (var item in Model.ChiTietKetQuas)
     {
         myDictionary[item.CauHoi.MaCauHoi] = counter;
         counter++;
+    }
+    int cnt2 = 1;
+    foreach (var item in groupedItems)
+    {
+        myDictionary2[item.Key.MaNhom ?? 0] = cnt2;
+        cnt2++;
     }
     <!-- Thêm vào trong phần <head> -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -245,7 +252,7 @@
                         @foreach (var group in groupedItems)
                         {
                             <button type="button" class="btn btn-light" onclick="showGroup('@group.Key.MaNhom')">
-                                Phần thi @group.Key.MaNhom
+                                Phần thi @myDictionary2[group.Key.MaNhom?? 0]
                             </button>
                         }
                     </div>
@@ -359,7 +366,7 @@
                     @foreach (var group in groupedItems)
                     {
                         <div class="group-container-right">
-                            <div class="bg-light">Phần thi @group.Key.MaNhom</div>
+                            <div class="bg-light">Phần thi  @myDictionary2[group.Key.MaNhom ?? 0]</div>
                             @foreach (var item in group)
                             {
                                 <button name="@item.MaCauHoi" class="m-1 btn-success" id="button-@item.MaCauHoi" onclick="showQuestion('@item.MaCauHoi')">
