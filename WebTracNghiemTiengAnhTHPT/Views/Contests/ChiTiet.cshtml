@@ -289,40 +289,39 @@ body {
 
 <!-- JavaScript -->
 <script>
-    let clickedRating = 0;
+    // Set initial rating to 0
+    let selectedRating = 0;
 
+    // Function to handle star click (selecting the rating)
     function showRating(value) {
-        clickedRating = value;
-        $("#rate").val(value);
+        selectedRating = value; // Update selected rating
+        document.getElementById("rate").value = value; // Set the hidden input value
 
-        $(".star").removeClass("selected");
-        $(".star").each(function () {
-            if ($(this).data("value") <= value) {
-                $(this).addClass("selected");
-            }
+        // Highlight stars up to the selected rating
+        const stars = document.querySelectorAll("#starRating .star");
+        stars.forEach((star, index) => {
+            star.classList.toggle("filled", index < value); // Fill stars up to the selected value
         });
     }
 
-    $(".star").on("mouseenter", function () {
-        let hoverValue = $(this).data("value");
-        $(".star").removeClass("hovered");
-        $(".star").each(function () {
-            if ($(this).data("value") <= hoverValue) {
-                $(this).addClass("hovered");
-            }
+    // Add hover effects for better user experience
+    document.querySelectorAll("#starRating .star").forEach(star => {
+        // Hover: Highlight stars up to the hovered star
+        star.addEventListener("mouseenter", function () {
+            const hoverValue = parseInt(this.getAttribute("data-value"));
+            document.querySelectorAll("#starRating .star").forEach((s, index) => {
+                s.classList.toggle("filled", index < hoverValue);
+            });
+        });
+
+        // Leave: Reset to the selected rating
+        star.addEventListener("mouseleave", function () {
+            document.querySelectorAll("#starRating .star").forEach((s, index) => {
+                s.classList.toggle("filled", index < selectedRating);
+            });
         });
     });
 
-    $(".star-rating").on("mouseleave", function () {
-        $(".star").removeClass("hovered");
-        $(".star").each(function () {
-            if ($(this).data("value") <= clickedRating) {
-                $(this).addClass("selected");
-            } else {
-                $(this).removeClass("selected");
-            }
-        });
-    });
 
     $(document).ready(function () {
         $("#ratingForm").submit(function (e) {
