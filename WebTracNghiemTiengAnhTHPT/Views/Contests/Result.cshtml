@@ -3,20 +3,22 @@
 @{
     ViewBag.Title = "ChiTietKyThi";
     Layout = "~/Views/Shared/LayoutWeb.cshtml";
+
     var groupedItems = Model.ChiTietKetQuas
                             .GroupBy(item => new { item.CauHoi.MaNhom, item.CauHoi.NhomCauHoi.NoiDung });
+
     int sodapan = 0;
     int sodapandung = 0;
-    int maketqua = Model.Maketqua;
-
+    double totalScore = 0;
     var myDictionary = new Dictionary<int, int>();
-    int couter = 1;
+    int counter = 1;
+
     foreach (var item in Model.ChiTietKetQuas)
     {
-        myDictionary[item.CauHoi.MaCauHoi] = couter;
-        couter++;
-
+        myDictionary[item.CauHoi.MaCauHoi] = counter;
+        counter++;
     }
+    int alll = 0;
 }
 
 <h2>Chi tiết kết quả</h2>
@@ -25,47 +27,102 @@
     <div class="row">
         <form action="/Contests/Result?MaDe=@ViewBag.MaDe" method="post">
             <div class="col-12 d-lg-flex flex-lg-row flex-column">
-                <div class="col-lg-9 col-12 ">
-                    <div>
-
-                    </div>
+                <div class="col-lg-9 col-12">
                     @foreach (var group in groupedItems)
                     {
                         <div class="group-container" id="group-container-@group.Key.MaNhom">
-                            <div class="bg-light"> @Html.Raw(HttpUtility.HtmlDecode(@group.Key.NoiDung))</div>
+                            <div class="bg-light">
+                                @Html.Raw(HttpUtility.HtmlDecode(@group.Key.NoiDung))
+                            </div>
                             @foreach (var item in group)
                             {
+                                double questionScore = 0;
+                                int correctSelections = 0;
+
+                                string valid = "ABCD";
+                                foreach (var IT in valid)
+                                {
+                                    if (item.DapAnChon.Contains(IT) ==item.CauHoi.DapAnChinhXac.Contains(IT))
+                                    {
+                                        correctSelections++;
+                                    }
+                                }
+
+                                // Calculate question score based on correct selections
+                                switch (correctSelections)
+                                {
+                                    case 1: questionScore = 0.1; break;
+                                    case 2: questionScore = 0.25; break;
+                                    case 3: questionScore = 0.5; break;
+                                    case 4: questionScore = 1; break;
+                                }
+                                alll++;
+                                if (item.CauHoi.DapAnChinhXac.Length == 1)
+                                {
+                                    if (questionScore != 1)
+                                    {
+                                        questionScore = 0;
+                                    }
+                                }
+                                totalScore += questionScore;
+
                                 <div class="item-container border p-3 mb-3">
                                     <div class="field mb-2">
-                                        @myDictionary[item.MaCauHoi] : @Html.Raw(HttpUtility.HtmlDecode(item.CauHoi.NoiDung))
+                                        @myDictionary[item.MaCauHoi]: @Html.Raw(HttpUtility.HtmlDecode(item.CauHoi.NoiDung))
+                                    </div>
+                                    <!-- Display question score -->
+                                    <div class="mb-2 text-success">
+                                        Điểm: @questionScore.ToString("F2")
                                     </div>
 
                                     <!-- Answer choices with radio buttons -->
                                     @foreach (var answer in new[] { "A", "B", "C", "D" })
                                     {
-                                        var answerText = item.CauHoi.GetType().GetProperty($"DapAn{answer}").GetValue(item.CauHoi, null);
-                                        var isChecked = item.DapAnChon == answer;
-                                        var isCorrect = item.CauHoi.DapAnChinhXac.Contains(answer);
+                                        if (item.CauHoi.DapAnChinhXac.Length == 1)
+                                        {
+                                            var answerText = item.CauHoi.GetType().GetProperty($"DapAn{answer}").GetValue(item.CauHoi, null);
+                                            var isChecked = item.DapAnChon == answer;
+                                            var isCorrect = item.CauHoi.DapAnChinhXac.Contains(answer);
+                                            var cssClass = isCorrect ? "correct-answer" : (isChecked ? "incorrect-answer" : "");
 
-                                        // Determine CSS class based on correctness and selection
-                                        var cssClass = isCorrect
-                                            ? "correct-answer font-weight-bold"  // Highlight correct answers
-                                            : (isChecked ? "selected-answer font-weight-bold" : ""); // Highlight selected answers if incorrect
+                                            <label class="form-check-label w-100 my-1 border @cssClass" for="dapAn@answer_@item.MaCauHoi">
+                                                <input class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAn@answer_@item.MaCauHoi" value="@answer" @(isChecked ? "checked" : "") disabled>
+                                                <span class="answer-text">
+                                                    @answerText
+                                                </span>
+                                                @if (isCorrect)
+                                                {
+                                                    <span class="correct-label">Đáp án chính xác</span>
+                                                }
+                                                @if (isChecked && isCorrect)
+                                                {
+                                                    sodapandung++;
+                                                }
+                                            </label>
+                                        }
+                                        else
+                                        {
+                                            var answerText = item.CauHoi.GetType().GetProperty($"DapAn{answer}").GetValue(item.CauHoi, null);
+                                            var isChecked = item.DapAnChon.Contains(answer);
+                                            var isCorrect = item.CauHoi.DapAnChinhXac.Contains(answer);
+                                            var cssClass = isCorrect ? "correct-answer" : (isChecked ? "incorrect-answer" : "");
 
-                                        <label class="form-check-label w-100 my-1 border @cssClass" for="dapAn@answer_@item.MaCauHoi">
-                                            <input class="form-check-input" type="radio" name="answer_@item.MaCauHoi" id="dapAn@answer_@item.MaCauHoi" value="@answer" @(isChecked ? "checked" : "") disabled>
-                                            <span class="answer-text">
-                                                @answerText
-                                            </span>
-                                            @if (isCorrect)
-                                            {
-                                                <span class="correct-label text-success">Đáp án chính xác</span>
-                                            }
-                                            else if (isChecked)
-                                            {
-                                                <span class="incorrect-label text-danger">Đáp án bạn chọn</span>
-                                            }
-                                        </label>
+                                            <label class="form-check-label w-100 my-1 border @cssClass" for="dapAn@answer_@item.MaCauHoi">
+                                                <input class="form-check-input" type="checkbox" name="answer_@item.MaCauHoi" id="dapAn@answer_@item.MaCauHoi" value="@answer" @(isChecked ? "checked" : "") disabled>
+                                                <span class="answer-text">
+                                                    @answerText
+                                                </span>
+                                                @if (isCorrect)
+                                                {
+                                                    <span class="correct-label">Đáp án chính xác</span>
+                                                }
+                                                @if (isChecked && isCorrect)
+                                                {
+                                                    sodapandung++;
+                                                }
+                                            </label>
+                                        }
+
                                     }
                                 </div>
                             }
@@ -73,17 +130,21 @@
                     }
 
                 </div>
-                <div class="col-lg-3 col-12 bg-light border border-primary rounded-3 p-4 mx-1 ">
-                    Số đáp án đúng: @sodapandung / @sodapan
+                <div class="col-lg-3 col-12 bg-light border border-primary rounded-3 p-4 mx-1">
+                    <div>Số đáp án đúng:  @totalScore.ToString("F2") / @alll</div>
+                    <div class="mt-2">
+                        <strong>Tổng điểm: @{ var s = totalScore * 10 / alll; <span> @s.ToString("F2") </span> } </strong>
+                    </div>
                 </div>
             </div>
         </form>
     </div>
 </div>
 <style>
-    .form-check-label{
+    .form-check-label {
         border-radius: 7px;
     }
+
     .correct-answer {
         border: 2px solid #28a745; /* Viền màu xanh lá cây */
         border-radius: 5px; /* Tùy chỉnh bo góc */
@@ -102,10 +163,11 @@
         padding: 2px 6px;
         border-radius: 3px;
     }
+
     .incorrect-answer {
         border: 2px solid red !important; /* Viền đỏ */
         border-radius: 5px; /* Tùy chỉnh bo góc */
-        background-color: #ffe6e6;  
+        background-color: #ffe6e6;
     }
     .correct-answer {
         background-color: #d4edda;
@@ -131,7 +193,7 @@
 
 </style>
 <!-- Ensure jQuery is included before your script -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+@*<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
         $.ajax({
@@ -144,4 +206,4 @@
             }
         });
     });
-</script>
+</script>*@

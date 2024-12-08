@@ -9,7 +9,7 @@
     var isFirst = true;
     int made = ViewBag.MaDe;
     DateTime endTime = (DateTime)ViewBag.endTime;
-    DateTime startTime = (DateTime)ViewBag.startTime;
+
     var myDictionary = new Dictionary<int, int>();
     int counter = 1;
 
@@ -25,8 +25,7 @@
 
 @*Reference the TinyMCE script*@
 <!-- Place the first <script> tag in your HTML's <head> -->
-<script src="https://cdn.tiny.cloud/1/4inckogq00f5sh986duadaulucd1rekxhug1kgjjozr5abyu/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
-
+<script src="~/Scripts/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
 <!-- Place the following <script> and <textarea> tags your HTML's <body> -->
 <script>
     tinymce.init({
@@ -237,7 +236,6 @@
             <input type="hidden" name="flag" id="flag" value="0" />
             <input type="hidden" name="url" id="url" />
             <input type="hidden" id="endTime" value="@endTime" />
-            <input type="hidden" id="startTime" value="@startTime" />
             <input type="hidden" id="maDe" value="@ViewBag.MaDe" />
 
             <div class="col-12 d-lg-flex flex-lg-row flex-column">
@@ -428,22 +426,20 @@
             }
         });
     }
-  
-    let now = new Date(document.getElementById('startTime').value).getTime(); // Thời gian ban đầu được gán trước
-    let endTime = new Date(document.getElementById('endTime').value).getTime();
 
-    let interval;
+    let endTime = new Date(document.getElementById('endTime').value).getTime();
+    var interval;
     function startTimer() {
         const timerDiv = document.getElementById('timer');
 
         interval = setInterval(() => {
-            now += 1000; // Tăng thời gian `now` thêm 1 giây (1000 milliseconds)
-            const distance = endTime - now;
+            let now = new Date().getTime();
+            let distance = endTime - now;
 
             if (distance <= 0) {
                 clearInterval(interval);
                 timerDiv.textContent = "00:00";
-                ketthuc(); // Gọi hàm kết thúc
+                ketthuc();
                 return;
             }// Hàm đếm ngược
             function startTimer(duration, display) {
@@ -478,7 +474,6 @@
             timerDiv.textContent = `Thời gian còn lại: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }, 1000);
     }
-
 
     function ketthuc() {
         if (confirm("Bạn có chắc chắn muốn nộp bài?")) {
