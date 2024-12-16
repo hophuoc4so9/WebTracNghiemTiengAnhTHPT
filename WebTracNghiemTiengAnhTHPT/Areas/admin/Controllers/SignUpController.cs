@@ -54,6 +54,14 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.admin.Controllers
                     ViewBag.Message = "Email đã được sử dụng.";
                     return View();
                 }
+                var existingUser2 = db.TaiKhoans.FirstOrDefault(u => u.Username == name);
+
+                if (existingUser2 != null)
+                {
+                    ViewBag.Message = "Username đã được sử dụng.";
+
+                    return View();
+                }
                 var newTaiKhoan = new TaiKhoan
                 {
                     Username = name,

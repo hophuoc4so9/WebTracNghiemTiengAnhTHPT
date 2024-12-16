@@ -27,6 +27,10 @@
                 <label for="confirm-password">Xác nhận mật khẩu</label>
             </div>
             <!-- Nút Đăng Ký -->
+            @if (ViewBag.Message!=null)
+            {
+                <p class="text-bg-danger">  @ViewBag.Message</p>
+            }
             <button type="submit" class="btn-submit">Đăng Ký</button>
         </form>
         <p class="login-prompt">Đã có tài khoản? <a href="/admin/Login/Login">Đăng nhập</a></p>
