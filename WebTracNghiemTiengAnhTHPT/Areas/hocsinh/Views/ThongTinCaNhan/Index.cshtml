@@ -422,7 +422,7 @@
                 const selectedDate = cell.dataset.date;
 
                 // Clear previous results
-                resultDisplay.innerHTML = '<p>Loading results...</p>';
+                resultDisplay.innerHTML = '<p>Đang tải kết quả...</p>';
 
                 fetch(`/ThongTinCaNhan/getResults?date=${selectedDate}`)
                     .then(response => response.json())
@@ -431,15 +431,15 @@
                         console.log(data)
 
                         if (data.length === 0) {
-                            resultDisplay.innerHTML = '<p>No results for this date.</p>';
+                            resultDisplay.innerHTML = '<p>Không có kết quả cho ngày hôm đó.</p>';
                             return;
                         }
                        
                         resultDisplay.innerHTML = data.map(result => `
                     <div class="result-item">
-                        <a href="/Contests/Result?maketqua=${result.maKQ}"><h4>Exam: ${result.examName}</h4></a>
-                        <p>Score: ${result.score}</p>
-                        <p>Status: ${result.status ? 'Đã nộp' : 'Chưa nộp'}</p>
+                        <a href="/Contests/Result?maketqua=${result.maKQ}"><h4>Tên bài thi: ${result.examName}</h4></a>
+                        <p>Điểm số: ${result.score}</p>
+                        <p>Trạng thái: ${result.status ? 'Đã nộp' : 'Chưa nộp'}</p>
                        
                     </div>
                 `).join('');

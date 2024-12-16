@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using WebTracNghiemTiengAnhTHPT.Models;
 using System.Data.Entity;
+using System.Globalization;
 
 namespace WebTracNghiemTiengAnhTHPT.Areas.hocsinh.Controllers
 {
@@ -91,8 +92,9 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.hocsinh.Controllers
         }
         public JsonResult GetKetQuaData()
         {
+            var userName = Session["UserName"] as string;
             TracNghiemTiengAnhTHPTEntities1 db = new TracNghiemTiengAnhTHPTEntities1();
-            var ketQuaData = db.KetQuas
+            var ketQuaData = db.KetQuas.Where(k=>k.Username ==userName)
                 .OrderBy(k => k.thoigian_batdau)
                 .ToList() // Execute the query and bring data into memory
                 .Select(k => new
@@ -108,10 +110,13 @@ namespace WebTracNghiemTiengAnhTHPT.Areas.hocsinh.Controllers
         [HttpGet]
         public JsonResult GetResults(string date)
         {
-            if (DateTime.TryParse(date, out DateTime selectedDate))
+            string format = "dd/MM/yyyy";
+            CultureInfo provider = CultureInfo.InvariantCulture;
+            DateTime selectedDate;
+            if (DateTime.TryParseExact(date, format, provider, DateTimeStyles.None, out selectedDate))
             {
                 var results = db.KetQuas
-                    .Where(kq => kq.thoigian_batdau.HasValue &&
+                    .Where(kq => kq.thoigian_batdau.HasValue  &&
                                  DbFunctions.TruncateTime(kq.thoigian_batdau) == selectedDate.Date)
                     .Select(kq => new
                     {
